@@ -1,0 +1,19 @@
+Package: bestNormalize
+Type: Package
+Title: Normalizing transformation functions
+Version: 0.1.0
+Date: 2017-11-01
+Author: Ryan Peterson
+Description: This packages contains functions to perform a family of normalizing transformations. It can also select and execute the best normalizing transformation.
+License: GPL
+Imports: 
+    forecast, 
+    caret, 
+    LambertW,
+    nortest, 
+    VGAM
+Suggests: 
+    knitr,
+    visreg,
+    MASS
+VignetteBuilder: knitr 
