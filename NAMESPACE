@@ -1,12 +1,11 @@
-export(BC, bestNormalize, binarize, cars, Lambert, 
-       orderNorm.smooth, predict.bc, predict.binarize, 
-       predict.BN, predict.lw, predict.orderNorm.smooth, 
-       predict.yj, revGam, YJ)
+export(BC, bestNormalize, binarize, Lambert, 
+       orderNorm, predict.bc, predict.binarize, 
+       predict.BN, predict.lw, predict.orderNorm, 
+       predict.yj, YJ)
 importFrom(caret, preProcess)
 importFrom(forecast, BoxCox.lambda)
 importFrom(forecast, BoxCox)
 importFrom(forecast, InvBoxCox)
 importFrom(LambertW,Gaussianize)
-importFrom(mgcv, gam)
 importFrom(nortest, lillie.test)
 importFrom(VGAM, yeo.johnson)

@@ -6,14 +6,16 @@ Date: 2017-11-01
 Author: Ryan Peterson
 Description: This packages contains functions to perform a family of normalizing transformations. It can also select and execute the best normalizing transformation.
 License: GPL
+Depends: 
+    mgcv
 Imports: 
     forecast, 
     caret, 
     LambertW,
-    nortest, 
-    VGAM
+    nortest
 Suggests: 
     knitr,
     visreg,
-    MASS
+    MASS,
+    testthat
 VignetteBuilder: knitr 

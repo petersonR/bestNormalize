@@ -1,6 +1,6 @@
 BC <-
-function(x, ...) {
-    l <- forecast::BoxCox.lambda(x, ...)
+function(x) {
+    l <- forecast::BoxCox.lambda(x, method = 'loglik')
     x.t <- as.vector(forecast::BoxCox(x, l))
     
     mu <- mean(x.t)
