@@ -1,6 +1,6 @@
-export(BC, bestNormalize, binarize, Lambert, 
+export(BC, bestNormalize, binarize, LW, 
        orderNorm, predict.bc, predict.binarize, 
-       predict.BN, predict.lw, predict.orderNorm, 
+       predict.bestNormalize, predict.lw, predict.orderNorm, 
        predict.yj, YJ)
 importFrom(caret, preProcess)
 importFrom(forecast, BoxCox.lambda)

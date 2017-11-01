@@ -5,7 +5,7 @@ data(iris)
 
 train <- iris$Petal.Width
 
-LW.obj <- Lambert(train)
+LW.obj <- LW(train)
 
 test_that('LW Transforms original data consistently' , {
   expect_equal(LW.obj$x.t, predict.lw(LW.obj))

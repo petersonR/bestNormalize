@@ -4,7 +4,7 @@ bestNormalize <- function(x,
                           ...) {
   
   x.t <- list()
-  x.t[['lw']] <- Lambert(x)
+  x.t[['lw']] <- LW(x)
   x.t[['yj']] <- YJ(x)
   
   if(all(x > 0)) x.t[['bc']] <- BC(x)
@@ -35,3 +35,45 @@ bestNormalize <- function(x,
     method_info = x.t[[which.min(D)]]
   )
 }
+
+predict.bestNormalize <- function(BNobject,
+                      newdata = NULL,
+                      inverse = F) {
+  method = BNobject$method
+  
+  # Caret preprocess YJ object's method == 4
+  if (length(method) == 4)
+    method = 'yj'
+  
+  obj <- BNobject$method_info
+  if (is.null(obj))
+    obj <- BNobject
+  
+  if (method == 'yj') {
+    newdata = predict.yj(obj,
+                         newdata = newdata,
+                         inverse = inverse)
+  } else if (method == 'lw') {
+    newdata = predict.lw(obj,
+                         newdata = newdata,
+                         inverse = inverse)
+  } else if (method == 'bc') {
+    newdata = predict.bc(obj,
+                         newdata = newdata,
+                         inverse = inverse)
+  } else if (method == 'orderNorm') {
+    newdata = predict.orderNorm(obj, 
+                                newdata = newdata, 
+                                inverse = inverse)
+  } else if (method == 'binarize') {
+    newdata = predict.binarize(obj,
+                               newdata = newdata,
+                               inverse = inverse)
+  } else
+    stop('method not recognized')
+  
+  # Add in more functions here for other methods
+  
+  newdata
+}
+
