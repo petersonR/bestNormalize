@@ -16,7 +16,7 @@ orderNorm <- function(x) {
   rev_s_fit <- gam(x ~ s(raw_x.t, k = nunique))
   
   x.t <- unname(as.vector(predict(s_fit)))
-  list(
+  val <- list(
     x.t = x.t,
     x = x,
     n = length(x),
@@ -25,6 +25,9 @@ orderNorm <- function(x) {
     s_fit = s_fit,
     rev_s_fit = rev_s_fit
   )
+  
+  class(val) <- 'orderNorm'
+  val
 }
 
 predict.orderNorm <- function(orderNorm.obj,
@@ -44,4 +47,9 @@ predict.orderNorm <- function(orderNorm.obj,
   vals <-
     mgcv::predict.gam(orderNorm.obj[[fitName]], newdata = newdata)
   unname(as.vector(vals))
+}
+
+print.orderNorm <- function(orderNorm.obj) {
+  cat('Smooth OrderNorm Transformation with', orderNorm.obj$n, 
+      'observations and', ifelse(orderNorm.obj$warn_status == 1, 'ties', 'no ties'), '\n')
 }

@@ -27,53 +27,32 @@ bestNormalize <- function(x,
   
   xFinal <- x.t[[which.min(D)]]$x.t
   norm_method <- names(x.t)[which.min(D)]
-  list(
-    method = norm_method,
+  val <- list(
     x.t = xFinal,
     x = x,
     D = D,
-    method_info = x.t[[which.min(D)]]
+    n = length(xFinal),
+    chosen_transform = x.t[[which.min(D)]]
   )
+  class(val) <- 'bestNormalize'
+  val
 }
 
-predict.bestNormalize <- function(BNobject,
-                      newdata = NULL,
-                      inverse = F) {
-  method = BNobject$method
-  
-  # Caret preprocess YJ object's method == 4
-  if (length(method) == 4)
-    method = 'yj'
-  
-  obj <- BNobject$method_info
-  if (is.null(obj))
-    obj <- BNobject
-  
-  if (method == 'yj') {
-    newdata = predict.yj(obj,
-                         newdata = newdata,
-                         inverse = inverse)
-  } else if (method == 'lw') {
-    newdata = predict.lw(obj,
-                         newdata = newdata,
-                         inverse = inverse)
-  } else if (method == 'bc') {
-    newdata = predict.bc(obj,
-                         newdata = newdata,
-                         inverse = inverse)
-  } else if (method == 'orderNorm') {
-    newdata = predict.orderNorm(obj, 
-                                newdata = newdata, 
-                                inverse = inverse)
-  } else if (method == 'binarize') {
-    newdata = predict.binarize(obj,
-                               newdata = newdata,
-                               inverse = inverse)
-  } else
-    stop('method not recognized')
-  
-  # Add in more functions here for other methods
-  
-  newdata
+predict.bestNormalize <- function(BNobject, newdata = NULL, inverse = FALSE) {
+  obj <- BNobject$chosen_transform
+  predict(obj, newdata = newdata, inverse = inverse)
 }
 
+print.bestNormalize <- function(x) {
+  
+  prettyD <- paste0(
+    'Estimated Normality Statistics (D):\n',
+    ifelse(length(BNobject$D['bc']), paste(" - Box-Cox:", round(BNobject$D['bc'],4), '\n'), ''),
+    ifelse(length(BNobject$D['bc']), paste(" - Lambert's W:", round(BNobject$D['lw'],4), '\n'), ''),
+    ifelse(length(BNobject$D['lw']), paste(" - Yeo-Johnson:", round(BNobject$D['yj'],4), '\n'), '')
+  )
+  
+  cat('Best Normalizing transformation with', BNobject$n, 'Observations\n',
+      prettyD, '\nBased off these, bestNormalize chose:\n')
+  print(BNobject$chosen_transform)
+}

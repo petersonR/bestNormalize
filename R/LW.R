@@ -11,16 +11,18 @@ LW <- function(x, type = 's') {
   
   attributes(x.t) <- NULL
   
-  list(
+  val <- list(
     x.t = unname(x.t),
     x = x,
     mean = mu,
     sd = sigma,
     tau.mat = tau.mat,
     n = length(x.t),
-    type = type,
-    method = 'lw'
+    type = type
   )
+  
+  class(val) <- 'lw'
+  val
 }
 
 predict.lw <- function(LW.obj,
@@ -46,4 +48,12 @@ predict.lw <- function(LW.obj,
   attributes(newdata) <- NULL
   
   unname(newdata)
+}
+
+print.lw <- function(LW.obj) {
+  cat('LambertW::Gaussianize Transformation with', LW.obj$n, 'observations:\n', 
+      'Estimated statistics:\n',
+      '- gamma =', LW.obj$tau.mat[3], '\n',
+      '- mean =', LW.obj$mean, '\n',
+      '- sd =', LW.obj$sd, '\n')
 }
