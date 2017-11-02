@@ -14,9 +14,9 @@ test_that('YJ Transforms original data consistently', {
 
 test_that('YJ Transforms new data consistently', {
   nd <- seq(0, 4, length = 100)
-  pred <- predict.yj(YJ.obj, newdata = nd)
+  pred <- predict(YJ.obj, newdata = nd)
   expect_true(!any(is.na(pred)))
   
-  nd2 <- predict.yj(YJ.obj, newdata = pred, inverse = TRUE)
+  nd2 <- predict(YJ.obj, newdata = pred, inverse = TRUE)
   expect_equal(nd, nd2)
 })

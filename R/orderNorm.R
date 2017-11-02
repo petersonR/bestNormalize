@@ -7,23 +7,18 @@ orderNorm <- function(x) {
     warn_status <- 1
   }
   
-  raw_x.t <- qnorm(rank(x, na.last = 'keep') / (length(x) + 1))
+  x.t <- qnorm(rank(x, na.last = 'keep') / (length(x) + 1))
   
-  # fit model for interpolation and extrapolation
-  s_fit <- gam(raw_x.t ~ s(x, k = nunique))
+  # fit linear model for potential future extrapolation
+  fit <- lm(x.t ~ x)
   
-  # fit model for reverse transformation
-  rev_s_fit <- gam(x ~ s(raw_x.t, k = nunique))
-  
-  x.t <- unname(as.vector(predict(s_fit)))
   val <- list(
     x.t = x.t,
     x = x,
     n = length(x),
     method = 'orderNorm',
     warn_status = warn_status,
-    s_fit = s_fit,
-    rev_s_fit = rev_s_fit
+    fit = fit
   )
   
   class(val) <- 'orderNorm'
@@ -33,23 +28,82 @@ orderNorm <- function(x) {
 predict.orderNorm <- function(orderNorm.obj,
                               newdata = NULL,
                               inverse = FALSE) {
+  # Perform transformation
+  if(!inverse) {
+    if(is.null(newdata)) newdata <- orderNorm.obj$x
+    return(x2orderNorm(orderNorm.obj, newdata))
+  } 
   
-  if (is.null(newdata) & !inverse)
-    newdata <- orderNorm.obj$x
-  if (is.null(newdata))
-    newdata <- orderNorm.obj$x.t
-    
-  fitName <- ifelse(inverse, 'rev_s_fit', 's_fit')
-  
-  newdata <- data.frame(newdata)
-  names(newdata) <- ifelse(inverse, 'raw_x.t', 'x')
-  
-  vals <-
-    mgcv::predict.gam(orderNorm.obj[[fitName]], newdata = newdata)
-  unname(as.vector(vals))
+  # Perform reverse transformation
+  if(is.null(newdata)) newdata <- orderNorm.obj$x.t
+  orderNorm2x(orderNorm.obj, newdata)
 }
 
 print.orderNorm <- function(orderNorm.obj) {
   cat('Smooth OrderNorm Transformation with', orderNorm.obj$n, 
-      'observations and', ifelse(orderNorm.obj$warn_status == 1, 'ties', 'no ties'), '\n')
+      'observations and', 
+      ifelse(orderNorm.obj$warn_status == 1, 
+             paste0('ties\n - ', length(unique(orderNorm.obj$x)), ' unique values'), 
+             'no ties'), '\n')
+}
+
+## Auxillary functions to help inter/extrapolate
+
+x2orderNorm <- function(orderNorm.obj, new_points) {
+  x_t <- orderNorm.obj$x.t
+  old_points <- orderNorm.obj$x
+  vals <- approx(old_points, x_t, xout = new_points, rule = 1)
+  
+  # If predictions have been made outside observed domain
+  if(any(is.na(vals$y))) {
+    warning('Transformations requested outside observed domain; linear approx. on ranks applied')
+    fit <- orderNorm.obj$fit
+    p <- fitted(fit)
+    low_impute_idx <- vals$x < min(old_points)
+    high_impute_idx <- vals$x > max(old_points)
+    
+    # Check 
+    if(any(low_impute_idx)) {
+      xx <- data.frame(x = vals$x[low_impute_idx])
+      vals$y[low_impute_idx] <- predict(fit, newdata = xx) - (min(p) - min(x_t))
+      
+    }
+    if(any(high_impute_idx)) {
+      xx <- data.frame(x = vals$x[high_impute_idx])
+      vals$y[high_impute_idx] <- predict(fit, newdata = xx) - (max(p) - max(x_t))
+    }
+  }
+  
+  vals$y
+}
+
+orderNorm2x <- function(orderNorm.obj, new_points_x_t) {
+  x_t <- orderNorm.obj$x.t
+  old_points <- orderNorm.obj$x
+  vals <- approx(x_t, old_points, xout = new_points_x_t, rule = 1)
+  
+  # If predictions have been made outside observed domain
+  if(any(is.na(vals$y))) {
+    warning('Transformations requested outside observed domain; linear approx. on ranks applied')
+    
+    fit <- orderNorm.obj$fit
+    p <- fitted(fit)
+    low_impute_idx <- vals$x < min(x_t)
+    high_impute_idx <- vals$x > max(x_t)
+    
+    # Check 
+    if(any(low_impute_idx)) {
+      
+      # Solve algebraically from original transformation
+      vals$y[low_impute_idx] <- 
+        unname((vals$x[low_impute_idx] + min(p) - min(x_t) - fit$coef[1]) / fit$coef[2])
+      
+    }
+    if(any(high_impute_idx)) {
+      vals$y[high_impute_idx] <- 
+        unname((vals$x[high_impute_idx] + max(p) - max(x_t) - fit$coef[1]) / fit$coef[2])
+    }
+  }
+  
+  vals$y
 }
