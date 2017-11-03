@@ -1,9 +1,8 @@
-export(BC, bestNormalize, binarize, LW, 
-       orderNorm, predict.bc, predict.binarize, 
+export(boxcox, bestNormalize, binarize, LW, 
+       orderNorm, predict.boxcox, predict.binarize, 
        predict.bestNormalize, predict.lw, predict.orderNorm, 
        predict.yj, YJ)
 importFrom(caret, preProcess)
-importFrom(forecast, BoxCox.lambda)
 importFrom(forecast, BoxCox)
 importFrom(forecast, InvBoxCox)
 importFrom(LambertW,Gaussianize)

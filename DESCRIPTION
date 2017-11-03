@@ -1,21 +1,28 @@
 Package: bestNormalize
 Type: Package
-Title: Normalizing transformation functions
-Version: 0.1.0
+Title: Normalizing Transformation Functions
+Version: 0.1.0.9001
 Date: 2017-11-01
-Author: Ryan Peterson
-Description: This packages contains functions to perform a family of normalizing transformations. It can also select and execute the best normalizing transformation.
-License: GPL
-Depends: 
-    mgcv
+Authors@R: person("Ryan Andrew", "Peterson", 
+                  email = "ryan-peterson@uiowa.edu", 
+                  role = c("aut", "cre"))
+Description: This packages contains functions to perform a family of 
+    normalizing transformations, including orderNorm which is based on ranks. 
+    orderNorm guarantees a normal transformation if there are no ties. 
+    bestNormalize can select the best normalizing transformation of all in
+    this family.
+License: GPL-3
+Depends: R (>= 3.1.0)
 Imports: 
-    forecast, 
     caret, 
+    forecast, 
     LambertW,
     nortest
 Suggests: 
     knitr,
-    visreg,
     MASS,
-    testthat
+    testthat,
+    visreg
 VignetteBuilder: knitr 
+LazyData: true
+RoxygenNote: 6.0.1
