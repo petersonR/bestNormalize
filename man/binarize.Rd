@@ -16,27 +16,31 @@ binarize(x, location_measure = "median")
 \arguments{
 \item{x}{A vector to binarize}
 
-\item{location_measure}{which location measure should be used? 
-can either be "median", "mean", "mode", a number, or a function.}
+\item{location_measure}{which location measure should be used? can either be
+"median", "mean", "mode", a number, or a function.}
 }
 \value{
-A list of class \code{binarize} with elements
-\item{x.t}{transformed original data} 
-\item{x}{original data}
-\item{method}{location_measure used for original fitting}
-\item{location}{estimated location_measure}
-\item{n}{size of vector}
-
-The \code{predict} function with \code{inverse = FALSE} returns the numeric value (0 or 1) 
-of the transformation on \code{newdata} (which defaults to the original data). 
-
-If \code{inverse = TRUE}, since the transform is not 1-1, it will create and return a factor that 
-indicates where the original data was cut.
+A list of class \code{binarize} with elements \item{x.t}{transformed
+  original data} \item{x}{original data} \item{method}{location_measure used
+  for original fitting} \item{location}{estimated location_measure} 
+  \item{n}{size of vector}
+  
+  The \code{predict} function with \code{inverse = FALSE} returns the numeric
+  value (0 or 1) of the transformation on \code{newdata} (which defaults to
+  the original data).
+  
+  If \code{inverse = TRUE}, since the transform is not 1-1, it will create
+  and return a factor that indicates where the original data was cut.
 }
 \description{
-This function will perform a binarizing tranformation, which could be used as a last resort if the data cannot be adequately normalized. This may be useful when accidentally attempting normalization of a binary vector (which could occur if implementing bestNormalize in an automated fashion).
-
-Note that the transformation is not one-to-one, in contrast to the other functions in this package.
+This function will perform a binarizing tranformation, which
+  could be used as a last resort if the data cannot be adequately normalized.
+  This may be useful when accidentally attempting normalization of a binary
+  vector (which could occur if implementing bestNormalize in an automated
+  fashion).
+  
+  Note that the transformation is not one-to-one, in contrast to the other
+  functions in this package.
 }
 \examples{
 x <- rgamma(100, 1, 1)
@@ -44,5 +48,4 @@ binarize_obj <- binarize(x)
 (p <- predict(binarize_obj))
 
 predict(binarize_obj, newdata = p, inverse = TRUE)
-
 }

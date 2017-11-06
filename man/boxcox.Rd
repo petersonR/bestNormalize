@@ -16,29 +16,30 @@ boxcox(x, ...)
 \arguments{
 \item{x}{A vector to normalize with Box-Cox}
 
-\item{...}{Additional arguments that can be passed to the estimation of the lambda parameter
-(lower, upper, epsilon)}
+\item{...}{Additional arguments that can be passed to the estimation of the
+lambda parameter (lower, upper, epsilon)}
 }
 \value{
-A list of class \code{boxcox} with elements
-\item{x.t}{transformed original data} 
-\item{x}{original data}
-\item{mean}{mean of vector post-BC transformation}
-\item{sd}{sd of vector post-BC transformation}
-\item{lambda}{estimated lambda value for skew transformation}
-\item{n}{size of vector}
-
-The \code{predict} function returns the numeric value of the transformation performed on 
-new data, and allows for the inverse transformation as well.
+A list of class \code{boxcox} with elements \item{x.t}{transformed
+  original data} \item{x}{original data} \item{mean}{mean of vector post-BC
+  transformation} \item{sd}{sd of vector post-BC transformation} 
+  \item{lambda}{estimated lambda value for skew transformation} \item{n}{size
+  of vector}
+  
+  The \code{predict} function returns the numeric value of the transformation
+  performed on new data, and allows for the inverse transformation as well.
 }
 \description{
-Perform a Box-Cox transformation and center/scale a vector to attempt normalization
+Perform a Box-Cox transformation and center/scale a vector to
+  attempt normalization
 }
 \details{
-\code{boxcox} estimates the optimal value of lamda for the Box-Cox transformation. 
-This transformation can be performed on new data, and inverted, via the \code{predict} function.
+\code{boxcox} estimates the optimal value of lamda for the Box-Cox
+transformation. This transformation can be performed on new data, and
+inverted, via the \code{predict} function.
 
-The function will return an error if a user attempt to transform nonpositive data.
+The function will return an error if a user attempt to transform nonpositive
+data.
 }
 \examples{
 x <- rgamma(100, 1, 1)
@@ -51,8 +52,8 @@ x2 <- predict(bc_obj, newdata = p, inverse = TRUE)
 all.equal(x2, x)
 }
 \references{
-Box, G. E. P. and Cox, D. R. (1964) An analysis of transformations. 
-Journal of the Royal Statistical Society B, 26, 211-252.
+Box, G. E. P. and Cox, D. R. (1964) An analysis of
+  transformations. Journal of the Royal Statistical Society B, 26, 211-252.
 }
 \seealso{
 \code{\link[MASS]{boxcox}}

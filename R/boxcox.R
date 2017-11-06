@@ -41,7 +41,7 @@
 #' @export
 boxcox <- function(x, ...) {
   l <- estimate_boxcox_lambda(x, ...)
-  x.t <- as.vector(forecast::BoxCox(x, l))
+  x.t <- boxcox_trans(x, l)
   mu <- mean(x.t)
   sigma <- sd(x.t)
   x.t <- (x.t - mu) / sigma
@@ -70,9 +70,9 @@ predict.boxcox <- function(boxcox_obj,
   
   if (inverse) {
     newdata <- newdata * boxcox_obj$sd + boxcox_obj$mean
-    newdata <-  forecast::InvBoxCox(newdata, boxcox_obj$lambda)
+    newdata <-  inv_boxcox_trans(newdata, boxcox_obj$lambda, boxcox_obj$eps)
   } else if (!inverse) {
-    newdata <- forecast::BoxCox(newdata, boxcox_obj$lambda)
+    newdata <- boxcox_trans(newdata, boxcox_obj$lambda, boxcox_obj$eps)
     newdata <- (newdata - boxcox_obj$mean) / boxcox_obj$sd
   }
   unname(newdata)
@@ -121,4 +121,25 @@ estimate_boxcox_lambda <- function(x, lower = -1, upper = 2, eps = .001) {
   results$maximum
 }
 
+# Internal transformation functions
+boxcox_trans <- function(x, lambda, eps = .001) {
+  if (lambda < 0)
+    x[x < 0] <- NA
+  if (abs(lambda) < eps)
+    val <- log(x)
+  else
+    val <- (sign(x) * abs(x) ^ lambda - 1) / lambda
+  val
+}
 
+inv_boxcox_trans <- function(x, lambda, eps = .001) {
+  if (lambda < 0)
+    x[x > -1 / lambda] <- NA
+  if (abs(lambda) < eps)
+    val <- exp(x)
+  else {
+    x <- x * lambda + 1
+    val <- sign(x) * abs(x) ^ (1 / lambda)
+  }
+  val
+}
