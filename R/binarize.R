@@ -16,10 +16,13 @@
 #' @param location_measure which location measure should be used? can either be
 #'   "median", "mean", "mode", a number, or a function.
 #'   
-#' @return A list of class \code{binarize} with elements \item{x.t}{transformed
-#'   original data} \item{x}{original data} \item{method}{location_measure used
-#'   for original fitting} \item{location}{estimated location_measure} 
-#'   \item{n}{size of vector}
+#' @return A list of class \code{binarize} with elements 
+#'   \item{x.t}{transformed original data} 
+#'   \item{x}{original data} 
+#'   \item{method}{location_measure used for original fitting} 
+#'   \item{location}{estimated location_measure} 
+#'   \item{n}{number of nonmissing observations}
+#'   \item{norm_stat}{Pearson's chi-squared normality test statistic}
 #'   
 #'   The \code{predict} function with \code{inverse = FALSE} returns the numeric
 #'   value (0 or 1) of the transformation on \code{newdata} (which defaults to
@@ -36,6 +39,9 @@
 #' predict(binarize_obj, newdata = p, inverse = TRUE)
 #' @export
 binarize <- function(x, location_measure = 'median') {
+  stopifnot(is.numeric(x))
+  
+  # Check and set location measure
   if (is.numeric(location_measure)) {
     loc <- location_measure
   } else if (is.function(location_measure)) {
@@ -56,7 +62,8 @@ binarize <- function(x, location_measure = 'median') {
     x = x,
     method = location_measure,
     location = loc,
-    n = length(x.t)
+    n = length(x.t) - sum(is.na(x)),
+    norm_stat = unname(nortest::pearson.test(x.t)$stat)
   )
   class(val) <- 'binarize'
   val
@@ -87,7 +94,7 @@ predict.binarize <- function(binarize_obj, newdata = NULL, inverse = F) {
 #' @export
 print.binarize <- function(binarize_obj) {
   cat('Binarize Transformation with', binarize_obj$n, 
-      'observations\nEstimated Statistic:\n -', binarize_obj$method,
+      'nonmissing obs.\nEstimated Statistic:\n -', binarize_obj$method,
       '=', binarize_obj$location)
 }
 

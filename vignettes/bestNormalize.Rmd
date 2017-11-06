@@ -1,0 +1,178 @@
+---
+title: "bestNormalize"
+author: "Ryan A Peterson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the bestNormalize Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(bestNormalize)
+```
+
+# Introduction
+
+The `bestNormalize` package is contains a family of transformation functions that can be used to normalize data.  The function of the same name finds and executes the best of all of these normalizing transformations.  
+
+When there are highly skewed distributions of the covariates in an applied regression problem, there exists the tendency to have high leverage points (and thereby creating highly influential points), even when one centers and scales the covariates.  When examining interactions, these influential points can become especially problematic since the leverage of that point is amplified for every child interaction of which it is a parent. Using the normalizing transformations contained in this package on predictor variables can largely decrease the impact of influential points.
+
+This package also introduces a technique to normalize the data based off of a rank mapping to the normal distribution, which *guarantees* normally distributed transformed data (if ties are not present).
+
+All of the transformations contained in this package are reversible (ie, 1-1), which allows for straight-forward interpretation and consistency.
+
+# Methods
+
+There are several normalization transformation options, each with their own implementations and limitations outlined in the table below. While some of these methods are implemented well in other R packages, the `bestNormalize` package puts them all under the same umbrella syntax that makes them easy to apply in a wide range of situations. 
+
+Table 1: Normalizing methods comparison  
+
+| Method       | Implementation | Limitations                |
+|:------------:|:--------------:|:---------------------------|
+| Gaussianize  | LambertW       | Not always effective       |
+| Box Cox      | forecast/caret | Restricted to nonnegatives |
+| Yeo-Johnson  | caret          | Not always effective       |
+| Power        | caret          | Not always effective       |
+| Order Norm*  | by-hand        | Cannot handle ties         |
+
+* Note that the orderNorm method does lose some information, just like any other kind of non-parametric technique based on ranks.
+
+# Examples
+
+A few simple examples:
+
+```{r, fig.height=8, fig.width = 8}
+set.seed(100)
+train <- rgamma(100, 1, 1)
+lambert_obj <- lambert(train)
+boxcox_obj <- boxcox(train)
+yeojohnson_obj <- yeojohnson(train)
+orderNorm_obj <- orderNorm(train)
+
+binarize_obj <- binarize(train)
+BNobject <- bestNormalize(train) 
+
+xx <- seq(min(train), max(train), length = 100)
+plot(xx, predict(lambert_obj, newdata = xx), type = "l", col = 1)
+lines(xx, predict(boxcox_obj, newdata = xx), col = 2)
+lines(xx, predict(yeojohnson_obj, newdata = xx), col = 3)
+lines(xx, predict(orderNorm_obj, newdata = xx), col = 4)
+
+legend("topleft", legend = c("Lambert WxF", "BoxCox", "YeoJohnson", "OrderNorm"), 
+       col = 1:4, lty = 1)
+
+hist(train)
+par(mfrow = c(2,2))
+hist(lambert_obj$x.t, main = "Lambert WxF transformation")
+hist(boxcox_obj$x.t, main = "BoxCox transformation")
+hist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation")
+hist(orderNorm_obj$x.t, main = "orderNorm transformation")
+
+table(binarize_obj$x.t)
+
+hist(BNobject$x.t, main = paste("Best Transformation:", BNobject$method))
+par(mfrow = c(1,1))
+plot(xx, predict(BNobject, newdata = xx), type = "l", col = 1, 
+     main = "Best Normalizing transformation", ylab = "f(xx)")
+```
+
+# Application to autotrader data
+
+The autotrader data set was scraped from autotrader.com as part of this package (and because at the time of writing, I needed to buy a car). I apply the `bestNormalize` functionality to de-skew mileage, age, and price in my pricing model.
+
+```{r, fig.height=8, fig.width=8}
+data("autotrader")
+autotrader$yearsold <- 2017 - autotrader$Year
+### Using best-normalize
+priceBN <- bestNormalize(autotrader$price, D_max = .05)
+mileageBN <- bestNormalize(autotrader$mileage, D_max = .05)
+yearsoldBN <- bestNormalize(autotrader$yearsold, D_max = .05)
+
+par(mfrow = c(3, 2))
+MASS::truehist(autotrader$price)
+MASS::truehist(priceBN$x.t)
+MASS::truehist(autotrader$mileage)
+MASS::truehist(mileageBN$x.t)
+MASS::truehist(autotrader$yearsold)
+MASS::truehist(yearsoldBN$x.t)
+
+par(mfrow = c(2, 2))
+price.xx <- seq(min(autotrader$price), max(autotrader$price), length = 100)
+mileage.xx <- seq(min(autotrader$mileage), max(autotrader$mileage), length = 100)
+yearsold.xx <- seq(min(autotrader$yearsold), max(autotrader$yearsold), length = 100)
+
+plot(price.xx, predict(priceBN, newdata = price.xx), type = "l", 
+     main = "Price bestNormalizing transformation", 
+     xlab = "Price ($)", ylab = "f(price)")
+plot(mileage.xx, predict(mileageBN, newdata = mileage.xx), type = "l", 
+     main = "Mileage bestNormalizing transformation", 
+     xlab = "Mileage", ylab = "f(Mileage)")
+plot(yearsold.xx, predict(yearsoldBN, newdata = yearsold.xx), type = "l", 
+     main = "Years-old bestNormalizing transformation", 
+     xlab = "Years-old", ylab = "f(Years-old)")
+
+autotrader$price.t <- priceBN$x.t
+autotrader$mileage.t <- mileageBN$x.t
+autotrader$yearsold.t <- yearsoldBN$x.t
+
+fit4 <- lm(price.t ~ mileage.t + model +
+               yearsold.t  + factor(status),
+           data = autotrader)
+summary(fit4)
+
+miles.t <- predict(mileageBN, newdata = mileage.xx)
+c1 <- coef(fit4)["mileage.t"]
+
+par(mfrow = c(1, 1))
+plot(
+    mileageBN$x.t,
+    priceBN$x.t,
+    pch = 20,
+    cex = .5,
+    col = "slategrey"
+)
+lines(miles.t,
+      coef(fit4)[1] + c1 * miles.t,
+      col = 4,
+      lwd = 2)
+
+## Mileage effect
+plot(autotrader$mileage,
+     autotrader$price,
+     pch = 20,
+     cex = .5,
+     col = "slategrey", 
+     main = "Mileage effect (using bestNormalize transformations in model)"
+)
+line_vals <- miles.t * c1 + coef(fit4)[1]
+lines(
+    mileage.xx,
+    y = predict(priceBN, newdata = line_vals, inverse = TRUE),
+    lwd = 2,
+    col = 4
+)
+
+## Years Old effect
+yo.t <- predict(yearsoldBN, newdata = yearsold.xx)
+c2 <- coef(fit4)["yearsold.t"]
+
+plot(
+    jitter(autotrader$yearsold, 1.5),
+    autotrader$price,
+    pch = 20,
+    cex = .5,
+    col = "slategrey", 
+    main = "Years old effect (using bestNormalize transformation)"
+)
+line_vals <- yo.t * c2 + coef(fit4)[1]
+lines(
+    yearsold.xx,
+    y = predict(priceBN, newdata = line_vals, inverse = TRUE),
+    lwd = 2,
+    col = 4
+)
+
+```

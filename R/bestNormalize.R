@@ -4,9 +4,12 @@
 #' @aliases predict.bestNormalize
 #'   
 #' @description Performs a suite of normalizing transformations, and selects the
-#'   best one on the basis of a particular statistic.
+#'   best one on the basis of the Shapiro-Wilks test for normality (ie, the one 
+#'   with the highest p-value, ie the one that shows the least amount of
+#'   evidence against normality).
 #' @param x A vector to normalize
-#' @details \code{bestNormalize} estimates the optimal normalizing
+#' @param allow_orderNorm set to FALSE if orderNorm should not be applied
+#' @details \code{bestNormalize} estimates the optimal normalizing 
 #'   transformation. This transformation can be performed on new data, and 
 #'   inverted, via the \code{predict} function.
 #'   
@@ -14,10 +17,9 @@
 #' 
 #' \item{x.t}{transformed original data} 
 #' \item{x}{original data} 
-#' \item{method}{method of normalization chosen}
+#' \item{norm_stats}{Pearson's chi-squared normality test statistics}
 #' \item{chosen_transform}{info about the tranformation (of appropriate class)}
-#' \item{n}{size of vector}
-#'   
+#' 
 #' The \code{predict} function returns the numeric value of the transformation
 #' performed on new data, and allows for the inverse transformation as well.
 #' 
@@ -38,39 +40,29 @@
 #'  \code{\link{yeojohnson}} 
 #' @export
 bestNormalize <- function(x,
-                          D_max = 1,
-                          allow_orderNorm = T,
+                          allow_orderNorm = TRUE,
                           ...) {
-  
+  stopifnot(is.numeric(x))
   x.t <- list()
-  x.t[['lambert']] <- lambert(x)
-  x.t[['yeojohnson']] <- yeojohnson(x)
-  
-  if (all(x > 0)) x.t[['boxcox']] <- boxcox(x)
-  
-  D <- unlist(lapply(x.t, function(x)
-    unname(nortest::lillie.test(as.vector(x$x.t))$statistic)))
-
-  if (min(D, na.rm = T) > D_max) {
-    if (allow_orderNorm) {
-      x.t$orderNorm <- orderNorm(x, ...)
-      D <- c(D, nortest::lillie.test(as.vector(x.t$orderNorm$x.t))$statistic)
-      names(D)[length(D)] <- 'orderNorm'
-    } else {
-      x.t$binarize <- binarize(x, ...)
-      D <- c(D, -Inf)
-      names(D)[length(D)] <- 'binarize'
-      warning('Data binarized, consider increasing D_max or allowing orderNorm')
-    }
+  for(i in c('lambert', 'yeojohnson', 'boxcox', 'orderNorm', 'binarize')) {
+    trans_i <- try(do.call(i, list(x = x)), silent = TRUE)
+    if(is.character(trans_i))
+      warning(i, ' did not work; ', trans_i)
+    else
+      x.t[[i]] <- trans_i
   }
   
-  xFinal <- x.t[[which.min(D)]]$x.t
+  if (!allow_orderNorm && !is.character(x.t$orderNorm)) 
+    x.t <- x.t[names(x.t) != 'orderNorm']
+  
+  norm_stats <- unlist(lapply(x.t, function(x) x$norm_stat))
+  best_idx <- which.min(norm_stats)
+  
   val <- list(
-    x.t = xFinal,
+    x.t = x.t[[best_idx]]$x.t,
     x = x,
-    D = D,
-    n = length(xFinal),
-    chosen_transform = x.t[[which.min(D)]]
+    norm_stats = norm_stats,
+    chosen_transform = x.t[[best_idx]]
   )
   class(val) <- 'bestNormalize'
   val

@@ -19,3 +19,19 @@ test_that('boxcox Transforms new data consistently', {
   expect_equal(nd, nd2)
 })
 
+test_that('boxcox does not try to estimate with negatives' , {
+  expect_error(boxcox(c(-1, 2, 3)))
+})
+
+test_that('boxcox correctly handles missing original data', {
+  b <- boxcox(c(NA, train))
+  expect_equal(as.numeric(NA), b$x.t[1])
+  expect_equal(as.numeric(NA), predict(b)[1])
+  expect_equal(as.numeric(NA), predict(b, inverse = TRUE)[1])
+})
+
+test_that('boxcox correctly handles missing new data', {
+  b <- boxcox(train)
+  expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA))[2])
+  expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
+})

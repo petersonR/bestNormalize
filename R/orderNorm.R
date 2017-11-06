@@ -30,10 +30,10 @@
 #'   
 #' \item{x.t}{transformed original data} 
 #' \item{x}{original data} 
-#' \item{n}{size of vector}
+#' \item{n}{number of nonmissing observations}
 #' \item{warn_status}{indicator if ties are present}
 #' \item{fit}{fit to be used for extrapolation, if needed}
-#'   
+#' \item{norm_stat}{Pearson's chi-squared normality test statistic}
 #' The \code{predict} function returns the numeric value of the transformation 
 #' performed on new data, and allows for the inverse transformation as well.
 #' 
@@ -54,15 +54,17 @@
 #'  \code{\link{yeojohnson}} 
 #' @export
 orderNorm <- function(x) {
+  stopifnot(is.numeric(x))
   warn_status <- 0
   nunique <- length(unique(x))
+  na_idx <- is.na(x)
   
   if (nunique < length(x)) {
     warning('Ties in data, Normal distribution not guaranteed')
     warn_status <- 1
   }
   
-  x.t <- qnorm(rank(x, na.last = 'keep') / (length(x) + 1))
+  x.t <- qnorm(rank(x, na.last = 'keep') / (length(x) + 1 - sum(na_idx)))
   
   # fit linear model for potential future extrapolation
   fit <- lm(x.t ~ x)
@@ -70,10 +72,10 @@ orderNorm <- function(x) {
   val <- list(
     x.t = x.t,
     x = x,
-    n = length(x),
-    method = 'orderNorm',
+    n = length(x) - sum(is.na(x)),
     warn_status = warn_status,
-    fit = fit
+    fit = fit,
+    norm_stat = unname(nortest::pearson.test(x.t)$stat)
   )
   
   class(val) <- 'orderNorm'
@@ -83,41 +85,48 @@ orderNorm <- function(x) {
 #' @rdname orderNorm
 #' @method predict orderNorm
 #' @export
-predict.orderNorm <- function(orderNorm.obj,
+predict.orderNorm <- function(orderNorm_obj,
                               newdata = NULL,
                               inverse = FALSE) {
   # Perform transformation
   if(!inverse) {
-    if(is.null(newdata)) newdata <- orderNorm.obj$x
-    return(orderNorm_trans(orderNorm.obj, newdata))
+    if(is.null(newdata)) newdata <- orderNorm_obj$x
+    na_idx <- !complete.cases(newdata)
+    
+    newdata[!na_idx] <- orderNorm_trans(orderNorm_obj, newdata[!na_idx])
+    return(newdata)
   } 
   
   # Perform reverse transformation
-  if (is.null(newdata)) newdata <- orderNorm.obj$x.t
-  inv_orderNorm_trans(orderNorm.obj, newdata)
+  if (is.null(newdata)) newdata <- orderNorm_obj$x.t
+  
+  na_idx <- !complete.cases(newdata)
+  newdata[!na_idx] <- inv_orderNorm_trans(orderNorm_obj, newdata[!na_idx])
+  
+  return(newdata)
 }
 
 #' @rdname orderNorm
 #' @method print orderNorm
 #' @export
-print.orderNorm <- function(orderNorm.obj) {
-  cat('Smooth OrderNorm Transformation with', orderNorm.obj$n, 
-      'observations and', 
+print.orderNorm <- function(orderNorm_obj) {
+  cat('OrderNorm Transformation with', orderNorm_obj$n, 
+      'nonmissing obs and', 
       ifelse(
-        orderNorm.obj$warn_status == 1, 
-        paste0('ties\n - ', length(unique(orderNorm.obj$x)), ' unique values'),
+        orderNorm_obj$warn_status == 1, 
+        paste0('ties\n - ', length(unique(orderNorm_obj$x)), ' unique values'),
         'no ties'), '\n')
 }
 
-orderNorm_trans <- function(orderNorm.obj, new_points) {
-  x_t <- orderNorm.obj$x.t
-  old_points <- orderNorm.obj$x
+orderNorm_trans <- function(orderNorm_obj, new_points) {
+  x_t <- orderNorm_obj$x.t
+  old_points <- orderNorm_obj$x
   vals <- approx(old_points, x_t, xout = new_points, rule = 1)
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
     warning('Transformations requested outside observed domain; linear approx. on ranks applied')
-    fit <- orderNorm.obj$fit
+    fit <- orderNorm_obj$fit
     p <- fitted(fit)
     l_idx <- vals$x < min(old_points)
     h_idx <- vals$x > max(old_points)
@@ -137,16 +146,16 @@ orderNorm_trans <- function(orderNorm.obj, new_points) {
   vals$y
 }
 
-inv_orderNorm_trans <- function(orderNorm.obj, new_points_x_t) {
-  x_t <- orderNorm.obj$x.t
-  old_points <- orderNorm.obj$x
+inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t) {
+  x_t <- orderNorm_obj$x.t
+  old_points <- orderNorm_obj$x
   vals <- approx(x_t, old_points, xout = new_points_x_t, rule = 1)
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
     warning('Transformations requested outside observed domain; linear approx. on ranks applied')
     
-    fit <- orderNorm.obj$fit
+    fit <- orderNorm_obj$fit
     p <- fitted(fit)
     l_idx <- vals$x < min(x_t)
     h_idx <- vals$x > max(x_t)

@@ -20,10 +20,13 @@ binarize(x, location_measure = "median")
 "median", "mean", "mode", a number, or a function.}
 }
 \value{
-A list of class \code{binarize} with elements \item{x.t}{transformed
-  original data} \item{x}{original data} \item{method}{location_measure used
-  for original fitting} \item{location}{estimated location_measure} 
-  \item{n}{size of vector}
+A list of class \code{binarize} with elements 
+  \item{x.t}{transformed original data} 
+  \item{x}{original data} 
+  \item{method}{location_measure used for original fitting} 
+  \item{location}{estimated location_measure} 
+  \item{n}{number of nonmissing observations}
+  \item{norm_pval}{always 0 for binarize}
   
   The \code{predict} function with \code{inverse = FALSE} returns the numeric
   value (0 or 1) of the transformation on \code{newdata} (which defaults to

@@ -9,5 +9,5 @@ The `bestNormalize` R package was designed to help find a normalizing transforma
 
 The bottom line: none of these methods are guaranteed to produce the best normalizing transformation. This package will look at a range of possible transformations and return the best one, ie the one that makes it look the *most* normal. 
 
-This package also introduces a technique to normalize the data based off of a smoothed rank mapping to the normal distribution, which allows us to guarantee normally distributed transformed data (if ties are not present). 
+This package also introduces a technique to normalize the data based off of a rank mapping to the normal distribution, which allows us to guarantee normally distributed transformed data (if ties are not present). 
 

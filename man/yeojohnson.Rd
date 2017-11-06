@@ -29,7 +29,8 @@ A list of class \code{yeojohnson} with elements
 \item{mean}{mean of vector post-YJ transformation} 
 \item{sd}{sd of vector post-BC transformation} 
 \item{lambda}{estimated lambda value for skew transformation} 
-\item{n}{size of vector}
+\item{n}{number of nonmissing observations}
+\item{norm_pval}{Shapiro-Wilk normality test p-value}
   
 The \code{predict} function returns the numeric value of the transformation
 performed on new data, and allows for the inverse transformation as well.

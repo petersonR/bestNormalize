@@ -14,8 +14,6 @@ Description: This packages contains functions to perform a family of
 License: GPL-3
 Depends: R (>= 3.1.0)
 Imports: 
-    caret, 
-    forecast, 
     LambertW,
     nortest
 Suggests: 

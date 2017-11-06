@@ -25,7 +25,8 @@
 #'   \item{mean}{mean of vector} 
 #'   \item{sd}{sd of vector post-BC transformation} 
 #'   \item{tau.mat}{estimated parameters of LambertW::Gaussianize} 
-#'   \item{n}{size of vector}
+#'   \item{n}{number of nonmissing observations}
+#'   \item{norm_stat}{Pearson's chi-squared normality test statistic}
 #'   
 #' The \code{predict} function returns the numeric value of the transformation 
 #' performed on new data, and allows for the inverse transformation as well.
@@ -54,12 +55,17 @@
 #' @seealso  \code{\link[LambertW]{LambertW::Gaussianize}}
 #' @export
 lambert <- function(x, type = 's', ...) {
-  obj <- unname(LambertW::Gaussianize(x, type = type, return.tau.mat = T, ...))
-  x.t <- obj[[1]]
+  stopifnot(is.numeric(x))
+  na_idx <- !complete.cases(x)
+  x_complete <- x[!na_idx]
+  obj <- unname(LambertW::Gaussianize(x_complete, type = type, return.tau.mat = T, ...))
+  
+  x.t <- x
+  x.t[!na_idx] <- obj[[1]]
   tau.mat <- obj[[2]]
   
-  mu <- mean(x.t)
-  sigma <- sd(x.t)
+  mu <- mean(x.t, na.rm = TRUE)
+  sigma <- sd(x.t, na.rm = TRUE)
   
   x.t <- (x.t - mu) / sigma
   
@@ -71,8 +77,9 @@ lambert <- function(x, type = 's', ...) {
     mean = mu,
     sd = sigma,
     tau.mat = tau.mat,
-    n = length(x.t),
-    type = type
+    n = length(x.t) - sum(na_idx),
+    type = type,
+    norm_stat = unname(nortest::pearson.test(x.t)$stat)
   )
   
   class(val) <- 'lambert'
@@ -93,8 +100,10 @@ predict.lambert <- function(lambert_obj,
   if (inverse)
     newdata <- newdata * lambert_obj$sd + lambert_obj$mean
   
-  newdata <- LambertW::Gaussianize(
-    as.matrix(newdata),
+  na_idx <- !complete.cases(newdata)
+
+  newdata[!na_idx] <- LambertW::Gaussianize(
+    as.matrix(newdata[!na_idx]),
     type = lambert_obj$type,
     tau.mat = lambert_obj$tau.mat,
     inverse = inverse
@@ -118,7 +127,7 @@ print.lambert <- function(lambert_obj) {
 
   
   cat('Lambert WxF Transformation of type', lambert_obj$type, 
-      'with', lambert_obj$n, 'observations:\n', 
+      'with', lambert_obj$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       prettyTau,
       '- mean =', lambert_obj$mean, '\n',

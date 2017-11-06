@@ -20,11 +20,16 @@ boxcox(x, ...)
 lambda parameter (lower, upper, epsilon)}
 }
 \value{
-A list of class \code{boxcox} with elements \item{x.t}{transformed
-  original data} \item{x}{original data} \item{mean}{mean of vector post-BC
-  transformation} \item{sd}{sd of vector post-BC transformation} 
-  \item{lambda}{estimated lambda value for skew transformation} \item{n}{size
-  of vector}
+A list of class \code{boxcox} with elements 
+\item{x.t}{transformed 
+  original data} 
+  \item{x}{original data} 
+  \item{mean}{mean of vector post-BC 
+  transformation} 
+  \item{sd}{sd of vector post-BC transformation} 
+  \item{lambda}{estimated lambda value for skew transformation} 
+  \item{n}{number of nonmissing observations}
+  \item{norm_pval}{Shapiro-Wilk normality test p-value}
   
   The \code{predict} function returns the numeric value of the transformation
   performed on new data, and allows for the inverse transformation as well.

@@ -15,3 +15,16 @@ test_that('LW Transforms new data', {
   pred <- predict.binarize(binarize.obj, newdata = nd)
   expect_true(!any(is.na(pred)))
 })
+
+test_that('binarize correctly handles missing original data', {
+  b <- binarize(c(NA, train))
+  expect_equal(as.numeric(NA), b$x.t[1])
+  expect_equal(as.numeric(NA), predict(b)[1])
+  expect_equal(as.numeric(NA), as.numeric(predict(b, inverse = TRUE)[1]))
+})
+
+test_that('binarize correctly handles missing new data', {
+  b <- binarize(train)
+  expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA))[2])
+  expect_equal(as.numeric(NA), as.numeric(predict(b, newdata = c(1, NA), inverse = TRUE)[2]))
+})

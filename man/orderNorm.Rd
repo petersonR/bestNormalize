@@ -9,9 +9,9 @@
 \usage{
 orderNorm(x)
 
-\method{predict}{orderNorm}(orderNorm.obj, newdata = NULL, inverse = FALSE)
+\method{predict}{orderNorm}(orderNorm_obj, newdata = NULL, inverse = FALSE)
 
-\method{print}{orderNorm}(orderNorm.obj)
+\method{print}{orderNorm}(orderNorm_obj)
 }
 \arguments{
 \item{x}{A vector to normalize}
@@ -21,10 +21,10 @@ A list of class \code{orderNorm} with elements
   
 \item{x.t}{transformed original data} 
 \item{x}{original data} 
-\item{n}{size of vector}
+\item{n}{number of nonmissing observations}
 \item{warn_status}{indicator if ties are present}
 \item{fit}{fit to be used for extrapolation, if needed}
-  
+\item{norm_pval}{Shapiro-Wilk normality test p-value}
 The \code{predict} function returns the numeric value of the transformation 
 performed on new data, and allows for the inverse transformation as well.
 }

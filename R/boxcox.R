@@ -16,11 +16,16 @@
 #' data.
 #' 
 #' 
-#' @return A list of class \code{boxcox} with elements \item{x.t}{transformed
-#'   original data} \item{x}{original data} \item{mean}{mean of vector post-BC
-#'   transformation} \item{sd}{sd of vector post-BC transformation} 
-#'   \item{lambda}{estimated lambda value for skew transformation} \item{n}{size
-#'   of vector}
+#' @return A list of class \code{boxcox} with elements 
+#' \item{x.t}{transformed 
+#'   original data} 
+#'   \item{x}{original data} 
+#'   \item{mean}{mean of vector post-BC 
+#'   transformation} 
+#'   \item{sd}{sd of vector post-BC transformation} 
+#'   \item{lambda}{estimated lambda value for skew transformation} 
+#'   \item{n}{number of nonmissing observations}
+#'   \item{norm_stat}{Pearson's chi-squared normality test statistic}
 #'   
 #'   The \code{predict} function returns the numeric value of the transformation
 #'   performed on new data, and allows for the inverse transformation as well.
@@ -40,18 +45,21 @@
 #' @seealso  \code{\link[MASS]{boxcox}}
 #' @export
 boxcox <- function(x, ...) {
+  stopifnot(is.numeric(x))
   l <- estimate_boxcox_lambda(x, ...)
   x.t <- boxcox_trans(x, l)
-  mu <- mean(x.t)
-  sigma <- sd(x.t)
+  mu <- mean(x.t, na.rm = TRUE)
+  sigma <- sd(x.t, na.rm = TRUE)
   x.t <- (x.t - mu) / sigma
+  
   val <- list(
     x.t = x.t,
     x = x,
     mean = mu,
     sd = sigma,
     lambda = l,
-    n = length(x.t)
+    n = length(x.t) - sum(is.na(x)),
+    norm_stat = unname(nortest::pearson.test(x.t)$stat)
   )
   class(val) <- c('boxcox', class(val))
   val
@@ -70,9 +78,9 @@ predict.boxcox <- function(boxcox_obj,
   
   if (inverse) {
     newdata <- newdata * boxcox_obj$sd + boxcox_obj$mean
-    newdata <-  inv_boxcox_trans(newdata, boxcox_obj$lambda, boxcox_obj$eps)
+    newdata <-  inv_boxcox_trans(newdata, boxcox_obj$lambda)
   } else if (!inverse) {
-    newdata <- boxcox_trans(newdata, boxcox_obj$lambda, boxcox_obj$eps)
+    newdata <- boxcox_trans(newdata, boxcox_obj$lambda)
     newdata <- (newdata - boxcox_obj$mean) / boxcox_obj$sd
   }
   unname(newdata)
@@ -82,11 +90,12 @@ predict.boxcox <- function(boxcox_obj,
 #' @method print boxcox
 #' @export
 print.boxcox <- function(boxcox_obj) {
-  cat('Box Cox Transformation with', boxcox_obj$n, 'observations:\n', 
+  cat('Box Cox Transformation with', boxcox_obj$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       '- lamda =', boxcox_obj$lambda, '\n',
       '- mean =', boxcox_obj$mean, '\n',
-      '- sd =', boxcox_obj$sd, '\n')
+      '- sd =', boxcox_obj$sd, '\n',
+      'Transformed data Shapiro-Wilks pvalue =', boxcox_obj$norm_pval, '\n')
 }
 
 # Modified version of boxcox from MASS package

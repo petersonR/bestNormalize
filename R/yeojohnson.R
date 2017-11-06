@@ -22,7 +22,8 @@
 #' \item{mean}{mean of vector post-YJ transformation} 
 #' \item{sd}{sd of vector post-BC transformation} 
 #' \item{lambda}{estimated lambda value for skew transformation} 
-#' \item{n}{size of vector}
+#' \item{n}{number of nonmissing observations}
+#' \item{norm_stat}{Pearson's chi-squared normality test statistic}
 #'   
 #' The \code{predict} function returns the numeric value of the transformation
 #' performed on new data, and allows for the inverse transformation as well.
@@ -48,18 +49,24 @@
 #' @seealso  \code{\link[recipes]{recipes::step_YeoJohnson}}
 #' @export
 yeojohnson <- function(x, eps = .001, ...) {
+  stopifnot(is.numeric(x))
   lambda <- estimate_yeojohnson_lambda(x, eps, ...)
-  x.t <- yeojohnson_trans(x, lambda, eps)
-  mu <- mean(x.t)
-  sigma <- sd(x.t)
+  x.t <- x
+  na_idx <- is.na(x)
+  x.t[!na_idx] <- yeojohnson_trans(x[!na_idx], lambda, eps)
+  mu <- mean(x.t, na.rm = TRUE)
+  sigma <- sd(x.t, na.rm = TRUE)
   x.t <- (x.t - mu) / sigma
+  
+  
   val <- list(
     x.t = x.t,
     x = x,
     mean = mu,
     sd = sigma,
     lambda = lambda,
-    n = length(x.t)
+    n = length(x.t) - sum(na_idx),
+    norm_stat = unname(nortest::pearson.test(x.t)$stat)
   )
   class(val) <- 'yeojohnson'
   val
@@ -76,11 +83,13 @@ predict.yeojohnson <- function(yeojohnson_obj,
   if (is.null(newdata))
     newdata <- yeojohnson_obj$x.t
   
+  na_idx <- is.na(newdata)
+  
   if (inverse) {
     newdata <- newdata * yeojohnson_obj$sd + yeojohnson_obj$mean
-    newdata <- inv_yeojohnson_trans(newdata, yeojohnson_obj$lambda)
+    newdata[!na_idx] <- inv_yeojohnson_trans(newdata[!na_idx], yeojohnson_obj$lambda)
   } else {
-    newdata <- yeojohnson_trans(newdata, yeojohnson_obj$lambda)
+    newdata[!na_idx] <- yeojohnson_trans(newdata[!na_idx], yeojohnson_obj$lambda)
     newdata <- (newdata - yeojohnson_obj$mean) / yeojohnson_obj$sd
   }
   

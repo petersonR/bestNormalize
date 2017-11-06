@@ -10,7 +10,7 @@
 \alias{print.bestNormalize}
 \title{bestNormalize: Flexibly calculate the best normalizing transformation for a vector}
 \usage{
-bestNormalize(x, D_max = 1, allow_orderNorm = T, ...)
+bestNormalize(x, allow_orderNorm = TRUE, ...)
 
 \method{predict}{bestNormalize}(BNobject, newdata = NULL, inverse = FALSE)
 
@@ -18,6 +18,8 @@ bestNormalize(x, D_max = 1, allow_orderNorm = T, ...)
 }
 \arguments{
 \item{x}{A vector to normalize}
+
+\item{allow_orderNorm}{set to FALSE if orderNorm should not be applied}
 }
 \value{
 A list of class \code{bestNormalize} with elements 
@@ -26,8 +28,8 @@ A list of class \code{bestNormalize} with elements
 \item{x}{original data} 
 \item{method}{method of normalization chosen}
 \item{chosen_transform}{info about the tranformation (of appropriate class)}
-\item{n}{size of vector}
-  
+\item{n}{number of nonmissing observations}
+
 The \code{predict} function returns the numeric value of the transformation
 performed on new data, and allows for the inverse transformation as well.
 }
@@ -39,10 +41,12 @@ based off of a goodness of fit statistic.
 #'
 
 Performs a suite of normalizing transformations, and selects the
-  best one on the basis of a particular statistic.
+  best one on the basis of the Shapiro-Wilks test for normality (ie, the one 
+  with the highest p-value, ie the one that shows the least amount of
+  evidence against normality).
 }
 \details{
-\code{bestNormalize} estimates the optimal normalizing
+\code{bestNormalize} estimates the optimal normalizing 
   transformation. This transformation can be performed on new data, and 
   inverted, via the \code{predict} function.
 }
