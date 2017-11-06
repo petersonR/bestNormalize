@@ -26,9 +26,8 @@ A list of class \code{bestNormalize} with elements
 
 \item{x.t}{transformed original data} 
 \item{x}{original data} 
-\item{method}{method of normalization chosen}
+\item{norm_stats}{Pearson's chi-squared normality test statistics}
 \item{chosen_transform}{info about the tranformation (of appropriate class)}
-\item{n}{number of nonmissing observations}
 
 The \code{predict} function returns the numeric value of the transformation
 performed on new data, and allows for the inverse transformation as well.
