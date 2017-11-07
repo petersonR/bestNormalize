@@ -82,16 +82,18 @@ predict.bestNormalize <- function(object, newdata = NULL, inverse = FALSE, ...) 
 #' @export
 print.bestNormalize <- function(x, ...) {
   prettyD <- paste0(
-    'Estimated Normality Statistics (D):\n',
-    ifelse(length(x$D['boxcox']), 
-           paste(" - Box-Cox:", round(x$D['boxcox'], 4), '\n'), ''),
-    ifelse(length(x$D['boxcox']), 
-           paste(" - Lambert's W:", round(x$D['lambert'], 4), '\n'), ''),
-    ifelse(length(x$D['lambert']), 
-           paste(" - Yeo-Johnson:", round(x$D['yeojohnson'], 4), '\n'), '')
+    'Estimated Normality Statistics (Pearson P, lower => more normal):\n',
+    ifelse(length(x$norm_stats['boxcox']), 
+           paste(" - Box-Cox:", round(x$norm_stats['boxcox'], 1), '\n'), ''),
+    ifelse(length(x$norm_stats['lambert']), 
+           paste(" - Lambert's W:", round(x$norm_stats['lambert'], 4), '\n'), ''),
+    ifelse(length(x$norm_stats['yeojohnson']), 
+           paste(" - Yeo-Johnson:", round(x$norm_stats['yeojohnson'], 4), '\n'), ''),
+    ifelse(length(x$norm_stats['orderNorm']), 
+           paste(" - orderNorm:", round(x$norm_stats['orderNorm'], 4), '\n'), '')
   )
   
-  cat('Best Normalizing transformation with', x$n, 'Observations\n',
+  cat('Best Normalizing transformation with', x$chosen_transform$n, 'Observations\n',
       prettyD, '\nBased off these, bestNormalize chose:\n')
   print(x$chosen_transform)
 }

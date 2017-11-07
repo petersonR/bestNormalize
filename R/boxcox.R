@@ -96,8 +96,7 @@ print.boxcox <- function(x, ...) {
       'Estimated statistics:\n',
       '- lamda =', x$lambda, '\n',
       '- mean =', x$mean, '\n',
-      '- sd =', x$sd, '\n',
-      'Transformed data Shapiro-Wilks pvalue =', x$norm_pval, '\n')
+      '- sd =', x$sd, '\n')
 }
 
 # Modified version of boxcox from MASS package

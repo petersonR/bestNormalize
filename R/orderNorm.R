@@ -117,6 +117,7 @@ predict.orderNorm <- function(object,
 
 #' @rdname orderNorm
 #' @method print orderNorm
+#' @importFrom stats quantile
 #' @export
 print.orderNorm <- function(x, ...) {
   cat('OrderNorm Transformation with', x$n, 
@@ -124,7 +125,9 @@ print.orderNorm <- function(x, ...) {
       ifelse(
         x$warn_status == 1, 
         paste0('ties\n - ', length(unique(x$x)), ' unique values'),
-        'no ties'), '\n')
+        'no ties'), '\n',
+      '- Original quantiles:\n')
+  print(round(quantile(x$x), 3))
 }
 
 #' @importFrom stats approx fitted predict.lm
