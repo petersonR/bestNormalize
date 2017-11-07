@@ -9,15 +9,21 @@
 \usage{
 boxcox(x, ...)
 
-\method{predict}{boxcox}(boxcox_obj, newdata = NULL, inverse = F)
+\method{predict}{boxcox}(object, newdata = NULL, inverse = FALSE, ...)
 
-\method{print}{boxcox}(boxcox_obj)
+\method{print}{boxcox}(x, ...)
 }
 \arguments{
 \item{x}{A vector to normalize with Box-Cox}
 
 \item{...}{Additional arguments that can be passed to the estimation of the
 lambda parameter (lower, upper, epsilon)}
+
+\item{object}{an object of class 'boxcox'}
+
+\item{newdata}{a vector of data to be (reverse) transformed}
+
+\item{inverse}{if TRUE, performs reverse transformation}
 }
 \value{
 A list of class \code{boxcox} with elements 

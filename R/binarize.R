@@ -15,7 +15,11 @@
 #' @param x A vector to binarize
 #' @param location_measure which location measure should be used? can either be
 #'   "median", "mean", "mode", a number, or a function.
-#'   
+#' @param newdata a vector of data to be (reverse) transformed
+#' @param inverse if TRUE, performs reverse transformation
+#' @param object an object of class 'binarize'
+#' @param ... additional arguments
+#' 
 #' @return A list of class \code{binarize} with elements 
 #'   \item{x.t}{transformed original data} 
 #'   \item{x}{original data} 
@@ -37,6 +41,7 @@
 #' (p <- predict(binarize_obj))
 #' 
 #' predict(binarize_obj, newdata = p, inverse = TRUE)
+#' @importFrom stats density median
 #' @export
 binarize <- function(x, location_measure = 'median') {
   stopifnot(is.numeric(x))
@@ -73,15 +78,15 @@ binarize <- function(x, location_measure = 'median') {
 #' @rdname binarize
 #' @method predict binarize
 #' @export
-predict.binarize <- function(binarize_obj, newdata = NULL, inverse = F) {
+predict.binarize <- function(object, newdata = NULL, inverse = FALSE, ...) {
   if (is.null(newdata) & !inverse)
-    newdata <- binarize_obj$x
+    newdata <- object$x
   if (is.null(newdata))
-    newdata <- binarize_obj$x.t
+    newdata <- object$x.t
   
   if (!inverse)
-    return(as.numeric(newdata > binarize_obj$location))
-  prettyLoc <- round(binarize_obj$location,
+    return(as.numeric(newdata > object$location))
+  prettyLoc <- round(object$location,
                      getOption('digits', 2))
   labels <- c(paste0('< ', prettyLoc),
               paste0('>= ', prettyLoc))
@@ -92,9 +97,9 @@ predict.binarize <- function(binarize_obj, newdata = NULL, inverse = F) {
 #' @rdname binarize
 #' @method print binarize
 #' @export
-print.binarize <- function(binarize_obj) {
-  cat('Binarize Transformation with', binarize_obj$n, 
-      'nonmissing obs.\nEstimated Statistic:\n -', binarize_obj$method,
-      '=', binarize_obj$location)
+print.binarize <- function(x, ...) {
+  cat('Binarize Transformation with', x$n, 
+      'nonmissing obs.\nEstimated Statistic:\n -', x$method,
+      '=', x$location)
 }
 

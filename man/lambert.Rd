@@ -9,9 +9,9 @@
 \usage{
 lambert(x, type = "s", ...)
 
-\method{predict}{lambert}(lambert_obj, newdata = NULL, inverse = FALSE)
+\method{predict}{lambert}(object, newdata = NULL, inverse = FALSE, ...)
 
-\method{print}{lambert}(lambert_obj)
+\method{print}{lambert}(x, ...)
 }
 \arguments{
 \item{x}{A vector to normalize with Box-Cox}
@@ -21,6 +21,12 @@ are "s", "h", and "hh", see details)}
 
 \item{...}{Additional arguments that can be passed to the 
 LambertW::Gaussianize function}
+
+\item{object}{an object of class 'lambert'}
+
+\item{newdata}{a vector of data to be (reverse) transformed}
+
+\item{inverse}{if TRUE, performs reverse transformation}
 }
 \value{
 A list of class \code{lambert} with elements 
@@ -72,5 +78,5 @@ Georg M. Goerg (2016). LambertW: An R package for Lambert W x F
   Scientific World Journal.
 }
 \seealso{
-\code{\link[LambertW]{LambertW::Gaussianize}}
+\code{\link[LambertW]{Gaussianize}}
 }

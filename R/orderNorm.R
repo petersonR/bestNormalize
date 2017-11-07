@@ -26,6 +26,11 @@
 #'   \code{predict} function.
 #'   
 #' @param x A vector to normalize
+#' @param newdata a vector of data to be (reverse) transformed
+#' @param inverse if TRUE, performs reverse transformation
+#' @param object an object of class 'orderNorm'
+#' @param ... additional arguments
+#' 
 #' @return A list of class \code{orderNorm} with elements
 #'   
 #' \item{x.t}{transformed original data} 
@@ -52,6 +57,7 @@
 #'  \code{\link{lambert}}, 
 #'  \code{\link{bestNormalize}},
 #'  \code{\link{yeojohnson}} 
+#' @importFrom stats qnorm lm
 #' @export
 orderNorm <- function(x) {
   stopifnot(is.numeric(x))
@@ -85,23 +91,26 @@ orderNorm <- function(x) {
 #' @rdname orderNorm
 #' @method predict orderNorm
 #' @export
-predict.orderNorm <- function(orderNorm_obj,
+predict.orderNorm <- function(object,
                               newdata = NULL,
-                              inverse = FALSE) {
+                              inverse = FALSE, 
+                              ...) {
+  stopifnot(is.null(newdata) || is.numeric(newdata))
+  
   # Perform transformation
   if(!inverse) {
-    if(is.null(newdata)) newdata <- orderNorm_obj$x
-    na_idx <- !complete.cases(newdata)
+    if(is.null(newdata)) newdata <- object$x
+    na_idx <- is.na(newdata)
     
-    newdata[!na_idx] <- orderNorm_trans(orderNorm_obj, newdata[!na_idx])
+    newdata[!na_idx] <- orderNorm_trans(object, newdata[!na_idx])
     return(newdata)
   } 
   
   # Perform reverse transformation
-  if (is.null(newdata)) newdata <- orderNorm_obj$x.t
+  if (is.null(newdata)) newdata <- object$x.t
   
-  na_idx <- !complete.cases(newdata)
-  newdata[!na_idx] <- inv_orderNorm_trans(orderNorm_obj, newdata[!na_idx])
+  na_idx <- is.na(newdata)
+  newdata[!na_idx] <- inv_orderNorm_trans(object, newdata[!na_idx])
   
   return(newdata)
 }
@@ -109,15 +118,16 @@ predict.orderNorm <- function(orderNorm_obj,
 #' @rdname orderNorm
 #' @method print orderNorm
 #' @export
-print.orderNorm <- function(orderNorm_obj) {
-  cat('OrderNorm Transformation with', orderNorm_obj$n, 
+print.orderNorm <- function(x, ...) {
+  cat('OrderNorm Transformation with', x$n, 
       'nonmissing obs and', 
       ifelse(
-        orderNorm_obj$warn_status == 1, 
-        paste0('ties\n - ', length(unique(orderNorm_obj$x)), ' unique values'),
+        x$warn_status == 1, 
+        paste0('ties\n - ', length(unique(x$x)), ' unique values'),
         'no ties'), '\n')
 }
 
+#' @importFrom stats approx fitted predict.lm
 orderNorm_trans <- function(orderNorm_obj, new_points) {
   x_t <- orderNorm_obj$x.t
   old_points <- orderNorm_obj$x
@@ -146,6 +156,7 @@ orderNorm_trans <- function(orderNorm_obj, new_points) {
   vals$y
 }
 
+#' @importFrom stats approx fitted
 inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t) {
   x_t <- orderNorm_obj$x.t
   old_points <- orderNorm_obj$x

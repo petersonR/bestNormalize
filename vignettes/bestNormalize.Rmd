@@ -87,9 +87,9 @@ The autotrader data set was scraped from autotrader.com as part of this package 
 data("autotrader")
 autotrader$yearsold <- 2017 - autotrader$Year
 ### Using best-normalize
-priceBN <- bestNormalize(autotrader$price, D_max = .05)
-mileageBN <- bestNormalize(autotrader$mileage, D_max = .05)
-yearsoldBN <- bestNormalize(autotrader$yearsold, D_max = .05)
+priceBN <- bestNormalize(autotrader$price)
+mileageBN <- bestNormalize(autotrader$mileage)
+yearsoldBN <- bestNormalize(autotrader$yearsold)
 
 par(mfrow = c(3, 2))
 MASS::truehist(autotrader$price)

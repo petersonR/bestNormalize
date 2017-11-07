@@ -9,12 +9,20 @@
 \usage{
 orderNorm(x)
 
-\method{predict}{orderNorm}(orderNorm_obj, newdata = NULL, inverse = FALSE)
+\method{predict}{orderNorm}(object, newdata = NULL, inverse = FALSE, ...)
 
-\method{print}{orderNorm}(orderNorm_obj)
+\method{print}{orderNorm}(x, ...)
 }
 \arguments{
 \item{x}{A vector to normalize}
+
+\item{object}{an object of class 'orderNorm'}
+
+\item{newdata}{a vector of data to be (reverse) transformed}
+
+\item{inverse}{if TRUE, performs reverse transformation}
+
+\item{...}{additional arguments}
 }
 \value{
 A list of class \code{orderNorm} with elements

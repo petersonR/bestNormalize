@@ -1,5 +1,4 @@
-library(testthat)
-library(bestNormalize)
+context('boxcox functionality')
 
 data(iris)
 train <- iris$Petal.Width

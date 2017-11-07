@@ -1,5 +1,4 @@
-library(testthat)
-library(bestNormalize)
+context('bestNormalize functionality')
 
 data(iris)
 train <- iris$Petal.Width

@@ -9,6 +9,9 @@
 #' @param eps A value to compare lambda against to see if it is equal to zero
 #' @param ... Additional arguments that can be passed to the estimation of the
 #'   lambda parameter (lower, upper)
+#' @param newdata a vector of data to be (reverse) transformed
+#' @param inverse if TRUE, performs reverse transformation
+#' @param object an object of class 'yeojohnson'
 #' @details \code{yeojohnson} estimates the optimal value of lamda for the Yeo-Johnson
 #' transformation. This transformation can be performed on new data, and
 #' inverted, via the \code{predict} function.
@@ -46,7 +49,8 @@
 #' 
 #' all.equal(x2, x)
 #' 
-#' @seealso  \code{\link[recipes]{recipes::step_YeoJohnson}}
+#' @seealso  \code{\link[recipes]{step_YeoJohnson}}
+#' @importFrom stats sd
 #' @export
 yeojohnson <- function(x, eps = .001, ...) {
   stopifnot(is.numeric(x))
@@ -75,22 +79,23 @@ yeojohnson <- function(x, eps = .001, ...) {
 #' @rdname yeojohnson
 #' @method predict yeojohnson
 #' @export
-predict.yeojohnson <- function(yeojohnson_obj,
+predict.yeojohnson <- function(object,
                                newdata = NULL,
-                               inverse = FALSE) {
+                               inverse = FALSE, 
+                               ...) {
   if (is.null(newdata) & !inverse)
-    newdata <- yeojohnson_obj$x
+    newdata <- object$x
   if (is.null(newdata))
-    newdata <- yeojohnson_obj$x.t
+    newdata <- object$x.t
   
   na_idx <- is.na(newdata)
   
   if (inverse) {
-    newdata <- newdata * yeojohnson_obj$sd + yeojohnson_obj$mean
-    newdata[!na_idx] <- inv_yeojohnson_trans(newdata[!na_idx], yeojohnson_obj$lambda)
+    newdata <- newdata * object$sd + object$mean
+    newdata[!na_idx] <- inv_yeojohnson_trans(newdata[!na_idx], object$lambda)
   } else {
-    newdata[!na_idx] <- yeojohnson_trans(newdata[!na_idx], yeojohnson_obj$lambda)
-    newdata <- (newdata - yeojohnson_obj$mean) / yeojohnson_obj$sd
+    newdata[!na_idx] <- yeojohnson_trans(newdata[!na_idx], object$lambda)
+    newdata <- (newdata - object$mean) / object$sd
   }
   
   unname(newdata)
@@ -99,18 +104,19 @@ predict.yeojohnson <- function(yeojohnson_obj,
 #' @rdname yeojohnson
 #' @method print yeojohnson
 #' @export
-print.yeojohnson <- function(yeojohnson_obj) {
-  cat('Yeo-Johnson Transformation with', yeojohnson_obj$n, 'observations:\n', 
+print.yeojohnson <- function(x, ...) {
+  cat('Yeo-Johnson Transformation with', x$n, 'observations:\n', 
       'Estimated statistics:\n',
-      '- lambda =', yeojohnson_obj$lambda, '\n',
-      '- mean =', yeojohnson_obj$mean, '\n',
-      '- sd =', yeojohnson_obj$sd, '\n')
+      '- lambda =', x$lambda, '\n',
+      '- mean =', x$mean, '\n',
+      '- sd =', x$sd, '\n')
 }
 
 # Helper functions that estimates yj lambda parameter
+#' @importFrom stats var optimize
 estimate_yeojohnson_lambda <- function(x, lower = -5, upper = 5, eps = .001) {
   n <- length(x)
-  ccID <- complete.cases(x)
+  ccID <- !is.na(x)
   x <- x[ccID]
   
 

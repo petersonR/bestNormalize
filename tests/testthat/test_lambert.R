@@ -1,5 +1,4 @@
-library(testthat)
-library(bestNormalize)
+context('lambert functionality')
 
 data(iris)
 

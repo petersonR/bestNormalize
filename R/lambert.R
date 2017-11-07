@@ -10,7 +10,10 @@
 #'   are "s", "h", and "hh", see details)
 #' @param ... Additional arguments that can be passed to the 
 #'   LambertW::Gaussianize function
-#'   
+#' @param newdata a vector of data to be (reverse) transformed
+#' @param inverse if TRUE, performs reverse transformation
+#' @param object an object of class 'lambert'
+#' 
 #' @details \code{lambert} uses the \code{LambertW} package to estimate a 
 #'   normalizing (or "Gaussianizing") transformation. This transformation can be
 #'   performed on new data, and inverted, via the \code{predict} function.
@@ -52,11 +55,12 @@
 #' 
 #' all.equal(x2, x)
 #' 
-#' @seealso  \code{\link[LambertW]{LambertW::Gaussianize}}
+#' @seealso  \code{\link[LambertW]{Gaussianize}}
+#' @importFrom stats sd
 #' @export
 lambert <- function(x, type = 's', ...) {
   stopifnot(is.numeric(x))
-  na_idx <- !complete.cases(x)
+  na_idx <- is.na(x)
   x_complete <- x[!na_idx]
   obj <- unname(LambertW::Gaussianize(x_complete, type = type, return.tau.mat = T, ...))
   
@@ -89,28 +93,31 @@ lambert <- function(x, type = 's', ...) {
 #' @rdname lambert
 #' @method predict lambert
 #' @export
-predict.lambert <- function(lambert_obj,
+predict.lambert <- function(object,
                             newdata = NULL,
-                            inverse = FALSE) {
+                            inverse = FALSE, 
+                            ...) {
   if (is.null(newdata) & !inverse)
-    newdata <- lambert_obj$x
+    newdata <- object$x
   if (is.null(newdata) & inverse)
-    newdata <- lambert_obj$x.t
+    newdata <- object$x.t
   
   if (inverse)
-    newdata <- newdata * lambert_obj$sd + lambert_obj$mean
+    newdata <- newdata * object$sd + object$mean
   
-  na_idx <- !complete.cases(newdata)
+  stopifnot(is.numeric(newdata))
+  
+  na_idx <- is.na(newdata)
 
   newdata[!na_idx] <- LambertW::Gaussianize(
     as.matrix(newdata[!na_idx]),
-    type = lambert_obj$type,
-    tau.mat = lambert_obj$tau.mat,
+    type = object$type,
+    tau.mat = object$tau.mat,
     inverse = inverse
   )
   
   if (!inverse)
-    newdata <- (newdata - lambert_obj$mean) / lambert_obj$sd
+    newdata <- (newdata - object$mean) / object$sd
   attributes(newdata) <- NULL
   
   unname(newdata)
@@ -119,17 +126,17 @@ predict.lambert <- function(lambert_obj,
 #' @rdname lambert
 #' @method print lambert
 #' @export
-print.lambert <- function(lambert_obj) {
+print.lambert <- function(x, ...) {
   prettyTau <- apply(cbind('- ',
-    rownames(lambert_obj$tau.mat)[-c(1:2)], ' = ',
-    round(lambert_obj$tau.mat[-c(1:2)],4), '\n'
+    rownames(x$tau.mat)[-c(1:2)], ' = ',
+    round(x$tau.mat[-c(1:2)],4), '\n'
   ), 1, paste, collapse = '')
 
   
-  cat('Lambert WxF Transformation of type', lambert_obj$type, 
-      'with', lambert_obj$n, 'nonmissing obs.:\n', 
+  cat('Lambert WxF Transformation of type', x$type, 
+      'with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       prettyTau,
-      '- mean =', lambert_obj$mean, '\n',
-      '- sd =', lambert_obj$sd, '\n')
+      '- mean =', x$mean, '\n',
+      '- sd =', x$sd, '\n')
 }

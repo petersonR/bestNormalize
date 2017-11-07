@@ -9,15 +9,23 @@
 \usage{
 binarize(x, location_measure = "median")
 
-\method{predict}{binarize}(binarize_obj, newdata = NULL, inverse = F)
+\method{predict}{binarize}(object, newdata = NULL, inverse = FALSE, ...)
 
-\method{print}{binarize}(binarize_obj)
+\method{print}{binarize}(x, ...)
 }
 \arguments{
 \item{x}{A vector to binarize}
 
 \item{location_measure}{which location measure should be used? can either be
 "median", "mean", "mode", a number, or a function.}
+
+\item{object}{an object of class 'binarize'}
+
+\item{newdata}{a vector of data to be (reverse) transformed}
+
+\item{inverse}{if TRUE, performs reverse transformation}
+
+\item{...}{additional arguments}
 }
 \value{
 A list of class \code{binarize} with elements 

@@ -1,6 +1,5 @@
 #' Calculate and perform best normalizing tranformation
 #' 
-#' @name bestNormalize
 #' @aliases predict.bestNormalize
 #'   
 #' @description Performs a suite of normalizing transformations, and selects the
@@ -9,6 +8,10 @@
 #'   evidence against normality).
 #' @param x A vector to normalize
 #' @param allow_orderNorm set to FALSE if orderNorm should not be applied
+#' @param newdata a vector of data to be (reverse) transformed
+#' @param inverse if TRUE, performs reverse transformation
+#' @param object an object of class 'bestNormalize'
+#' @param ... additional arguments
 #' @details \code{bestNormalize} estimates the optimal normalizing 
 #'   transformation. This transformation can be performed on new data, and 
 #'   inverted, via the \code{predict} function.
@@ -39,9 +42,7 @@
 #'  \code{\link{orderNorm}},
 #'  \code{\link{yeojohnson}} 
 #' @export
-bestNormalize <- function(x,
-                          allow_orderNorm = TRUE,
-                          ...) {
+bestNormalize <- function(x, allow_orderNorm = TRUE) {
   stopifnot(is.numeric(x))
   x.t <- list()
   for(i in c('lambert', 'yeojohnson', 'boxcox', 'orderNorm', 'binarize')) {
@@ -70,28 +71,27 @@ bestNormalize <- function(x,
 
 #' @rdname bestNormalize
 #' @method predict bestNormalize
+#' @importFrom stats predict
 #' @export
-predict.bestNormalize <- function(BNobject, newdata = NULL, inverse = FALSE) {
-  obj <- BNobject$chosen_transform
-  predict(obj, newdata = newdata, inverse = inverse)
+predict.bestNormalize <- function(object, newdata = NULL, inverse = FALSE, ...) {
+  predict(object$chosen_transform, newdata = newdata, inverse = inverse, ...)
 }
 
 #' @rdname bestNormalize
 #' @method print bestNormalize
 #' @export
-print.bestNormalize <- function(BNobject) {
-  
+print.bestNormalize <- function(x, ...) {
   prettyD <- paste0(
     'Estimated Normality Statistics (D):\n',
-    ifelse(length(BNobject$D['boxcox']), 
-           paste(" - Box-Cox:", round(BNobject$D['boxcox'], 4), '\n'), ''),
-    ifelse(length(BNobject$D['boxcox']), 
-           paste(" - Lambert's W:", round(BNobject$D['lambert'], 4), '\n'), ''),
-    ifelse(length(BNobject$D['lambert']), 
-           paste(" - Yeo-Johnson:", round(BNobject$D['yeojohnson'], 4), '\n'), '')
+    ifelse(length(x$D['boxcox']), 
+           paste(" - Box-Cox:", round(x$D['boxcox'], 4), '\n'), ''),
+    ifelse(length(x$D['boxcox']), 
+           paste(" - Lambert's W:", round(x$D['lambert'], 4), '\n'), ''),
+    ifelse(length(x$D['lambert']), 
+           paste(" - Yeo-Johnson:", round(x$D['yeojohnson'], 4), '\n'), '')
   )
   
-  cat('Best Normalizing transformation with', BNobject$n, 'Observations\n',
+  cat('Best Normalizing transformation with', x$n, 'Observations\n',
       prettyD, '\nBased off these, bestNormalize chose:\n')
-  print(BNobject$chosen_transform)
+  print(x$chosen_transform)
 }

@@ -9,10 +9,9 @@
 \usage{
 yeojohnson(x, eps = 0.001, ...)
 
-\method{predict}{yeojohnson}(yeojohnson_obj, newdata = NULL,
-  inverse = FALSE)
+\method{predict}{yeojohnson}(object, newdata = NULL, inverse = FALSE, ...)
 
-\method{print}{yeojohnson}(yeojohnson_obj)
+\method{print}{yeojohnson}(x, ...)
 }
 \arguments{
 \item{x}{A vector to normalize with Yeo-Johnson}
@@ -21,6 +20,12 @@ yeojohnson(x, eps = 0.001, ...)
 
 \item{...}{Additional arguments that can be passed to the estimation of the
 lambda parameter (lower, upper)}
+
+\item{object}{an object of class 'yeojohnson'}
+
+\item{newdata}{a vector of data to be (reverse) transformed}
+
+\item{inverse}{if TRUE, performs reverse transformation}
 }
 \value{
 A list of class \code{yeojohnson} with elements 
@@ -68,5 +73,5 @@ Yeo, I. K., & Johnson, R. A. (2000). A new family of power
  https://github.com/topepo/recipes
 }
 \seealso{
-\code{\link[recipes]{recipes::step_YeoJohnson}}
+\code{\link[recipes]{step_YeoJohnson}}
 }

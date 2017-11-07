@@ -8,6 +8,9 @@
 #' @param x A vector to normalize with Box-Cox
 #' @param ... Additional arguments that can be passed to the estimation of the
 #'   lambda parameter (lower, upper, epsilon)
+#' @param object an object of class 'boxcox'
+#' @param newdata a vector of data to be (reverse) transformed
+#' @param inverse if TRUE, performs reverse transformation
 #' @details \code{boxcox} estimates the optimal value of lamda for the Box-Cox
 #' transformation. This transformation can be performed on new data, and
 #' inverted, via the \code{predict} function.
@@ -43,6 +46,7 @@
 #' 
 #' all.equal(x2, x)
 #' @seealso  \code{\link[MASS]{boxcox}}
+#' @importFrom stats sd
 #' @export
 boxcox <- function(x, ...) {
   stopifnot(is.numeric(x))
@@ -68,20 +72,18 @@ boxcox <- function(x, ...) {
 #' @rdname boxcox
 #' @method predict boxcox
 #' @export
-predict.boxcox <- function(boxcox_obj,
-                       newdata = NULL,
-                       inverse = F) {
+predict.boxcox <- function(object, newdata = NULL, inverse = FALSE, ...) {
   if (is.null(newdata) & !inverse)
-    newdata <- boxcox_obj$x
+    newdata <- object$x
   if (is.null(newdata) & inverse)
-    newdata <- boxcox_obj$x.t
+    newdata <- object$x.t
   
   if (inverse) {
-    newdata <- newdata * boxcox_obj$sd + boxcox_obj$mean
-    newdata <-  inv_boxcox_trans(newdata, boxcox_obj$lambda)
+    newdata <- newdata * object$sd + object$mean
+    newdata <-  inv_boxcox_trans(newdata, object$lambda)
   } else if (!inverse) {
-    newdata <- boxcox_trans(newdata, boxcox_obj$lambda)
-    newdata <- (newdata - boxcox_obj$mean) / boxcox_obj$sd
+    newdata <- boxcox_trans(newdata, object$lambda)
+    newdata <- (newdata - object$mean) / object$sd
   }
   unname(newdata)
 }
@@ -89,19 +91,20 @@ predict.boxcox <- function(boxcox_obj,
 #' @rdname boxcox
 #' @method print boxcox
 #' @export
-print.boxcox <- function(boxcox_obj) {
-  cat('Box Cox Transformation with', boxcox_obj$n, 'nonmissing obs.:\n', 
+print.boxcox <- function(x, ...) {
+  cat('Box Cox Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
-      '- lamda =', boxcox_obj$lambda, '\n',
-      '- mean =', boxcox_obj$mean, '\n',
-      '- sd =', boxcox_obj$sd, '\n',
-      'Transformed data Shapiro-Wilks pvalue =', boxcox_obj$norm_pval, '\n')
+      '- lamda =', x$lambda, '\n',
+      '- mean =', x$mean, '\n',
+      '- sd =', x$sd, '\n',
+      'Transformed data Shapiro-Wilks pvalue =', x$norm_pval, '\n')
 }
 
 # Modified version of boxcox from MASS package
+#' @importFrom stats lm optimize
 estimate_boxcox_lambda <- function(x, lower = -1, upper = 2, eps = .001) {
   n <- length(x)
-  ccID <- complete.cases(x)
+  ccID <- !is.na(x)
   x <- x[ccID]
   
   if (any(x <= 0))

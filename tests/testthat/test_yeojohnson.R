@@ -1,5 +1,4 @@
-library(testthat)
-library(bestNormalize)
+context('yeojohnson functionality')
 
 data(iris)
 
