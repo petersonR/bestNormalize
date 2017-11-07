@@ -1,16 +1,16 @@
 ---
-title: "bestNormalize"
+title: "Using the bestNormalize Package"
 author: "Ryan A Peterson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using the bestNormalize Package}
+  %\VignetteIndexEntry{bestNormalize}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.height = 5, fig.width = 7)
 library(bestNormalize)
 ```
 
@@ -44,7 +44,7 @@ Table 1: Normalizing methods comparison
 
 A few simple examples:
 
-```{r, fig.height=8, fig.width = 8}
+```{r}
 set.seed(100)
 train <- rgamma(100, 1, 1)
 lambert_obj <- lambert(train)
@@ -65,6 +65,9 @@ legend("topleft", legend = c("Lambert WxF", "BoxCox", "YeoJohnson", "OrderNorm")
        col = 1:4, lty = 1)
 
 hist(train)
+```
+
+```{r, fig.height=8, fig.width = 8}
 par(mfrow = c(2,2))
 hist(lambert_obj$x.t, main = "Lambert WxF transformation")
 hist(boxcox_obj$x.t, main = "BoxCox transformation")
@@ -72,9 +75,11 @@ hist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation")
 hist(orderNorm_obj$x.t, main = "orderNorm transformation")
 
 table(binarize_obj$x.t)
+```
 
+```{r}
+par(mfrow = c(1,2))
 hist(BNobject$x.t, main = paste("Best Transformation:", BNobject$method))
-par(mfrow = c(1,1))
 plot(xx, predict(BNobject, newdata = xx), type = "l", col = 1, 
      main = "Best Normalizing transformation", ylab = "f(xx)")
 ```
@@ -98,7 +103,9 @@ MASS::truehist(autotrader$mileage)
 MASS::truehist(mileageBN$x.t)
 MASS::truehist(autotrader$yearsold)
 MASS::truehist(yearsoldBN$x.t)
+```
 
+```{r}
 par(mfrow = c(2, 2))
 price.xx <- seq(min(autotrader$price), max(autotrader$price), length = 100)
 mileage.xx <- seq(min(autotrader$mileage), max(autotrader$mileage), length = 100)
@@ -113,12 +120,14 @@ plot(mileage.xx, predict(mileageBN, newdata = mileage.xx), type = "l",
 plot(yearsold.xx, predict(yearsoldBN, newdata = yearsold.xx), type = "l", 
      main = "Years-old bestNormalizing transformation", 
      xlab = "Years-old", ylab = "f(Years-old)")
+```
 
+```{r}
 autotrader$price.t <- priceBN$x.t
 autotrader$mileage.t <- mileageBN$x.t
 autotrader$yearsold.t <- yearsoldBN$x.t
 
-fit4 <- lm(price.t ~ mileage.t + model +
+fit4 <- lm(price.t ~ mileage.t +
                yearsold.t  + factor(status),
            data = autotrader)
 summary(fit4)
