@@ -1,0 +1,55 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# bestNormalize: Flexibly calculate the best normalizing transformation for a vector
+
+The `bestNormalize` R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is oberved. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the *most* normal. 
+
+This package also introduces a new normalization technique, `orderNorm`, which transforms the data based off of a rank mapping to the normal distribution, which allows us to *guarantee* normally distributed transformed data (if ties are not present). 
+
+## Installation
+
+You can install bestNormalize from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("petersonR/bestNormalize")
+```
+
+## Example
+
+In this example, we generate 1000 draws from a gamma distribution, and normalize them:
+
+```{r example}
+library(bestNormalize)
+set.seed(100)
+x <- rgamma(1000, 1, 1)
+
+# Estimate best transformation
+BN_obj <- bestNormalize(x)
+BN_obj
+
+# Perform transformation
+gx <- predict(BN_obj)
+
+# Perform reverse transformation
+x2 <- predict(BN_obj, newdata = gx, inverse = TRUE)
+
+# Prove the transformation is 1:1
+all.equal(x2, x)
+# Show that the transformation worked
+par(mfrow = c(1,2))
+MASS::truehist(x, xlab = "x")
+MASS::truehist(gx, xlab = "g(x)")
+```
