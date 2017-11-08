@@ -7,9 +7,9 @@ Authors@R: person("Ryan Andrew", "Peterson",
                   email = "ryan-peterson@uiowa.edu", 
                   role = c("aut", "cre"))
 Description: Estimate a suite of normalizing transformations, including 
-    orderNorm which is based on ranks and guarantees a normal 
-    transformation if there are no ties. bestNormalize will select the 
-    best normalizing transformation for a vector consistently and accurately.
+    a new technique based on ranks which can guarantee a normal 
+    transformation if there are no ties. The package is built to estimate
+    the best normalizing transformation for a vector consistently and accurately.
 URL: https://github.com/petersonR/bestNormalize
 License: GPL-3
 Depends: R (>= 3.1.0)
