@@ -1,16 +1,16 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 0.1.1.9003
+Version: 0.2.0
 Date: 2017-11-01
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan-peterson@uiowa.edu", 
                   role = c("aut", "cre"))
-Description: This packages contains functions to perform a family of 
-    normalizing transformations, including orderNorm which is based on ranks. 
-    orderNorm guarantees a normal transformation if there are no ties. 
-    bestNormalize can select the best normalizing transformation of all in
-    this family.
+Description: Estimate a suite of normalizing transformations, including 
+    orderNorm which is based on ranks and guarantees a normal 
+    transformation if there are no ties. bestNormalize will select the 
+    best normalizing transformation for a vector consistently and accurately.
+URL: https://github.com/petersonR/bestNormalize
 License: GPL-3
 Depends: R (>= 3.1.0)
 Imports: 
