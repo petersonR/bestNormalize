@@ -29,7 +29,7 @@
 #'   \item{sd}{sd of vector post-BC transformation} 
 #'   \item{tau.mat}{estimated parameters of LambertW::Gaussianize} 
 #'   \item{n}{number of nonmissing observations}
-#'   \item{norm_stat}{Pearson's chi-squared normality test statistic}
+#'   \item{norm_stat}{Pearson's P / degrees of freedom}
 #'   
 #' The \code{predict} function returns the numeric value of the transformation 
 #' performed on new data, and allows for the inverse transformation as well.
@@ -75,6 +75,8 @@ lambert <- function(x, type = 's', ...) {
   
   attributes(x.t) <- NULL
   
+  ptest <- nortest::pearson.test(x.t)
+  
   val <- list(
     x.t = unname(x.t),
     x = x,
@@ -83,7 +85,7 @@ lambert <- function(x, type = 's', ...) {
     tau.mat = tau.mat,
     n = length(x.t) - sum(na_idx),
     type = type,
-    norm_stat = unname(nortest::pearson.test(x.t)$stat)
+    norm_stat = unname(ptest$statistic / ptest$df)
   )
   
   class(val) <- 'lambert'

@@ -26,7 +26,7 @@
 #' \item{sd}{sd of vector post-BC transformation} 
 #' \item{lambda}{estimated lambda value for skew transformation} 
 #' \item{n}{number of nonmissing observations}
-#' \item{norm_stat}{Pearson's chi-squared normality test statistic}
+#'   \item{norm_stat}{Pearson's P / degrees of freedom}
 #'   
 #' The \code{predict} function returns the numeric value of the transformation
 #' performed on new data, and allows for the inverse transformation as well.
@@ -54,7 +54,7 @@
 #' @export
 yeojohnson <- function(x, eps = .001, ...) {
   stopifnot(is.numeric(x))
-  lambda <- estimate_yeojohnson_lambda(x, eps, ...)
+  lambda <- estimate_yeojohnson_lambda(x, eps = eps, ...)
   x.t <- x
   na_idx <- is.na(x)
   x.t[!na_idx] <- yeojohnson_trans(x[!na_idx], lambda, eps)
@@ -62,6 +62,7 @@ yeojohnson <- function(x, eps = .001, ...) {
   sigma <- sd(x.t, na.rm = TRUE)
   x.t <- (x.t - mu) / sigma
   
+  ptest <- nortest::pearson.test(x.t)
   
   val <- list(
     x.t = x.t,
@@ -70,7 +71,7 @@ yeojohnson <- function(x, eps = .001, ...) {
     sd = sigma,
     lambda = lambda,
     n = length(x.t) - sum(na_idx),
-    norm_stat = unname(nortest::pearson.test(x.t)$stat)
+    norm_stat = unname(ptest$statistic / ptest$df)
   )
   class(val) <- 'yeojohnson'
   val
@@ -105,7 +106,7 @@ predict.yeojohnson <- function(object,
 #' @method print yeojohnson
 #' @export
 print.yeojohnson <- function(x, ...) {
-  cat('Yeo-Johnson Transformation with', x$n, 'observations:\n', 
+  cat('Yeo-Johnson Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       '- lambda =', x$lambda, '\n',
       '- mean =', x$mean, '\n',

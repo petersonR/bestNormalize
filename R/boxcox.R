@@ -28,7 +28,7 @@
 #'   \item{sd}{sd of vector post-BC transformation} 
 #'   \item{lambda}{estimated lambda value for skew transformation} 
 #'   \item{n}{number of nonmissing observations}
-#'   \item{norm_stat}{Pearson's chi-squared normality test statistic}
+#'   \item{norm_stat}{Pearson's P / degrees of freedom}
 #'   
 #'   The \code{predict} function returns the numeric value of the transformation
 #'   performed on new data, and allows for the inverse transformation as well.
@@ -56,6 +56,8 @@ boxcox <- function(x, ...) {
   sigma <- sd(x.t, na.rm = TRUE)
   x.t <- (x.t - mu) / sigma
   
+  ptest <- nortest::pearson.test(x.t)
+  
   val <- list(
     x.t = x.t,
     x = x,
@@ -63,7 +65,7 @@ boxcox <- function(x, ...) {
     sd = sigma,
     lambda = l,
     n = length(x.t) - sum(is.na(x)),
-    norm_stat = unname(nortest::pearson.test(x.t)$stat)
+    norm_stat = unname(ptest$statistic / ptest$df)
   )
   class(val) <- c('boxcox', class(val))
   val

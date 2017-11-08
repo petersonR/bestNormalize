@@ -45,19 +45,20 @@
 bestNormalize <- function(x, allow_orderNorm = TRUE) {
   stopifnot(is.numeric(x))
   x.t <- list()
-  for(i in c('lambert', 'yeojohnson', 'boxcox', 'orderNorm', 'binarize')) {
+  methods <- c('lambert', 'yeojohnson', 'boxcox', 'binarize')
+  if (allow_orderNorm) 
+    methods <- c(methods, 'orderNorm')
+  
+  for(i in methods) {
     trans_i <- try(do.call(i, list(x = x)), silent = TRUE)
     if(is.character(trans_i))
-      warning(i, ' did not work; ', trans_i)
+      warning(paste(i, ' did not work; ', trans_i))
     else
       x.t[[i]] <- trans_i
   }
-  
-  if (!allow_orderNorm && !is.character(x.t$orderNorm)) 
-    x.t <- x.t[names(x.t) != 'orderNorm']
-  
+
   norm_stats <- unlist(lapply(x.t, function(x) x$norm_stat))
-  best_idx <- which.min(norm_stats)
+  best_idx <- names(which.min(norm_stats))
   
   val <- list(
     x.t = x.t[[best_idx]]$x.t,
@@ -82,9 +83,9 @@ predict.bestNormalize <- function(object, newdata = NULL, inverse = FALSE, ...) 
 #' @export
 print.bestNormalize <- function(x, ...) {
   prettyD <- paste0(
-    'Estimated Normality Statistics (Pearson P, lower => more normal):\n',
+    'Estimated Normality Statistics (Pearson P / df, lower => more normal):\n',
     ifelse(length(x$norm_stats['boxcox']), 
-           paste(" - Box-Cox:", round(x$norm_stats['boxcox'], 1), '\n'), ''),
+           paste(" - Box-Cox:", round(x$norm_stats['boxcox'], 4), '\n'), ''),
     ifelse(length(x$norm_stats['lambert']), 
            paste(" - Lambert's W:", round(x$norm_stats['lambert'], 4), '\n'), ''),
     ifelse(length(x$norm_stats['yeojohnson']), 

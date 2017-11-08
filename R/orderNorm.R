@@ -38,7 +38,7 @@
 #' \item{n}{number of nonmissing observations}
 #' \item{warn_status}{indicator if ties are present}
 #' \item{fit}{fit to be used for extrapolation, if needed}
-#' \item{norm_stat}{Pearson's chi-squared normality test statistic}
+#' \item{norm_stat}{Pearson's P / degrees of freedom}
 #' The \code{predict} function returns the numeric value of the transformation 
 #' performed on new data, and allows for the inverse transformation as well.
 #' 
@@ -75,13 +75,15 @@ orderNorm <- function(x) {
   # fit linear model for potential future extrapolation
   fit <- lm(x.t ~ x)
   
+  ptest <- nortest::pearson.test(x.t)
+  
   val <- list(
     x.t = x.t,
     x = x,
     n = length(x) - sum(is.na(x)),
     warn_status = warn_status,
     fit = fit,
-    norm_stat = unname(nortest::pearson.test(x.t)$stat)
+    norm_stat =  unname(ptest$statistic / ptest$df)
   )
   
   class(val) <- 'orderNorm'
