@@ -1,7 +1,6 @@
 ## Test environments 
 - win-builder (devel, release, oldrelease)
-- ubuntu (), R 3.??
-- local OS X install, R 3.??
+- local ubuntu (14.04), R 3.??
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
