@@ -1,0 +1,13 @@
+citHeader("To cite 'bestNormalize' in publications use:")
+
+citEntry(entry = "Manual",
+  title        = "bestNormalize: A suite of normalizing transformations",
+  author       = personList(as.person("Ryan Andrew Peterson")),
+  year         = "2017",
+  note         = "R package version 3.4.1",
+  url          = "https://github.com/petersonR/bestNormalize",
+  textVersion  =
+  paste("Ryan A Peterson (2017).",
+        "Estimating normalization transformations with bestNormalize",
+        "URL https://github.com/petersonR/bestNormalize")
+)
