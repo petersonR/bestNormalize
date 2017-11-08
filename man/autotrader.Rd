@@ -8,7 +8,7 @@
 \describe{
   \item{price}{price, in US dollars}
   \item{Car_Info}{Raw description from website}
-  \item{Link}{hyperlink to listing}
+  \item{Link}{hyperlink to listing (must be appended to https://www.autotrader.com/)}
   \item{Make}{Car manufacturer}
   \item{Year}{Year car manufactured}
   \item{Location}{Location of listing}

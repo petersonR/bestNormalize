@@ -16,40 +16,40 @@ library(bestNormalize)
 
 # Introduction
 
-The `bestNormalize` package is contains a family of transformation functions that can be used to normalize data.  The function of the same name finds and executes the best of all of these normalizing transformations.
+The `bestNormalize` package contains a suite of transformation-estimating functions that can be used to normalize data. The function of the same name finds and executes the best of all of these potential normalizing transformations.
 
-There are many instances where researchers may want to normalize a variable. What first may come to mind is the often problematic assumption of normality in the classical linear regression problem. Over the years many methods have been used to relax this assumption: generalized linear models, quantile regression, etc. One technique that is still somewhat popular in this context is to "beat" the data to look normal via a normalizing transformation. While certainly not the most elegant way to solve the problem, often this technique works well as a quick and dirty solution. 
+There are many instances where researchers may want to normalize a variable. What may come to mind first is the (often problematic) assumption of normality of the outcome (conditional on the covariates) in the classical linear regression problem. Over the years many methods have been used to relax this assumption: generalized linear models, quantile regression, survival models, etc. One technique that is still somewhat popular in this context is to "beat the data" to look normal via some kind of normalizing transformation. This could be something as simple as a log transformation, or something as complex as a Yeo-Johnson transformation. While perhaps not the most elegant solution the problem, often this technique works well as a quick and dirty solution. 
 
-Another increasingly popular application of normalization occurs in applied regression settings with highly skewed distributions of the covariates. In these settings, there exists the tendency to have high leverage points (and thereby creating highly influential points), even when one centers and scales the covariates. When examining interactions, these influential points can become especially problematic since the leverage of that point is amplified for every child interaction of which it is a parent. Normalization of the covariates mitigates the leverage and influence of these covariates, which allows for easier model selection.
+Another increasingly popular application of normalization occurs in applied regression settings with highly skewed distributions of the covariates. In these settings, there exists the tendency to have high leverage points (and highly influential points), even when one centers and scales the covariates. When examining interactions, these influential points can become especially problematic since the leverage of that point is amplified for every child interaction of which it is a parent. Normalization of the covariates mitigates the leverage and influence of these covariates, which allows for easier model selection. As a result, popular model selection packages such as `caret` and `recipes` have built-in mechanisms to normalize the predictor variables (they call this "preprocessing"). This concept is unique in that it forgoes the assumption of linearity between the outcome and the covariate, opting instead for a linear relationship between Y and the transformed value of the covariate (which in many cases may be more plausible). This process has many benefits, as described in the accompanying paper (paper not yet published).
 
-This package is designed to make this normalization transformation as effortless and consistent as possible. This package also introduces a technique to normalize the data based off of a rank mapping to the normal distribution, which *guarantees* normally distributed transformed data (if ties are not present).
+This package is designed to make this normalization transformation as effortless and consistent as possible. This package also introduces `orderNorm`, a normalization technique based off of a rank mapping to the normal distribution, which *guarantees* normally distributed transformed data (if ties are not present).
 
-All of the transformations contained in this package are reversible (ie, 1-1), which allows for straight-forward interpretation and consistency. In other words, any analysis performed on the normalized data can be interpreted using the original unit (see application).
+All of the transformations contained in this package are reversible (i.e., 1-1), which allows for straight-forward interpretation and consistency. In other words, any analysis performed on the normalized data can be interpreted using the original unit (see application).
 
 # Methods
 
-There are several normalization transformation options, each with their own implementations and limitations outlined in the table below. While some of these methods are implemented well in other R packages, the `bestNormalize` package puts them all under the same umbrella syntax that makes them easy to apply in a wide range of situations. 
+There are several normalization transformation options, each with their own implementations and limitations outlined in the table below. While some of these methods are implemented well in other R packages, the `bestNormalize` package puts them all under the same umbrella syntax that makes them easy to apply in a wide range of situations. The transformations contained in this package are summarized in this section and in Table 1.
 
 Table 1: Normalizing methods comparison  
 
-| Method       | Implementation | Limitations                |
-|:------------:|:--------------:|:---------------------------|
-| Lambert WxF  | LambertW       | Not always effective       |
-| Box Cox      | forecast/caret | Restricted to nonnegatives |
-| Yeo-Johnson  | caret          | Not always effective       |
-| Order Norm*  | by-hand        | Cannot handle ties         |
+| Method       | Implementation | Limitations                 |
+|:------------:|:--------------:|:----------------------------|
+| Lambert WxF  | LambertW       | Not always effective        |
+| Box Cox      | forecast/caret | Restricted to non-negatives |
+| Yeo-Johnson  | caret          | Not always effective        |
+| Order Norm*  | by-hand        | Cannot handle ties          |
 
 \* Note that the orderNorm method does lose some information, just like any other kind of non-parametric technique based on ranks.
 
 ## The Lambert W x F transformation
 
-The Lambert W x F tranformation, proposed by Goerg and implemented in the `LambertW` package, is essentially a mechanism that de-skews a random variable $X$ using moments. The method is motivated by a system theory, and is alleged to be able to transform any random variable into any other kind of random variable, thus being applicable to a large number of cases. 
+The Lambert W x F transformation, proposed by Goerg and implemented in the `LambertW` package, is essentially a mechanism that de-skews a random variable $X$ using moments. The method is motivated by a system theory, and is alleged to be able to transform any random variable into any other kind of random variable, thus being applicable to a large number of cases. 
 
-One of the package's main functions is `Gaussianize`, which is similar in spirit to the purpose of this package. However, I have found in practice that often times, this method is about the same as doing a Box Cox transformation, and has similar drawbacks to the Yeo-Johnson transformation in that it's not always effective.  
+One of the package's main functions is `Gaussianize`, which is similar in spirit to the purpose of this package. However, I have found in practice that often times, this method does not perform as well as the Box Cox or the Yeo-Johnson transformation.
 
 ## The Box Cox tranformation
 
-The Box Cox tranformation, proposed by Box and Cox in their famous 1964 paper and implemented with differing syntax and methods in many packages in R (see `caret`, `MASS`, `forecast`), is a straightforward transformation that only involves one parameter, $\lambda$:
+The Box Cox transformation, proposed by Box and Cox in their famous 1964 paper and implemented with differing syntax and methods in many packages in R (see `caret`, `MASS`, `forecast`), is a straightforward transformation that only involves one parameter, $\lambda$:
 
 $$
 g(x; \lambda) = \boldsymbol 1 _{(\lambda \neq 0)} \frac{x^\lambda-1}{\lambda} 
@@ -68,10 +68,11 @@ g(x;\lambda) &=
 \boldsymbol 1 _{(\lambda \neq 0, x \geq 0)} \frac{(x+1)^\lambda-1}{\lambda} \\
 &+ \boldsymbol 1_{(\lambda = 0, x \geq 0)} \log (x+1) \\
 &+ \boldsymbol 1_{(\lambda \neq 2, x < 0)} \frac{(1-x)^{2-\lambda}-1}{\lambda - 2} \\
-&+ \boldsymbol 1_{(\lambda = 0, x < 0)} -\log (1-x)
-
+&+ \boldsymbol 1_{(\lambda = 0, x < 0)} -\log (1-x) \\
 \end{aligned}
 $$
+
+
 This method has the advantage of working without having to worry about the domain of $x$. As with the Box-Cox $\lambda$, this $\lambda$ parameter can be estimated via maximum likelihood.
 
 ## The orderNorm technique 
@@ -88,13 +89,13 @@ On new data *within* the range of the original data, this transformation refers 
 
 ```{r, echo = FALSE}
 
-train <- iris$Petal.Width
-old_points <- train
+x <- iris$Petal.Width
+old_points <- x
 
 x_t <- qnorm(rank(old_points, na.last = 'keep') / (length(old_points) + 1))
 plot(old_points, x_t, main = "The orderNorm Transformation", 
      pch = 20, cex = 1, xlim = c(-.5, 3), ylim = c(-3, 3),
-     xlab = "Original Value", ylab = "Transformed value")
+     xlab = "Original Value", ylab = "Transformed Value")
 abline(h = 0, v = 0, lty = 3)
 
 # Fit and predictions for plot
@@ -133,17 +134,21 @@ legend('bottomright',
 
 The reason for the shifted linear extrapolation is that it ensures that the function is 1-1 (which would not necessarily be the case if a more smooth procedure was utilized). However, this issue should be relatively minimal since we should not expect to see many observations outside the observed range if the sample size is large enough. 
 
-The orderNorm technique will not guarantee a normal distribution in the presence of ties, but it still could yield the best normalizing tranformation when compared to the Box Cox, Yeo Johnson, or Lambert W x F approaches.
+The orderNorm technique will not guarantee a normal distribution in the presence of ties, but it still could yield the best normalizing transformation when compared to the Box Cox, Yeo Johnson, or Lambert W x F approaches.
 
 ## Other techniques
 
 There have been a range of other normalization techniques discussed since the original Box-Cox paper that are not included in this package (at the time of writing). Many of these transformations have their own strengths and weaknesses.
 
-These include (but are not limited to): Modified Box Cox (1964), Manly's Exponential, John/Draper's Modulus (1980) Bickel/Doksum's Modified Box Cox (1981). 
+These include (but are not limited to): Modified Box Cox (1964), Manly's Exponential (1976), John/Draper's Modulus (1980) Bickel/Doksum's Modified Box Cox (1981). 
 
 The framework of this package is to create a class for each transformation, so the addition of other normalization techniques would be easy extensions of this package (readers can feel free to submit a pull request to this package's GitHub page with new transformation techniques if they feel so inclined).
 
 The `bestNormalize` package does also include a function to perform a binarizing transformation. This is provided as a potential "last resort" if a vector is really unable to be transformed to a normally distributed variable. In cases when a user is automatically normalizing covariates, this is useful when they may accidentally try to normalize a vector with not enough unique values.
+
+## Selecting the best technique
+
+The `bestNormalize` function selects the best transformation according to the Pearson P statistic. There are a variety of normality tests out there, but the benefit of the Pearson P is that it is a relatively interpretable goodness of fit test, and the ratio P / df can be compared between transformations as an absolute measure of the departure from normality. The transformation whose transformed values fit normality the closest according to this statistic (or equivalently, this ratio), is selected by `bestNormalize`. The ratios are printed when the object is printed, see examples in the next section. 
 
 # Examples
 
@@ -153,41 +158,42 @@ In this section, I provide some code that performs each of the transformations d
 
 # Generate some data
 set.seed(100)
-train <- rgamma(100, 1, 1)
-MASS::truehist(train, nbins = 12)
+x <- rgamma(1000, 1, 1)
+MASS::truehist(x, nbins = 12)
 ```
 
 This data is clearly not normal. Let's use the `bestNormalize` functionality to perform a suite of potential transformations, and see how each method performs.
 
 ```{r}
 # Lambert's W x F transfromation
-(lambert_obj <- lambert(train))
+(lambert_obj <- lambert(x))
 # Box Cox's Transformation
-(boxcox_obj <- boxcox(train))
+(boxcox_obj <- boxcox(x))
 # Yeo-Johnson's Transformation
-(yeojohnson_obj <- yeojohnson(train))
+(yeojohnson_obj <- yeojohnson(x))
 # orderNorm Transformation
-(orderNorm_obj <- orderNorm(train))
+(orderNorm_obj <- orderNorm(x))
 
 # Pick the best one automatically
-(BNobject <- bestNormalize(train))
+(BNobject <- bestNormalize(x))
 
 # Last resort - binarize
-(binarize_obj <- binarize(train))
+(binarize_obj <- binarize(x))
 
 ```
 
 These objects can then be fed into the `predict` function to perform the transformation on new values. The reverse transformation is also possible with this function. Below we plot the transformation for a range of new x values
 
 ```{r}
-xx <- seq(min(train), max(train), length = 100)
-plot(xx, predict(lambert_obj, newdata = xx), type = "l", col = 1)
+xx <- seq(min(x), max(x), length = 100)
+plot(xx, predict(lambert_obj, newdata = xx), type = "l", col = 1, ylim = c(-4, 4),
+     xlab = 'x', ylab = "g(x)")
 lines(xx, predict(boxcox_obj, newdata = xx), col = 2)
 lines(xx, predict(yeojohnson_obj, newdata = xx), col = 3)
 lines(xx, predict(orderNorm_obj, newdata = xx), col = 4)
 
-legend("topleft", legend = c("Lambert WxF", "BoxCox", "YeoJohnson", "OrderNorm"), 
-       col = 1:4, lty = 1)
+legend("bottomright", legend = c("Lambert WxF", "Box Cox", "Yeo-Johnson", "OrderNorm"), 
+       col = 1:4, lty = 1, bty = 'n')
 ```
 
 To examine how each of them performed, we can visualize the transformed values in a histogram.
@@ -195,25 +201,23 @@ To examine how each of them performed, we can visualize the transformed values i
 ```{r, fig.height=8, fig.width = 7}
 par(mfrow = c(2,2))
 MASS::truehist(lambert_obj$x.t, main = "Lambert WxF transformation", nbins = 12)
-MASS::truehist(boxcox_obj$x.t, main = "BoxCox transformation", nbins = 12)
+MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = 12)
 MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = 12)
 MASS::truehist(orderNorm_obj$x.t, main = "orderNorm transformation", nbins = 12)
-
-table(binarize_obj$x.t)
 ```
 
-The best tranformation in this case is plotted below.
+The best transformation in this case is plotted below.
 
 ```{r}
 par(mfrow = c(1,2))
 MASS::truehist(BNobject$x.t, main = paste("Best Transformation:", BNobject$method), nbins = 12)
 plot(xx, predict(BNobject, newdata = xx), type = "l", col = 1, 
-     main = "Best Normalizing transformation", ylab = "f(xx)")
+     main = "Best Normalizing transformation", ylab = "g(x)", xlab = "x")
 ```
 
-# Application to autotrader data
+# Application to `autotrader` data
 
-The autotrader data set was scraped from autotrader.com as part of this package (and because at the time of writing, I needed to buy a car). I apply the `bestNormalize` functionality to de-skew mileage, age, and price in my pricing model.
+The `autotrader` data set was scraped from the [autotrader website](https://www.autotrader.com/) as part of this package (and because at the time of writing, I needed to buy a car). I apply the `bestNormalize` functionality to de-skew mileage, age, and price in my pricing model. See `?autotrader` for more information on this data set.
 
 ```{r, fig.height=8, fig.width=7}
 data("autotrader")
@@ -240,13 +244,13 @@ yearsold.xx <- seq(min(autotrader$yearsold), max(autotrader$yearsold), length = 
 
 plot(price.xx, predict(priceBN, newdata = price.xx), type = "l", 
      main = "Price bestNormalizing transformation", 
-     xlab = "Price ($)", ylab = "f(price)")
+     xlab = "Price ($)", ylab = "g(price)")
 plot(mileage.xx, predict(mileageBN, newdata = mileage.xx), type = "l", 
      main = "Mileage bestNormalizing transformation", 
-     xlab = "Mileage", ylab = "f(Mileage)")
+     xlab = "Mileage", ylab = "g(Mileage)")
 plot(yearsold.xx, predict(yearsoldBN, newdata = yearsold.xx), type = "l", 
      main = "Years-old bestNormalizing transformation", 
-     xlab = "Years-old", ylab = "f(Years-old)")
+     xlab = "Years-old", ylab = "g(Years-old)")
 ```
 
 ```{r}
@@ -265,31 +269,47 @@ par(mfrow = c(1, 1))
 plot(
     mileageBN$x.t,
     priceBN$x.t,
-    pch = 20,
-    cex = .5,
-    col = "slategrey",
-    main = "Estimated linear effect (using transformed data)"
+    pch = 16,
+    col = grey(.1, alpha = .2),
+    main = "Estimated linear effect (using transformed data)",
+    xlab = "g(Mileage)",
+    ylab = "g(Price)"
 )
 lines(miles.t,
       coef(fit4)[1] + c1 * miles.t,
-      col = 4,
+      col = "slateblue",
       lwd = 2)
 
 ## Mileage effect
-plot(autotrader$mileage,
-     autotrader$price,
-     pch = 20,
-     cex = .5,
-     col = "slategrey", 
-     main = "Mileage effect (re-transformed to original unit)"
+plot(
+  autotrader$mileage,
+  autotrader$price,
+  pch = 16,
+  col = grey(.1, alpha = .2),
+  main = "Mileage effect (re-transformed to original unit)",
+  xlab = "Mileage",
+  ylab = "Price"
 )
 line_vals <- miles.t * c1 + coef(fit4)[1]
 lines(
     mileage.xx,
     y = predict(priceBN, newdata = line_vals, inverse = TRUE),
     lwd = 2,
-    col = 4
+    col = "slateblue"
 )
+# Compare to GAM fit
+fit_gam <- mgcv::gam(price ~ s(yearsold) + s(mileage), data = autotrader)
+p_gam <- predict(fit_gam, newdata = data.frame(yearsold = mean(autotrader$yearsold), 
+                                               mileage = mileage.xx))
+lines(mileage.xx, p_gam, lwd = 2, col = 'green3')
+
+legend(
+  'topright',
+  c("GAM fit", "Transformed linear fit"),
+  lwd = 2,
+  col = c("green3", "slateblue"),
+  bty = "n"
+  )
 
 ## Years Old effect
 yo.t <- predict(yearsoldBN, newdata = yearsold.xx)
@@ -298,17 +318,30 @@ c2 <- coef(fit4)["yearsold.t"]
 plot(
     jitter(autotrader$yearsold, 1.5),
     autotrader$price,
-    pch = 20,
-    cex = .5,
-    col = "slategrey", 
-    main = "Years old effect (re-transformed to original unit)"
+    pch = 16,
+    col = grey(.1, alpha = .2), 
+    main = "Years old effect (re-transformed to original unit)",
+    xlab = "Age (Jittered)",
+    ylab = "Price"
 )
 line_vals <- yo.t * c2 + coef(fit4)[1]
 lines(
     yearsold.xx,
     y = predict(priceBN, newdata = line_vals, inverse = TRUE),
     lwd = 2,
-    col = 4
+    col = "slateblue"
 )
 
+# Compare to GAM fit
+p_gam <- predict(fit_gam, newdata = data.frame(yearsold = yearsold.xx, 
+                                               mileage = mean(autotrader$mileage)))
+lines(yearsold.xx, p_gam, lwd = 2, col = 'green3')
+
+legend(
+  'topright',
+  c("GAM fit", "Transformed linear fit"),
+  lwd = 2,
+  col = c("green3", "slateblue"),
+  bty = "n"
+  )
 ```

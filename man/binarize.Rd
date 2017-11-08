@@ -34,7 +34,7 @@ A list of class \code{binarize} with elements
   \item{method}{location_measure used for original fitting} 
   \item{location}{estimated location_measure} 
   \item{n}{number of nonmissing observations}
-  \item{norm_stat}{Pearson's chi-squared normality test statistic}
+  \item{norm_stat}{Pearson's P / degrees of freedom}
   
   The \code{predict} function with \code{inverse = FALSE} returns the numeric
   value (0 or 1) of the transformation on \code{newdata} (which defaults to

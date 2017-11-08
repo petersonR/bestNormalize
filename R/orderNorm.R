@@ -66,7 +66,7 @@ orderNorm <- function(x) {
   na_idx <- is.na(x)
   
   if (nunique < length(x)) {
-    warning('Ties in data, Normal distribution not guaranteed')
+    warning('Ties in data, Normal distribution not guaranteed\n')
     warn_status <- 1
   }
   
