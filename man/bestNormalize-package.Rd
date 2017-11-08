@@ -13,6 +13,13 @@ Perhaps the most useful function is \code{bestNormalize}, which attempts all
 of these transformations and picks the best one based off of a goodness of
 fit statistic.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/petersonR/bestNormalize}
+}
+
+}
 \author{
 \strong{Maintainer}: Ryan Andrew Peterson \email{ryan-peterson@uiowa.edu}
 
