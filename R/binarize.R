@@ -3,7 +3,7 @@
 #' @name binarize
 #' @aliases predict.binarize
 #'   
-#' @description This function will perform a binarizing tranformation, which
+#' @description This function will perform a binarizing transformation, which
 #'   could be used as a last resort if the data cannot be adequately normalized.
 #'   This may be useful when accidentally attempting normalization of a binary
 #'   vector (which could occur if implementing bestNormalize in an automated
