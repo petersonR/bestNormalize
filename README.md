@@ -52,10 +52,4 @@ x2 <- predict(BN_obj, newdata = gx, inverse = TRUE)
 # Prove the transformation is 1:1
 all.equal(x2, x)
 #> [1] TRUE
-# Show that the transformation worked
-par(mfrow = c(1,2))
-MASS::truehist(x, xlab = "x")
-MASS::truehist(gx, xlab = "g(x)")
 ```
-
-![](man/figures/README-example-1.png)

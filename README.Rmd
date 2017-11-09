@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-"
+  fig.path = "README-"
 )
 ```
 
@@ -48,8 +48,5 @@ x2 <- predict(BN_obj, newdata = gx, inverse = TRUE)
 
 # Prove the transformation is 1:1
 all.equal(x2, x)
-# Show that the transformation worked
-par(mfrow = c(1,2))
-MASS::truehist(x, xlab = "x")
-MASS::truehist(gx, xlab = "g(x)")
+
 ```
