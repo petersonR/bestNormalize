@@ -1,4 +1,4 @@
-#' OrderNorm Transformation
+#' orderNorm Transformation
 #' 
 #' @name orderNorm
 #' @aliases predict.orderNorm

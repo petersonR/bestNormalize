@@ -5,7 +5,7 @@
 \alias{predict.orderNorm}
 \alias{predict.orderNorm}
 \alias{print.orderNorm}
-\title{OrderNorm Transformation}
+\title{orderNorm Transformation}
 \usage{
 orderNorm(x)
 
