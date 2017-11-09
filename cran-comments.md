@@ -1,6 +1,6 @@
 ## Test environments 
-- win-builder (devel, release, oldrelease)
-- local ubuntu (14.04), R 3.??
+- win-builder (devel, release)
+- local ubuntu (14.04), R 3.4.2
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
