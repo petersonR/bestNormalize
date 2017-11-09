@@ -58,4 +58,4 @@ MASS::truehist(x, xlab = "x")
 MASS::truehist(gx, xlab = "g(x)")
 ```
 
-![](README-example-1.png)
+![](man/figures/README-example-1.png)

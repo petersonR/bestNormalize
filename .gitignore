@@ -1,19 +1,2 @@
-# Blacklist Everything
-*
-
-# Whitelist subdirectories
-!*/
-
-# Whitelist some files
-
-!*.R
-!*.Rmd
-!*.Rd
-!*.md
-!*.RData
-!DESCRIPTION
-!NAMESPACE
 .Rproj.user
-!.Rbuildignore
-!.gitignore
-!inst/CITATION
+.Rhistory
