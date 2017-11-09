@@ -2,7 +2,7 @@ Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
 Version: 0.2.0
-Date: 2017-11-01
+Date: 2017-11-09
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan-peterson@uiowa.edu", 
                   role = c("aut", "cre"))
