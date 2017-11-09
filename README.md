@@ -20,7 +20,7 @@ devtools::install_github("petersonR/bestNormalize")
 Example
 -------
 
-This is a basic example which shows you how to solve a common problem:
+In this example, we generate 1000 draws from a gamma distribution, and normalize them:
 
 ``` r
 library(bestNormalize)
@@ -54,8 +54,8 @@ all.equal(x2, x)
 #> [1] TRUE
 # Show that the transformation worked
 par(mfrow = c(1,2))
-MASS::truehist(x, main = "x")
-MASS::truehist(gx, main = "g(x)")
+MASS::truehist(x, xlab = "x")
+MASS::truehist(gx, xlab = "g(x)")
 ```
 
 ![](README-example-1.png)
