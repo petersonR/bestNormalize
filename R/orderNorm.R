@@ -122,7 +122,7 @@ predict.orderNorm <- function(object,
 #' @importFrom stats quantile
 #' @export
 print.orderNorm <- function(x, ...) {
-  cat('OrderNorm Transformation with', x$n, 
+  cat('orderNorm Transformation with', x$n, 
       'nonmissing obs and', 
       ifelse(
         x$warn_status == 1, 

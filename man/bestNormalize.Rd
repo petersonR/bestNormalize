@@ -5,7 +5,7 @@
 \alias{predict.bestNormalize}
 \alias{predict.bestNormalize}
 \alias{print.bestNormalize}
-\title{Calculate and perform best normalizing tranformation}
+\title{Calculate and perform best normalizing transformation}
 \usage{
 bestNormalize(x, allow_orderNorm = TRUE)
 
@@ -33,15 +33,15 @@ A list of class \code{bestNormalize} with elements
 \item{x.t}{transformed original data} 
 \item{x}{original data} 
 \item{norm_stats}{Pearson's chi-squared normality test statistics}
-\item{chosen_transform}{info about the tranformation (of appropriate class)}
+\item{chosen_transform}{info about the transformation (of appropriate class)}
 
 The \code{predict} function returns the numeric value of the transformation
 performed on new data, and allows for the inverse transformation as well.
 }
 \description{
 Performs a suite of normalizing transformations, and selects the
-  best one on the basis of the Shapiro-Wilks test for normality (ie, the one 
-  with the highest p-value, ie the one that shows the least amount of
+  best one on the basis of the Shapiro-Wilks test for normality (i.e., the one 
+  with the highest p-value, i.e. the one that shows the least amount of
   evidence against normality).
 }
 \details{

@@ -1,10 +1,10 @@
-#' Calculate and perform best normalizing tranformation
+#' Calculate and perform best normalizing transformation
 #' 
 #' @aliases predict.bestNormalize
 #'   
 #' @description Performs a suite of normalizing transformations, and selects the
-#'   best one on the basis of the Shapiro-Wilks test for normality (ie, the one 
-#'   with the highest p-value, ie the one that shows the least amount of
+#'   best one on the basis of the Shapiro-Wilks test for normality (i.e., the one 
+#'   with the highest p-value, i.e. the one that shows the least amount of
 #'   evidence against normality).
 #' @param x A vector to normalize
 #' @param allow_orderNorm set to FALSE if orderNorm should not be applied
@@ -21,7 +21,7 @@
 #' \item{x.t}{transformed original data} 
 #' \item{x}{original data} 
 #' \item{norm_stats}{Pearson's chi-squared normality test statistics}
-#' \item{chosen_transform}{info about the tranformation (of appropriate class)}
+#' \item{chosen_transform}{info about the transformation (of appropriate class)}
 #' 
 #' The \code{predict} function returns the numeric value of the transformation
 #' performed on new data, and allows for the inverse transformation as well.
