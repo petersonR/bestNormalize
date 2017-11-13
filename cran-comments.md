@@ -17,3 +17,8 @@ This is my first submission to CRAN
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package
+
+## Resubmission 
+This is a resubmission. In this version, I have:
+
+* Clarified in DESCRIPTION which transformation functions this package implements

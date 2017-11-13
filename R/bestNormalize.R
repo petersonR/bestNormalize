@@ -20,7 +20,7 @@
 #' 
 #' \item{x.t}{transformed original data} 
 #' \item{x}{original data} 
-#' \item{norm_stats}{Pearson's chi-squared normality test statistics}
+#' \item{norm_stats}{Pearson's chi-squared normality test statistics / degrees of freedom}
 #' \item{chosen_transform}{info about the transformation (of appropriate class)}
 #' 
 #' The \code{predict} function returns the numeric value of the transformation
