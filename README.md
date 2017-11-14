@@ -3,9 +3,9 @@
 bestNormalize: Flexibly calculate the best normalizing transformation for a vector
 ==================================================================================
 
-The `bestNormalize` R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is oberved. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the *most* normal.
+The `bestNormalize` R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is oberved. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the *most* normal. 
 
-This package also introduces a new normalization technique, `orderNorm`, which transforms the data based off of a rank mapping to the normal distribution, which allows us to *guarantee* normally distributed transformed data (if ties are not present).
+This package also introduces a new normalization technique, Ordered Quantile normalization (`orderNorm()`), which transforms the data based off of a rank mapping to the normal distribution, which allows us to *guarantee* normally distributed transformed data (if ties are not present). 
 
 Installation
 ------------
