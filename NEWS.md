@@ -1,3 +1,5 @@
+# bestNormalize 0.2.2.9000
+
 # bestNormalize 0.2.2
 
 - Changed the name of the orderNorm technique to "Ordered Quantile normalization".
