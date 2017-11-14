@@ -4,7 +4,7 @@
 #' @aliases predict.lambert
 #'   
 #' @description Perform Lambert's W x F transformation and center/scale a vector
-#'   to attempt normalization via the \code{LambertW} package
+#'   to attempt normalization via the \code{LambertW} package.
 #' @param x A vector to normalize with Box-Cox
 #' @param type a character indicating which transformation to perform (options 
 #'   are "s", "h", and "hh", see details)
@@ -18,9 +18,11 @@
 #'   normalizing (or "Gaussianizing") transformation. This transformation can be
 #'   performed on new data, and inverted, via the \code{predict} function.
 #'   
-#'   NOTE: The type = "s" argument is the only one that does the 1-1 transform 
-#'   consistently. Use type = "h" or type = 'hh' at risk of not having this 1-1 
-#'   transform.
+#'   NOTE: The type = "s" argument is the only one that does the 1-1 transform
+#'   consistently, and so it is the only method currently used in
+#'   \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not having
+#'   this estimate 1-1 transform. These alternative types are effective when the
+#'   data has exceptionally heavy tails, e.g. the Cauchy distribution.
 #'   
 #' @return A list of class \code{lambert} with elements 
 #'   \item{x.t}{transformed original data} 

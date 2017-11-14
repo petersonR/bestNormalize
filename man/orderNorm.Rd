@@ -5,7 +5,7 @@
 \alias{predict.orderNorm}
 \alias{predict.orderNorm}
 \alias{print.orderNorm}
-\title{orderNorm Transformation}
+\title{Calculate and perform Ordered Quantile normalizing transformation}
 \usage{
 orderNorm(x)
 
@@ -37,25 +37,26 @@ The \code{predict} function returns the numeric value of the transformation
 performed on new data, and allows for the inverse transformation as well.
 }
 \description{
-The \code{orderNorm} transformation is a rank-based procedure by
-  which the values of a vector are mapped to their percentile, which is then
-  mapped to the same percentile of the normal distribution. Without the
-  presence of ties, this essentially guarantees that the transformation leads
-  to a uniform distribution.
-  
+The Ordered Quantile normalization transformation,
+  \code{orderNorm()}, is a rank-based procedure by which the values of a
+  vector are mapped to their percentile, which is then mapped to the same
+  percentile of the normal distribution. Without the presence of ties, this
+  essentially guarantees that the transformation leads to a uniform
+  distribution.
+
   The transformation is: \deqn{g(x) = \Phi ^ {-1} (rank(x) / (length(x) +
   1))}
-  
+
   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each
   observation's rank, and length(x) refers to the number of observations.
-  
+
   Using linear interpolation between these percentiles, the orderNorm becomes
   a 1-1 transformation. While it is possible to extrapolate beyond the
   observed values, a warning will occur. This is because outside of the
-  observed domain of x, it is unclear how to extrapolate the transformation. 
+  observed domain of x, it is unclear how to extrapolate the transformation.
   A linear approximation lm(g(x) ~ x) is used to extrapolate beyond the
   original domain.
-  
+
   This transformation can be performed on new data and inverted via the
   \code{predict} function.
 }

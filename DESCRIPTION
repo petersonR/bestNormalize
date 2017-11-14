@@ -1,18 +1,19 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 0.2.1
+Version: 0.2.2
 Date: 2017-11-13
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan-peterson@uiowa.edu", 
                   role = c("aut", "cre"))
 Description: Estimate a suite of normalizing transformations, including 
     a new technique based on ranks which can guarantee normally distributed 
-    transformed data if there are no ties. The package is built to estimate
-    the best normalizing transformation for a vector consistently and 
-    accurately. It implements the Box-Cox transformation, the Yeo-Johnson 
-    transformation, three types of Lambert WxF transformations, and the 
-    orderNorm transformation.
+    transformed data if there are no ties: Ordered Quantile Normalization. 
+    The package is built to estimate the best normalizing transformation for
+    a vector consistently and accurately. It implements the Box-Cox 
+    transformation, the Yeo-Johnson transformation, three types of Lambert
+    WxF transformations, and the Ordered Quantile normalization 
+    transformation.
 URL: https://github.com/petersonR/bestNormalize
 License: GPL-3
 Depends: R (>= 3.1.0)

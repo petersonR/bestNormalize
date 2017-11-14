@@ -22,3 +22,5 @@ There are currently no downstream dependencies for this package
 This is a resubmission. In this version, I have:
 
 * Clarified in DESCRIPTION which transformation functions this package implements
+
+* Re-titled orderNorm in description and documentation to "Ordered Quantile normalization"

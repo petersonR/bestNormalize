@@ -3,9 +3,10 @@
 #' @aliases predict.bestNormalize
 #'   
 #' @description Performs a suite of normalizing transformations, and selects the
-#'   best one on the basis of the Shapiro-Wilks test for normality (i.e., the one 
-#'   with the highest p-value, i.e. the one that shows the least amount of
-#'   evidence against normality).
+#'   best one on the basis of the Pearson P test statistic for normality. The 
+#'   transformation that has the lowest P (calculated on the transformed data) 
+#'   is selected. See details for more information.
+#'   
 #' @param x A vector to normalize
 #' @param allow_orderNorm set to FALSE if orderNorm should not be applied
 #' @param newdata a vector of data to be (reverse) transformed
@@ -20,11 +21,25 @@
 #' 
 #' \item{x.t}{transformed original data} 
 #' \item{x}{original data} 
-#' \item{norm_stats}{Pearson's chi-squared normality test statistics / degrees of freedom}
+#' \item{norm_stats}{Pearson's Pearson's P / degrees of freedom}
 #' \item{chosen_transform}{info about the transformation (of appropriate class)}
 #' 
 #' The \code{predict} function returns the numeric value of the transformation
 #' performed on new data, and allows for the inverse transformation as well.
+#' 
+#' @details This function currently estimates the Yeo-Johnson transformation,
+#'   the Box Cox transformation (if the data is positive), and the Lambert WxF
+#'   Gaussianizing transformation of type "s". If allow_orderNorm == TRUE, then
+#'   the ordered quantile normalization technique is also employed, and will
+#'   likely be chosen if ties are not present since it essentially forces the
+#'   data to follow a normal distribution. More information on the orderNorm
+#'   technique can be found in the package vignette, or using \code{?orderNorm}.
+#'   
+#' NOTE: Only the Lambert technique of type = "s" (skew) ensures that the
+#' transformation is consistently 1-1, so it is the only method currently used
+#' in \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not
+#' having this estimate 1-1 transform. These alternative types are effective
+#' when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
 #' 
 #' @examples 
 #' 

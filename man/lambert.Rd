@@ -43,16 +43,18 @@ performed on new data, and allows for the inverse transformation as well.
 }
 \description{
 Perform Lambert's W x F transformation and center/scale a vector
-  to attempt normalization via the \code{LambertW} package
+  to attempt normalization via the \code{LambertW} package.
 }
 \details{
 \code{lambert} uses the \code{LambertW} package to estimate a 
   normalizing (or "Gaussianizing") transformation. This transformation can be
   performed on new data, and inverted, via the \code{predict} function.
   
-  NOTE: The type = "s" argument is the only one that does the 1-1 transform 
-  consistently. Use type = "h" or type = 'hh' at risk of not having this 1-1 
-  transform.
+  NOTE: The type = "s" argument is the only one that does the 1-1 transform
+  consistently, and so it is the only method currently used in
+  \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not having
+  this estimate 1-1 transform. These alternative types are effective when the
+  data has exceptionally heavy tails, e.g. the Cauchy distribution.
 }
 \examples{
 x <- rgamma(100, 1, 1)
