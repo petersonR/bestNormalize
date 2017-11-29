@@ -21,11 +21,17 @@ This package also introduces a new normalization technique, Ordered Quantile nor
 
 ## Installation
 
-You can install bestNormalize from github with:
+You can install the most recent (devel) version of bestNormalize from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("petersonR/bestNormalize")
+```
+
+Or, you can download it from CRAN with:
+
+```{r cran-installation, eval = FALSE}
+install.packages("bestNormalize")
 ```
 
 ## Example
