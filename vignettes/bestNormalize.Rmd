@@ -225,7 +225,7 @@ autotrader$yearsold <- 2017 - autotrader$Year
 ### Using best-normalize
 (priceBN <- bestNormalize(autotrader$price))
 (mileageBN <- bestNormalize(autotrader$mileage))
-(yearsoldBN <- bestNormalize(autotrader$yearsold, allow_orderNorm = FALSE))
+(yearsoldBN <- bestNormalize(autotrader$yearsold))
 
 par(mfrow = c(3, 2))
 MASS::truehist(autotrader$price)
