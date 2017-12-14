@@ -55,6 +55,10 @@ Perform Lambert's W x F transformation and center/scale a vector
   \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not having
   this estimate 1-1 transform. These alternative types are effective when the
   data has exceptionally heavy tails, e.g. the Cauchy distribution.
+  
+  Additionally, sometimes (depending on the distribution) this method will be
+  unable to extrapolate beyond the observed bounds. In this cases, NaN is
+  returned
 }
 \examples{
 x <- rgamma(100, 1, 1)

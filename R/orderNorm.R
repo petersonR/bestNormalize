@@ -3,7 +3,7 @@
 #' @name orderNorm
 #' @aliases predict.orderNorm
 #'
-#' @description The Ordered Quantile normalization transformation,
+#' @description The Ordered Quantile (ORQ) normalization transformation,
 #'   \code{orderNorm()}, is a rank-based procedure by which the values of a
 #'   vector are mapped to their percentile, which is then mapped to the same
 #'   percentile of the normal distribution. Without the presence of ties, this
@@ -18,10 +18,14 @@
 #'
 #'   Using linear interpolation between these percentiles, the orderNorm becomes
 #'   a 1-1 transformation. While it is possible to extrapolate beyond the
-#'   observed values, a warning will occur. This is because outside of the
-#'   observed domain of x, it is unclear how to extrapolate the transformation.
-#'   A linear approximation lm(g(x) ~ x) is used to extrapolate beyond the
-#'   original domain.
+#'   observed values, a warning will occur unless warn = FALSE. This is
+#'   because outside of the observed domain of x, it is unclear how to
+#'   extrapolate the transformation.
+#'
+#'   A binomial glm with a logit link is used on the ranks in order to
+#'   extrapolate beyond the bounds of the original domain of x. The inverse
+#'   normal CDF is then applied to these extrapolated predictions in order to
+#'   extrapolate the transformation.
 #'
 #'   This transformation can be performed on new data and inverted via the
 #'   \code{predict} function.
@@ -30,6 +34,7 @@
 #' @param newdata a vector of data to be (reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
 #' @param object an object of class 'orderNorm'
+#' @param warn transforms outside observed range or ties will yield warning
 #' @param ... additional arguments
 #' 
 #' @return A list of class \code{orderNorm} with elements
@@ -37,7 +42,7 @@
 #' \item{x.t}{transformed original data} 
 #' \item{x}{original data} 
 #' \item{n}{number of nonmissing observations}
-#' \item{warn_status}{indicator if ties are present}
+#' \item{ties_status}{indicator if ties are present}
 #' \item{fit}{fit to be used for extrapolation, if needed}
 #' \item{norm_stat}{Pearson's P / degrees of freedom}
 #' The \code{predict} function returns the numeric value of the transformation 
@@ -58,23 +63,24 @@
 #'  \code{\link{lambert}}, 
 #'  \code{\link{bestNormalize}},
 #'  \code{\link{yeojohnson}} 
-#' @importFrom stats qnorm lm
+#' @importFrom stats qnorm glm
 #' @export
-orderNorm <- function(x) {
+orderNorm <- function(x, warn = TRUE) {
   stopifnot(is.numeric(x))
-  warn_status <- 0
+  ties_status <- 0
   nunique <- length(unique(x))
   na_idx <- is.na(x)
   
   if (nunique < length(x)) {
-    warning('Ties in data, Normal distribution not guaranteed\n')
-    warn_status <- 1
+    if(warn) warning('Ties in data, Normal distribution not guaranteed\n')
+    ties_status <- 1
   }
   
-  x.t <- qnorm(rank(x, na.last = 'keep') / (length(x) + 1 - sum(na_idx)))
+  q.x <- rank(x, na.last = 'keep') / (length(x) + 1 - sum(na_idx))
+  x.t <- qnorm(q.x)
   
-  # fit linear model for potential future extrapolation
-  fit <- lm(x.t ~ x)
+  # fit model for future extrapolation
+  fit <- suppressWarnings(glm(q.x ~ x, family = 'binomial'))
   
   ptest <- nortest::pearson.test(x.t)
   
@@ -82,7 +88,7 @@ orderNorm <- function(x) {
     x.t = x.t,
     x = x,
     n = length(x) - sum(is.na(x)),
-    warn_status = warn_status,
+    ties_status = ties_status,
     fit = fit,
     norm_stat =  unname(ptest$statistic / ptest$df)
   )
@@ -97,6 +103,7 @@ orderNorm <- function(x) {
 predict.orderNorm <- function(object,
                               newdata = NULL,
                               inverse = FALSE, 
+                              warn = TRUE,
                               ...) {
   stopifnot(is.null(newdata) || is.numeric(newdata))
   
@@ -105,7 +112,7 @@ predict.orderNorm <- function(object,
     if(is.null(newdata)) newdata <- object$x
     na_idx <- is.na(newdata)
     
-    newdata[!na_idx] <- orderNorm_trans(object, newdata[!na_idx])
+    newdata[!na_idx] <- orderNorm_trans(object, newdata[!na_idx], warn)
     return(newdata)
   } 
   
@@ -113,7 +120,7 @@ predict.orderNorm <- function(object,
   if (is.null(newdata)) newdata <- object$x.t
   
   na_idx <- is.na(newdata)
-  newdata[!na_idx] <- inv_orderNorm_trans(object, newdata[!na_idx])
+  newdata[!na_idx] <- inv_orderNorm_trans(object, newdata[!na_idx], warn)
   
   return(newdata)
 }
@@ -126,66 +133,70 @@ print.orderNorm <- function(x, ...) {
   cat('orderNorm Transformation with', x$n, 
       'nonmissing obs and', 
       ifelse(
-        x$warn_status == 1, 
+        x$ties_status == 1, 
         paste0('ties\n - ', length(unique(x$x)), ' unique values'),
         'no ties'), '\n',
       '- Original quantiles:\n')
   print(round(quantile(x$x), 3))
 }
 
-#' @importFrom stats approx fitted predict.lm
-orderNorm_trans <- function(orderNorm_obj, new_points) {
+#' @importFrom stats approx fitted predict.glm qnorm
+orderNorm_trans <- function(orderNorm_obj, new_points, warn) {
   x_t <- orderNorm_obj$x.t
   old_points <- orderNorm_obj$x
   vals <- approx(old_points, x_t, xout = new_points, rule = 1)
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
-    warning('Transformations requested outside observed domain; linear approx. on ranks applied')
+    if (warn) warning('Transformations requested outside observed domain; logistic approx. on ranks applied')
     fit <- orderNorm_obj$fit
-    p <- fitted(fit)
+    p <- qnorm(fitted(fit, type = "response"))
     l_idx <- vals$x < min(old_points)
     h_idx <- vals$x > max(old_points)
     
     # Check 
     if (any(l_idx)) {
       xx <- data.frame(x = vals$x[l_idx])
-      vals$y[l_idx] <- predict(fit, newdata = xx) - (min(p) - min(x_t))
+      vals$y[l_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - (min(p) - min(x_t))
       
     }
     if (any(h_idx)) {
       xx <- data.frame(x = vals$x[h_idx])
-      vals$y[h_idx] <- predict(fit, newdata = xx) - (max(p) - max(x_t))
+      vals$y[h_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - (max(p) - max(x_t))
     }
   }
   
   vals$y
 }
 
-#' @importFrom stats approx fitted
-inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t) {
+#' @importFrom stats approx fitted qnorm pnorm
+inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t, warn) {
   x_t <- orderNorm_obj$x.t
   old_points <- orderNorm_obj$x
   vals <- approx(x_t, old_points, xout = new_points_x_t, rule = 1)
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
-    warning('Transformations requested outside observed domain; linear approx. on ranks applied')
+    if(warn) warning('Transformations requested outside observed domain; logistic approx. on ranks applied')
     
     fit <- orderNorm_obj$fit
-    p <- fitted(fit)
+    p <- qnorm(fitted(fit, type = "response"))
     l_idx <- vals$x < min(x_t)
     h_idx <- vals$x > max(x_t)
     
     # Check 
     if (any(l_idx)) {
       # Solve algebraically from original transformation
+      logits <- log(pnorm(vals$x[l_idx] + min(p) - min(x_t)) / 
+                      (1 - pnorm(vals$x[l_idx] + min(p) - min(x_t))))
       vals$y[l_idx] <- 
-        unname((vals$x[l_idx] + min(p) - min(x_t) - fit$coef[1]) / fit$coef[2])
+        unname((logits - fit$coef[1]) / fit$coef[2])
     }
     if (any(h_idx)) {
+      logits <- log(pnorm(vals$x[h_idx] + max(p) - max(x_t)) / 
+                      (1 - pnorm(vals$x[h_idx] + max(p) - max(x_t))))
       vals$y[h_idx] <- 
-        unname((vals$x[h_idx] + max(p) - max(x_t) - fit$coef[1]) / fit$coef[2])
+        unname((logits - fit$coef[1]) / fit$coef[2])
     }
   }
   

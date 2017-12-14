@@ -22,8 +22,10 @@
 #' \item{x.t}{transformed original data} 
 #' \item{x}{original data} 
 #' \item{norm_stats}{Pearson's Pearson's P / degrees of freedom}
-#' \item{chosen_transform}{info about the transformation (of appropriate class)}
+#' \item{chosen_transform}{the chosen transformation (of appropriate class)}
+#' \item{other_transforms}{the other transformations (of appropriate class)}
 #' 
+#'  
 #' The \code{predict} function returns the numeric value of the transformation
 #' performed on new data, and allows for the inverse transformation as well.
 #' 
@@ -60,7 +62,7 @@
 bestNormalize <- function(x, allow_orderNorm = TRUE) {
   stopifnot(is.numeric(x))
   x.t <- list()
-  methods <- c('lambert', 'yeojohnson', 'boxcox', 'binarize')
+  methods <- c('lambert', 'yeojohnson', 'boxcox')
   if (allow_orderNorm) 
     methods <- c(methods, 'orderNorm')
   
@@ -79,7 +81,8 @@ bestNormalize <- function(x, allow_orderNorm = TRUE) {
     x.t = x.t[[best_idx]]$x.t,
     x = x,
     norm_stats = norm_stats,
-    chosen_transform = x.t[[best_idx]]
+    chosen_transform = x.t[[best_idx]],
+    other_transforms = x.t[names(x.t) != best_idx]
   )
   class(val) <- 'bestNormalize'
   val

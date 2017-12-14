@@ -11,6 +11,13 @@ best until the data is oberved. This package will look at a range of
 possible transformations and return the best one, i.e. the one that
 makes it look the *most* normal.
 
+Note that some authors use the term “normalize” differently than in this
+package. We define “normalize”: to transform a vector of data in such a
+way that the transformed values follow a Gaussian distribution (or
+equivalently, a bell curve). This is in contrast to other such
+techniques designed to transform values to the 0-1 range, or to the -1
+to 1 range.
+
 This package also introduces a new normalization technique, Ordered
 Quantile normalization (`orderNorm()`), which transforms the data based
 off of a rank mapping to the normal distribution, which allows us to

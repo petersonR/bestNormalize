@@ -1,4 +1,9 @@
-# bestNormalize 0.2.2.9000
+# bestNormalize 0.2.2.9001
+
+- Improved extrapolation of the ORQ (orderNorm) method
+    - Instead of linear extrapolation, it uses binomial (logit-link) model on ranks,
+    
+- Added plotting feature for transformation objects
 
 # bestNormalize 0.2.2
 

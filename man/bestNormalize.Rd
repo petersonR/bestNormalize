@@ -33,8 +33,10 @@ A list of class \code{bestNormalize} with elements
 \item{x.t}{transformed original data} 
 \item{x}{original data} 
 \item{norm_stats}{Pearson's Pearson's P / degrees of freedom}
-\item{chosen_transform}{info about the transformation (of appropriate class)}
+\item{chosen_transform}{the chosen transformation (of appropriate class)}
+\item{other_transforms}{the other transformations (of appropriate class)}
 
+ 
 The \code{predict} function returns the numeric value of the transformation
 performed on new data, and allows for the inverse transformation as well.
 }

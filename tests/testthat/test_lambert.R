@@ -12,7 +12,7 @@ test_that('lambert Transforms original data consistently' , {
 })
 
 test_that('lambert Transforms new data consistently', {
-  nd <- seq(0, 4, length = 100)
+  nd <- seq(-1, 4, length = 100)
   pred <- predict(lambert_obj, newdata = nd)
   expect_true(!any(is.na(pred)))
   

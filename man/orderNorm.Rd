@@ -7,14 +7,17 @@
 \alias{print.orderNorm}
 \title{Calculate and perform Ordered Quantile normalizing transformation}
 \usage{
-orderNorm(x)
+orderNorm(x, warn = TRUE)
 
-\method{predict}{orderNorm}(object, newdata = NULL, inverse = FALSE, ...)
+\method{predict}{orderNorm}(object, newdata = NULL, inverse = FALSE,
+  warn = TRUE, ...)
 
 \method{print}{orderNorm}(x, ...)
 }
 \arguments{
 \item{x}{A vector to normalize}
+
+\item{warn}{transforms outside observed range or ties will yield warning}
 
 \item{object}{an object of class 'orderNorm'}
 
@@ -30,14 +33,14 @@ A list of class \code{orderNorm} with elements
 \item{x.t}{transformed original data} 
 \item{x}{original data} 
 \item{n}{number of nonmissing observations}
-\item{warn_status}{indicator if ties are present}
+\item{ties_status}{indicator if ties are present}
 \item{fit}{fit to be used for extrapolation, if needed}
 \item{norm_stat}{Pearson's P / degrees of freedom}
 The \code{predict} function returns the numeric value of the transformation 
 performed on new data, and allows for the inverse transformation as well.
 }
 \description{
-The Ordered Quantile normalization transformation,
+The Ordered Quantile (ORQ) normalization transformation,
   \code{orderNorm()}, is a rank-based procedure by which the values of a
   vector are mapped to their percentile, which is then mapped to the same
   percentile of the normal distribution. Without the presence of ties, this
@@ -52,10 +55,14 @@ The Ordered Quantile normalization transformation,
 
   Using linear interpolation between these percentiles, the orderNorm becomes
   a 1-1 transformation. While it is possible to extrapolate beyond the
-  observed values, a warning will occur. This is because outside of the
-  observed domain of x, it is unclear how to extrapolate the transformation.
-  A linear approximation lm(g(x) ~ x) is used to extrapolate beyond the
-  original domain.
+  observed values, a warning will occur unless warn = FALSE. This is
+  because outside of the observed domain of x, it is unclear how to
+  extrapolate the transformation.
+
+  A binomial glm with a logit link is used on the ranks in order to
+  extrapolate beyond the bounds of the original domain of x. The inverse
+  normal CDF is then applied to these extrapolated predictions in order to
+  extrapolate the transformation.
 
   This transformation can be performed on new data and inverted via the
   \code{predict} function.
