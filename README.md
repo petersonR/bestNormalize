@@ -24,6 +24,16 @@ off of a rank mapping to the normal distribution, which allows us to
 *guarantee* normally distributed transformed data (if ties are not
 present).
 
+To evaluate the efficacy of the normalization technique, the
+`bestNormalize()` function implements repeated cross-validation to
+estimate the Pearson’s P statistic divided by its degrees of freedom.
+This is called the “Normality statistic”, and if it is close to 1, then
+the transformation can be thought of as working well. The function is
+designed to select the transformation that produces the lowest P / df
+value, when estimated on out-of-sample data (estimating this on
+in-sample data will always choose the orderNorm technique, and is
+generally not the main goal of these procedures).
+
 ## Installation
 
 You can install the most recent (devel) version of bestNormalize from
@@ -55,16 +65,18 @@ BN_obj <- bestNormalize(x)
 BN_obj
 #> Best Normalizing transformation with 1000 Observations
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
-#>  - Box-Cox: 0.8188 
-#>  - Lambert's W: 1.28 
-#>  - Yeo-Johnson: 5.8284 
-#>  - orderNorm: 0.0066 
+#>  - Box-Cox: 1.1176 
+#>  - Lambert's W: 1.1004 
+#>  - Yeo-Johnson: 1.933 
+#>  - orderNorm: 1.2876 
+#> Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
 #>  
 #> Based off these, bestNormalize chose:
-#> orderNorm Transformation with 1000 nonmissing obs and no ties 
-#>  - Original quantiles:
-#>    0%   25%   50%   75%  100% 
-#> 0.000 0.253 0.693 1.437 7.431
+#> Lambert WxF Transformation of type s with 1000 nonmissing obs.:
+#>  Estimated statistics:
+#>  - gamma = 0.4129
+#>  - mean = 0.667563 
+#>  - sd = 0.7488649
 
 # Perform transformation
 gx <- predict(BN_obj)
@@ -76,3 +88,5 @@ x2 <- predict(BN_obj, newdata = gx, inverse = TRUE)
 all.equal(x2, x)
 #> [1] TRUE
 ```
+
+For a more in depth tutorial, please consult the package vignette.

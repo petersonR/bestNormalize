@@ -21,6 +21,8 @@ Note that some authors use the term "normalize" differently than in this package
 
 This package also introduces a new normalization technique, Ordered Quantile normalization (`orderNorm()`), which transforms the data based off of a rank mapping to the normal distribution, which allows us to *guarantee* normally distributed transformed data (if ties are not present). 
 
+To evaluate the efficacy of the normalization technique, the `bestNormalize()` function implements repeated cross-validation to estimate the Pearson's P statistic divided by its degrees of freedom. This is called the "Normality statistic", and if it is close to 1, then the transformation can be thought of as working well. The function is designed to select the transformation that produces the lowest P / df value, when estimated on out-of-sample data (estimating this on in-sample data will always choose the orderNorm technique, and is generally not the main goal of these procedures). 
+
 ## Installation
 
 You can install the most recent (devel) version of bestNormalize from github with:
@@ -59,3 +61,5 @@ x2 <- predict(BN_obj, newdata = gx, inverse = TRUE)
 all.equal(x2, x)
 
 ```
+
+For a more in depth tutorial, please consult the package vignette.
