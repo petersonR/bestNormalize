@@ -1,8 +1,8 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 0.2.2.9000
-Date: 2017-12-14
+Version: 0.2.2.9002
+Date: 2017-12-18
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan-peterson@uiowa.edu", 
                   role = c("aut", "cre"))
@@ -19,7 +19,8 @@ License: GPL-3
 Depends: R (>= 3.1.0)
 Imports: 
     LambertW,
-    nortest
+    nortest,
+    parallel
 Suggests: 
     knitr,
     MASS,

@@ -7,7 +7,8 @@
 \alias{print.bestNormalize}
 \title{Calculate and perform best normalizing transformation}
 \usage{
-bestNormalize(x, allow_orderNorm = TRUE)
+bestNormalize(x, allow_orderNorm = TRUE, out_of_sample = TRUE,
+  cluster = NULL, k = 10, r = 5)
 
 \method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE,
   ...)
@@ -18,6 +19,14 @@ bestNormalize(x, allow_orderNorm = TRUE)
 \item{x}{A vector to normalize}
 
 \item{allow_orderNorm}{set to FALSE if orderNorm should not be applied}
+
+\item{out_of_sample}{if FALSE, estimates quickly in-sample performance}
+
+\item{cluster}{name of cluster set using \code{makeCluster}}
+
+\item{k}{number of folds}
+
+\item{r}{number of repeats}
 
 \item{object}{an object of class 'bestNormalize'}
 
@@ -33,10 +42,10 @@ A list of class \code{bestNormalize} with elements
 \item{x.t}{transformed original data} 
 \item{x}{original data} 
 \item{norm_stats}{Pearson's Pearson's P / degrees of freedom}
+\item{method}{out-of-sample or in-sample, number of folds + repeats}
 \item{chosen_transform}{the chosen transformation (of appropriate class)}
 \item{other_transforms}{the other transformations (of appropriate class)}
 
- 
 The \code{predict} function returns the numeric value of the transformation
 performed on new data, and allows for the inverse transformation as well.
 }
@@ -53,17 +62,27 @@ Performs a suite of normalizing transformations, and selects the
 
 This function currently estimates the Yeo-Johnson transformation,
   the Box Cox transformation (if the data is positive), and the Lambert WxF
-  Gaussianizing transformation of type "s". If allow_orderNorm == TRUE, then
-  the ordered quantile normalization technique is also employed, and will
-  likely be chosen if ties are not present since it essentially forces the
-  data to follow a normal distribution. More information on the orderNorm
-  technique can be found in the package vignette, or using \code{?orderNorm}.
-  
-NOTE: Only the Lambert technique of type = "s" (skew) ensures that the
-transformation is consistently 1-1, so it is the only method currently used
-in \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not
-having this estimate 1-1 transform. These alternative types are effective
-when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
+  Gaussianizing transformation of type "s". If allow_orderNorm == TRUE and if
+  out_of_sample == FALSE then the ordered quantile normalization technique
+  will likely be chosen since it essentially forces the data to follow a
+  normal distribution. More information on the orderNorm technique can be
+  found in the package vignette, or using \code{?orderNorm}.
+
+  Repeated cross-validation is used to estimate the out-of-sample performance
+  of each transformation if out_of_sample = TRUE. While this can take some
+  time, users can speed it up by creating a cluster via the \code{parallel}
+  package's \code{makeCluster} function, and passing the name of this cluster
+  to \code{bestNormalize} via the cl argument. For best performance, we
+  recommend the number of clusters to be set to the number of repeats r. Care
+  should be taken to account for the number of observations per fold; to
+  small a number and the estimated normality statistic could be inaccurate,
+  or at least suffer from high variability.
+
+  NOTE: Only the Lambert technique of type = "s" (skew) ensures that the
+  transformation is consistently 1-1, so it is the only method currently used
+  in \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not
+  having this estimate 1-1 transform. These alternative types are effective
+  when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
 }
 \examples{
 

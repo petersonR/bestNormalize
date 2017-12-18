@@ -37,14 +37,16 @@
 \item{...}{further parameters to be passed to \code{plot} and \code{lines}}
 }
 \description{
-Plots transformation functions for objects produced by the bestNormalize package
+Plots transformation functions for objects produced by the bestNormalize
+package
 }
 \details{
-The plots produced by the individual transformations are simply plots of the original values by
-the newly transformed values, with a line denoting where transformations would take place
-for new data. 
+The plots produced by the individual transformations are simply
+  plots of the original values by the newly transformed values, with a line
+  denoting where transformations would take place for new data.
 
-For the bestNormalize object, this plots each of the possible transformations run by the original
-call to bestNormalize. The first argument in the "cols" parameter refers to the color of the 
-chosen transformation.
+  For the bestNormalize object, this plots each of the possible
+  transformations run by the original call to bestNormalize. The first
+  argument in the "cols" parameter refers to the color of the chosen
+  transformation.
 }

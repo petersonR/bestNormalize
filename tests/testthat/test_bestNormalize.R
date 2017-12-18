@@ -5,22 +5,25 @@ train <- iris$Petal.Width
 
 test_that('Various options for BN with positive data', {
   expect_warning(BNobject <- bestNormalize(train))
-  expect_silent(BNobject3 <- bestNormalize(train, allow_orderNorm = FALSE))
+  expect_silent(BNobject3 <- bestNormalize(train, allow_orderNorm = FALSE, k = 5))
+  expect_warning(BNobject <- bestNormalize(train, out_of_sample = FALSE))
 })
 
 test_that('Various options for BN with mixed data', {
   expect_warning(BNobject2 <- bestNormalize(c(train, -1)))
   expect_warning(BNobject3 <- bestNormalize(c(train, -1), allow_orderNorm = FALSE))
+  expect_warning(BNobject4 <- bestNormalize(c(train, -1), allow_orderNorm = FALSE, out_of_sample = FALSE))
 })
 
 test_that('Various options for BN with negative data', {
   expect_warning(BNobject2 <- bestNormalize(-train))
   expect_warning(BNobject3 <- bestNormalize(-train, allow_orderNorm = FALSE))
+  expect_warning(BNobject4 <- bestNormalize(-train, allow_orderNorm = FALSE, out_of_sample = FALSE))
 })
 
 
 BNobject <- suppressWarnings(bestNormalize(train))
-BNobject4 <- bestNormalize(train, allow_orderNorm = FALSE)
+BNobject4 <- bestNormalize(train, allow_orderNorm = FALSE, k = 5)
 
 # Test transformations
 test_that('BestNormalize transformations with positive data', {
