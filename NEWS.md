@@ -1,3 +1,5 @@
+# bestNormalize 1.0.0.9000
+
 # bestNormalize 1.0.0
 
 - Added feature to estimate out-of-sample normality statistics in bestNormalize 
