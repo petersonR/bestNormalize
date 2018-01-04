@@ -11,7 +11,7 @@
 #' @param object an object of class 'boxcox'
 #' @param newdata a vector of data to be (reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
-#' @details \code{boxcox} estimates the optimal value of lamda for the Box-Cox
+#' @details \code{boxcox} estimates the optimal value of lambda for the Box-Cox
 #' transformation. This transformation can be performed on new data, and
 #' inverted, via the \code{predict} function.
 #' 
@@ -96,7 +96,7 @@ predict.boxcox <- function(object, newdata = NULL, inverse = FALSE, ...) {
 print.boxcox <- function(x, ...) {
   cat('Box Cox Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
-      '- lamda =', x$lambda, '\n',
+      '- lambda =', x$lambda, '\n',
       '- mean =', x$mean, '\n',
       '- sd =', x$sd, '\n')
 }

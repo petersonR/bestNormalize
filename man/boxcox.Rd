@@ -45,7 +45,7 @@ Perform a Box-Cox transformation and center/scale a vector to
   attempt normalization
 }
 \details{
-\code{boxcox} estimates the optimal value of lamda for the Box-Cox
+\code{boxcox} estimates the optimal value of lambda for the Box-Cox
 transformation. This transformation can be performed on new data, and
 inverted, via the \code{predict} function.
 

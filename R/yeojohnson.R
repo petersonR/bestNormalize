@@ -12,7 +12,7 @@
 #'@param newdata a vector of data to be (reverse) transformed
 #'@param inverse if TRUE, performs reverse transformation
 #'@param object an object of class 'yeojohnson'
-#'@details \code{yeojohnson} estimates the optimal value of lamda for the
+#'@details \code{yeojohnson} estimates the optimal value of lambda for the
 #'  Yeo-Johnson transformation. This transformation can be performed on new
 #'  data, and inverted, via the \code{predict} function.
 #'

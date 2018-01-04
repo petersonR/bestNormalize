@@ -57,8 +57,8 @@ Perform Lambert's W x F transformation and center/scale a vector
   data has exceptionally heavy tails, e.g. the Cauchy distribution.
   
   Additionally, sometimes (depending on the distribution) this method will be
-  unable to extrapolate beyond the observed bounds. In this cases, NaN is
-  returned
+  unable to extrapolate beyond the observed bounds. In these cases, NaN is
+  returned.
 }
 \examples{
 x <- rgamma(100, 1, 1)

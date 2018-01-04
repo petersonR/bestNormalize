@@ -25,8 +25,8 @@
 #'   data has exceptionally heavy tails, e.g. the Cauchy distribution.
 #'   
 #'   Additionally, sometimes (depending on the distribution) this method will be
-#'   unable to extrapolate beyond the observed bounds. In this cases, NaN is
-#'   returned
+#'   unable to extrapolate beyond the observed bounds. In these cases, NaN is
+#'   returned.
 #'   
 #' @return A list of class \code{lambert} with elements 
 #'   \item{x.t}{transformed original data} 

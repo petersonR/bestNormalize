@@ -43,7 +43,7 @@ Perform a Yeo-Johnson Transformation and center/scale a vector to
  attempt normalization
 }
 \details{
-\code{yeojohnson} estimates the optimal value of lamda for the
+\code{yeojohnson} estimates the optimal value of lambda for the
  Yeo-Johnson transformation. This transformation can be performed on new
  data, and inverted, via the \code{predict} function.
 
