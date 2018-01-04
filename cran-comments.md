@@ -1,6 +1,6 @@
 ## Test environments 
 - win-builder (devel, release)
-- local Windows (10), R 3.4.2
+- local Windows (10), R 3.4.3
 - local ubuntu (14.04), R 3.4.2
 
 ## R CMD check results

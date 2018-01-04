@@ -3,6 +3,11 @@
 
 # bestNormalize: Flexibly calculate the best normalizing transformation for a vector
 
+[![Travis-CI Build
+Status](https://travis-ci.org/petersonR/bestNormalize.svg?branch=master)](https://travis-ci.org/petersonR/bestNormalize)
+[![CRAN
+version](http://www.r-pkg.org/badges/version/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
+
 The `bestNormalize` R package was designed to help find a normalizing
 transformation for a vector. There are many techniques that have been
 developed in this aim, however each has been subject to their own
