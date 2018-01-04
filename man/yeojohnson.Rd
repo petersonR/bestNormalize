@@ -28,29 +28,29 @@ lambda parameter (lower, upper)}
 \item{inverse}{if TRUE, performs reverse transformation}
 }
 \value{
-A list of class \code{yeojohnson} with elements 
-\item{x.t}{transformed original data} 
-\item{x}{original data} 
-\item{mean}{mean of vector post-YJ transformation} 
-\item{sd}{sd of vector post-BC transformation} 
-\item{lambda}{estimated lambda value for skew transformation} 
-\item{n}{number of nonmissing observations}
-  \item{norm_stat}{Pearson's P / degrees of freedom}
-  
-The \code{predict} function returns the numeric value of the transformation
-performed on new data, and allows for the inverse transformation as well.
+A list of class \code{yeojohnson} with elements \item{x.t}{transformed
+ original data} \item{x}{original data} \item{mean}{mean of vector post-YJ
+ transformation} \item{sd}{sd of vector post-BC transformation}
+ \item{lambda}{estimated lambda value for skew transformation}
+ \item{n}{number of nonmissing observations} \item{norm_stat}{Pearson's P /
+ degrees of freedom}
+
+ The \code{predict} function returns the numeric value of the transformation
+ performed on new data, and allows for the inverse transformation as well.
 }
 \description{
 Perform a Yeo-Johnson Transformation and center/scale a vector to
-  attempt normalization
+ attempt normalization
 }
 \details{
-\code{yeojohnson} estimates the optimal value of lamda for the Yeo-Johnson
-transformation. This transformation can be performed on new data, and
-inverted, via the \code{predict} function.
+\code{yeojohnson} estimates the optimal value of lamda for the
+ Yeo-Johnson transformation. This transformation can be performed on new
+ data, and inverted, via the \code{predict} function.
 
-The Yeo-Johnson is similar to the Box-Cox method, however it allows for the
-transformation of nonpositive data as well.
+ The Yeo-Johnson is similar to the Box-Cox method, however it allows for the
+ transformation of nonpositive data as well. The \code{step_YeoJohnson}
+ function in the \code{recipes} package is another useful resource (see
+ references).
 }
 \examples{
 
@@ -65,13 +65,10 @@ all.equal(x2, x)
 
 }
 \references{
-Yeo, I. K., & Johnson, R. A. (2000). A new family of power 
+Yeo, I. K., & Johnson, R. A. (2000). A new family of power
  transformations to improve normality or symmetry. Biometrika.
- 
- Max Kuhn and Hadley Wickham (2017). recipes: Preprocessing Tools to Create 
- Design Matrices. R package version 0.1.0.9000. 
+
+ Max Kuhn and Hadley Wickham (2017). recipes: Preprocessing Tools to Create
+ Design Matrices. R package version 0.1.0.9000.
  https://github.com/topepo/recipes
-}
-\seealso{
-\code{\link[recipes]{step_YeoJohnson}}
 }

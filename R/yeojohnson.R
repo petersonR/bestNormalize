@@ -1,57 +1,58 @@
-#' Yeo-Johnson Normalization
-#' 
-#' @name yeojohnson
-#' @aliases predict.yeojohnson
-#'   
-#' @description Perform a Yeo-Johnson Transformation and center/scale a vector to
-#'   attempt normalization
-#' @param x A vector to normalize with Yeo-Johnson
-#' @param eps A value to compare lambda against to see if it is equal to zero
-#' @param ... Additional arguments that can be passed to the estimation of the
-#'   lambda parameter (lower, upper)
-#' @param newdata a vector of data to be (reverse) transformed
-#' @param inverse if TRUE, performs reverse transformation
-#' @param object an object of class 'yeojohnson'
-#' @details \code{yeojohnson} estimates the optimal value of lamda for the Yeo-Johnson
-#' transformation. This transformation can be performed on new data, and
-#' inverted, via the \code{predict} function.
-#' 
-#' The Yeo-Johnson is similar to the Box-Cox method, however it allows for the
-#' transformation of nonpositive data as well.
-#' 
-#' @return A list of class \code{yeojohnson} with elements 
-#' \item{x.t}{transformed original data} 
-#' \item{x}{original data} 
-#' \item{mean}{mean of vector post-YJ transformation} 
-#' \item{sd}{sd of vector post-BC transformation} 
-#' \item{lambda}{estimated lambda value for skew transformation} 
-#' \item{n}{number of nonmissing observations}
-#'   \item{norm_stat}{Pearson's P / degrees of freedom}
-#'   
-#' The \code{predict} function returns the numeric value of the transformation
-#' performed on new data, and allows for the inverse transformation as well.
-#'   
-#'@references Yeo, I. K., & Johnson, R. A. (2000). A new family of power 
+#'Yeo-Johnson Normalization
+#'
+#'@name yeojohnson
+#'@aliases predict.yeojohnson
+#'
+#'@description Perform a Yeo-Johnson Transformation and center/scale a vector to
+#'  attempt normalization
+#'@param x A vector to normalize with Yeo-Johnson
+#'@param eps A value to compare lambda against to see if it is equal to zero
+#'@param ... Additional arguments that can be passed to the estimation of the
+#'  lambda parameter (lower, upper)
+#'@param newdata a vector of data to be (reverse) transformed
+#'@param inverse if TRUE, performs reverse transformation
+#'@param object an object of class 'yeojohnson'
+#'@details \code{yeojohnson} estimates the optimal value of lamda for the
+#'  Yeo-Johnson transformation. This transformation can be performed on new
+#'  data, and inverted, via the \code{predict} function.
+#'
+#'  The Yeo-Johnson is similar to the Box-Cox method, however it allows for the
+#'  transformation of nonpositive data as well. The \code{step_YeoJohnson}
+#'  function in the \code{recipes} package is another useful resource (see
+#'  references).
+#'
+#'@return A list of class \code{yeojohnson} with elements \item{x.t}{transformed
+#'  original data} \item{x}{original data} \item{mean}{mean of vector post-YJ
+#'  transformation} \item{sd}{sd of vector post-BC transformation}
+#'  \item{lambda}{estimated lambda value for skew transformation}
+#'  \item{n}{number of nonmissing observations} \item{norm_stat}{Pearson's P /
+#'  degrees of freedom}
+#'
+#'  The \code{predict} function returns the numeric value of the transformation
+#'  performed on new data, and allows for the inverse transformation as well.
+#'
+#'@references Yeo, I. K., & Johnson, R. A. (2000). A new family of power
 #'  transformations to improve normality or symmetry. Biometrika.
-#'  
-#'  Max Kuhn and Hadley Wickham (2017). recipes: Preprocessing Tools to Create 
-#'  Design Matrices. R package version 0.1.0.9000. 
+#'
+#'  Max Kuhn and Hadley Wickham (2017). recipes: Preprocessing Tools to Create
+#'  Design Matrices. R package version 0.1.0.9000.
 #'  https://github.com/topepo/recipes
-#' 
-#' @examples 
-#' 
+#'
+#'
+#'
+#' @examples
+#'
 #' x <- rgamma(100, 1, 1)
-#' 
+#'
 #' yeojohnson_obj <- yeojohnson(x)
 #' yeojohnson_obj
 #' p <- predict(yeojohnson_obj)
 #' x2 <- predict(yeojohnson_obj, newdata = p, inverse = TRUE)
-#' 
+#'
 #' all.equal(x2, x)
-#' 
-#' @seealso  \code{\link[recipes]{step_YeoJohnson}}
-#' @importFrom stats sd
-#' @export
+#'
+#'@importFrom stats sd
+#'@export
 yeojohnson <- function(x, eps = .001, ...) {
   stopifnot(is.numeric(x))
   lambda <- estimate_yeojohnson_lambda(x, eps = eps, ...)

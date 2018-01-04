@@ -1,7 +1,7 @@
 ## Test environments 
 - win-builder (devel, release)
 - local Windows (10), R 3.4.3
-- local ubuntu (14.04), R 3.4.2
+- travis-ci.org (R-oldrel, R-release, R-devel)
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
@@ -25,6 +25,7 @@ bestNormalize 10.03   0.66    4.77
 The new version of the package performs some computationally intensive cross-
 validation. The example is relatively minimal and should not take much longer 
 than it did in this case, but is necessary to show how the process works.
+The note may not show up if the runtime is quick enough.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package
