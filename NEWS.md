@@ -1,7 +1,7 @@
 # bestNormalize 1.0.0.9000
 
-- Added reference (Thanks to Stefano Nembrini) for original Van der Waerden paper 
-  that cites the basis for the orderNorm transformation, as well as discussion 
+- Added references for original papers (Van der Waerden, Bartlett) 
+  that cite the basis for the orderNorm transformation, as well as discussion 
   in Beasley (2009)
 
 # bestNormalize 1.0.0

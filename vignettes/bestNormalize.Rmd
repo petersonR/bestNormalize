@@ -70,13 +70,15 @@ This method has the advantage of working without having to worry about the domai
 
 ## The Ordered Quantile technique 
 
-The ORQ normalization technique is based on the following transformation (originally developed in 1952 by Van der Waerden in "Order tests for the two sample problem and their power"):
+The ORQ normalization technique is based on the following transformation (originally discussed, as far as I can find, by Bartlett in 1947 and further developed in 1952 by Van der Waerden in "Order tests for the two sample problem and their power"):
 
 Let $x$ refer to the original data. Then the transformation is:
 
 $$
 g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x)}{\text{length}(x) + 1}\right)
 $$
+
+ORQ normalization, while based on this transformation, is a little more complicated to implement in many settings where the transformation needs to be applied on new data.
 
 On new data *within* the range of the original data, this transformation refers to the linear interpolation between two of the original data points. On new data *outside* the range of the original data, the transformation returns a warning and extrapolates using a shifted logit approximation of the ranks to the original data. This is visualized below via the `iris` data set, on the `Petal.Width` variable. 
 
@@ -104,7 +106,7 @@ legend('bottomright',
        col = c(1, "slateblue", 1, 1))
 ```
 
-The reason for the shifted logit extrapolation is that it ensures that the function is 1-1, and can handle data outside the original (observed) domain. However, this approximation should be relatively minimal since we should not expect to see many observations outside the observed range if the sample size is large enough. 
+The reason for the shifted logit extrapolation is that it ensures that the function is 1-1, and can handle data outside the original (observed) domain. This approximation will usually be relatively minimal since we should not expect to see many observations outside the observed range if the sample size is large enough. 
 
 The ORQ technique will not guarantee a normal distribution in the presence of ties, but it still could yield the best normalizing transformation when compared to the Box Cox, Yeo Johnson, or Lambert W x F approaches.
 
@@ -112,7 +114,7 @@ The ORQ technique will not guarantee a normal distribution in the presence of ti
 
 There have been a range of other normalization techniques discussed since the original Box-Cox paper that are not included in this package (at the time of writing). Many of these transformations have their own strengths and weaknesses.
 
-These include (but are not limited to): Modified Box Cox (1964), Manly's Exponential (1976), John/Draper's Modulus (1980) Bickel/Doksum's Modified Box Cox (1981). 
+These include (but are not limited to): Modified Box Cox (1964), Manly's Exponential (1976), John/Draper's Modulus (1980), Bickel/Doksum's Modified Box Cox (1981). 
 
 The framework of this package is to create an S3 class for each transformation, so the addition of other normalization techniques would be easy extensions of this package (readers can feel free to submit a pull request to this package's GitHub page with new transformation techniques if they feel so inclined).
 

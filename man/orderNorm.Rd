@@ -54,10 +54,12 @@ The Ordered Quantile (ORQ) normalization transformation,
   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each
   observation's rank, and length(x) refers to the number of observations.
   
-  This formula is basically the same as the one discussed in Van der Waerden,
-  and expounded upon in Beasley (2009), however there is a key difference,
+  By itself, this method is certainly not new; the earliest mention of it
+  that I could find is in a 1947 paper by Bartlett (see references). This
+  formula was outlined explicitly in Van der Waerden, and expounded upon in
+  Beasley (2009). However there is a key difference to this version of it,
   as explained below.
-
+  
   Using linear interpolation between these percentiles, the ORQ normalization
   becomes a 1-1 transformation that can be applied to new data. However,
   outside of the observed domain of x, it is unclear how to extrapolate the
@@ -86,7 +88,11 @@ x2 <- predict(orderNorm_obj, newdata = p, inverse = TRUE)
 all.equal(x2, x)
 }
 \references{
-Van der Waerden BL. Order tests for the two-sample problem and 
+Bartlett, M. S. "The Use of Transformations." Biometrics, 
+  vol. 3, no. 1, 1947, pp. 39-52. JSTOR 
+  www.jstor.org/stable/3001536.
+
+ Van der Waerden BL. Order tests for the two-sample problem and 
    their power. 1952;55:453-458. Ser A. 
    
  Beasley TM, Erickson S, Allison DB. Rank-based inverse normal transformations
