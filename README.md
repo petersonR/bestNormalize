@@ -23,11 +23,15 @@ equivalently, a bell curve). This is in contrast to other such
 techniques designed to transform values to the 0-1 range, or to the -1
 to 1 range.
 
-This package also introduces a new normalization technique, Ordered
-Quantile normalization (`orderNorm()`), which transforms the data based
-off of a rank mapping to the normal distribution, which allows us to
-*guarantee* normally distributed transformed data (if ties are not
-present).
+This package also introduces a new adaptation of a 1952 normalization
+technique, Ordered Quantile normalization (`orderNorm()`), which
+transforms the data based off of a rank mapping to the normal
+distribution. This allows us to *guarantee* normally distributed
+transformed data (if ties are not present). The adaptation uses a
+shifted logit approximation on the ranks transformation to perform the
+transformation on newly observed data outside of the original domain. On
+new data within the original domain, the transformation uses linear
+interpolation of the fitted transformation.
 
 To evaluate the efficacy of the normalization technique, the
 `bestNormalize()` function implements repeated cross-validation to
