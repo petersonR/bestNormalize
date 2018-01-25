@@ -77,7 +77,11 @@ p <- predict(orderNorm_obj)
 x2 <- predict(orderNorm_obj, newdata = p, inverse = TRUE)
 
 all.equal(x2, x)
-
+}
+\references{
+Van der Waerden BL. Order tests for the two-sample problem and
+  their power. Proc Koninklijke Nederlandse Akademie van Wetenschappen.
+  1952;55:453–458. Ser A.
 }
 \seealso{
 \code{\link{boxcox}},

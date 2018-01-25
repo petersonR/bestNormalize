@@ -1,5 +1,7 @@
 # bestNormalize 1.0.0.9000
 
+- Added reference (Thanks to Stefano Nembrini) for original paper that cites the basis for the orderNorm transformation
+
 # bestNormalize 1.0.0
 
 - Added feature to estimate out-of-sample normality statistics in bestNormalize 

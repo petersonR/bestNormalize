@@ -70,7 +70,7 @@ This method has the advantage of working without having to worry about the domai
 
 ## The Ordered Quantile technique 
 
-The ORQ normalization technique uses the following transformation:
+The ORQ normalization technique is based on the following transformation (originally developed in 1952 by Van der Waerden in "Order tests for the two sample problem and their power"):
 
 Let $x$ refer to the original data. Then the transformation is:
 
