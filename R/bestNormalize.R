@@ -61,12 +61,24 @@
 #' 
 #' x <- rgamma(100, 1, 1)
 #' 
-#' BN_obj <- bestNormalize(x)
+#' \dontrun{
+#' # With Repeated CV
+#' BN_obj <- bestNormalize(x) 
 #' BN_obj
 #' p <- predict(BN_obj)
 #' x2 <- predict(BN_obj, newdata = p, inverse = TRUE)
 #' 
 #' all.equal(x2, x)
+#' }
+#' 
+#' # Without Repeated CV
+#' BN_obj <- bestNormalize(x, allow_orderNorm = FALSE, out_of_sample = FALSE) 
+#' BN_obj
+#' p <- predict(BN_obj)
+#' x2 <- predict(BN_obj, newdata = p, inverse = TRUE)
+#' 
+#' all.equal(x2, x)
+#' 
 #' 
 #' @seealso  \code{\link[bestNormalize]{boxcox}},
 #'  \code{\link{lambert}}, 
