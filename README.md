@@ -23,10 +23,10 @@ equivalently, a bell curve). This is in contrast to other such
 techniques designed to transform values to the 0-1 range, or to the -1
 to 1 range.
 
-This package also introduces a new adaptation of a 1952 normalization
-technique, Ordered Quantile normalization (`orderNorm()`), which
-transforms the data based off of a rank mapping to the normal
-distribution. This allows us to *guarantee* normally distributed
+This package also introduces a new adaptation of a normalization
+technique, which we call Ordered Quantile normalization (`orderNorm()`,
+or ORQ). ORQ transforms the data based off of a rank mapping to the
+normal distribution. This allows us to *guarantee* normally distributed
 transformed data (if ties are not present). The adaptation uses a
 shifted logit approximation on the ranks transformation to perform the
 transformation on newly observed data outside of the original domain. On
@@ -98,4 +98,5 @@ all.equal(x2, x)
 #> [1] TRUE
 ```
 
-For a more in depth tutorial, please consult the package vignette.
+For a more in depth tutorial, please consult [the package
+vignette](https://cran.r-project.org/web/packages/bestNormalize/vignettes/bestNormalize.html).
