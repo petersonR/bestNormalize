@@ -1,7 +1,7 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 1.0.0.9000
+Version: 1.0.1
 Date: 2018-01-25
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan-peterson@uiowa.edu", 

@@ -1,8 +1,10 @@
-# bestNormalize 1.0.0.9000
+# bestNormalize 1.0.1
 
 - Added references for original papers (Van der Waerden, Bartlett) 
   that cite the basis for the orderNorm transformation, as well as discussion 
   in Beasley (2009)
+- Edited description to clarify that this procedure is a new adaptation of an 
+  older technique rather than a new technique in itself
 
 # bestNormalize 1.0.0
 

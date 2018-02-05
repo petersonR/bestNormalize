@@ -12,15 +12,14 @@ There were 2 NOTEs:
 Maintainer: 'Ryan Andrew Peterson <ryan-peterson@uiowa.edu>'
 
 Possibly mis-spelled words in DESCRIPTION:
-  WxF (15:5)
-  Yeo (14:25)
+  ORQ (12:29, 12:35)
 
-Yeo is a name and Lambert's WxF is a type of transformation.
+ORQ is the acronym for the ordered quantile normalization procedure.
 
-** running examples for arch 'x64' ... [6s] NOTE
+** running examples for arch 'x64' ... [4s] NOTE
 Examples with CPU or elapsed time > 10s
-               user system elapsed
-bestNormalize 10.03   0.66    4.77
+              user system elapsed
+bestNormalize  9.6   0.82    3.09
 
 The new version of the package performs some computationally intensive cross-
 validation. The example is relatively minimal and should not take much longer 
