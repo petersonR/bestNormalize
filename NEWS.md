@@ -1,3 +1,5 @@
+# bestNormalize 1.0.1.9000
+
 # bestNormalize 1.0.1
 
 - Added references for original papers (Van der Waerden, Bartlett) 
