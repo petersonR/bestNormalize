@@ -7,7 +7,7 @@
 \alias{print.yeojohnson}
 \title{Yeo-Johnson Normalization}
 \usage{
-yeojohnson(x, eps = 0.001, ...)
+yeojohnson(x, eps = 0.001, standardize = TRUE, ...)
 
 \method{predict}{yeojohnson}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -17,6 +17,9 @@ yeojohnson(x, eps = 0.001, ...)
 \item{x}{A vector to normalize with Yeo-Johnson}
 
 \item{eps}{A value to compare lambda against to see if it is equal to zero}
+
+\item{standardize}{If TRUE, the transformed values are also centered and
+scaled, such that the transformation attempts a standard normal}
 
 \item{...}{Additional arguments that can be passed to the estimation of the
 lambda parameter (lower, upper)}
@@ -33,7 +36,7 @@ A list of class \code{yeojohnson} with elements \item{x.t}{transformed
  transformation} \item{sd}{sd of vector post-BC transformation}
  \item{lambda}{estimated lambda value for skew transformation}
  \item{n}{number of nonmissing observations} \item{norm_stat}{Pearson's P /
- degrees of freedom}
+ degrees of freedom} \item{standardize}{Was the transformation standardized}
 
  The \code{predict} function returns the numeric value of the transformation
  performed on new data, and allows for the inverse transformation as well.

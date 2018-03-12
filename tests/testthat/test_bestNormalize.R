@@ -75,3 +75,28 @@ test_that('bestNormalize handles missing new data', {
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA))[2])
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
 })
+
+# Test standardize = FALSE
+train2 <- c(train, -1, NA)
+BNobject <- suppressWarnings(bestNormalize(train2, standardize = FALSE))
+BNobject4 <- suppressWarnings(bestNormalize(train2, standardize = FALSE, allow_orderNorm = FALSE))
+test_that('BestNormalize transformations without standardization', {
+  expect_equal(BNobject$x.t, predict.bestNormalize(BNobject))
+  expect_equal(BNobject$x, predict.bestNormalize(BNobject, inverse = T))
+  expect_equal(BNobject4$x.t, predict.bestNormalize(BNobject4))
+  expect_equal(BNobject4$x, predict.bestNormalize(BNobject4, inverse = T))
+})
+
+test_that('bestNormalize without standardization handles missing original data', {
+  suppressWarnings(b <- bestNormalize(c(NA, train), standardize = FALSE))
+  expect_equal(as.numeric(NA), b$x.t[1])
+  expect_equal(as.numeric(NA), predict(b)[1])
+  expect_equal(as.numeric(NA), predict(b, inverse = TRUE)[1])
+})
+
+test_that('bestNormalize without standardization handles missing new data', {
+  suppressWarnings(b <- bestNormalize(train, standardize = FALSE))
+  expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA))[2])
+  expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
+})
+

@@ -9,6 +9,9 @@
 #'   
 #' @param x A vector to normalize
 #' @param allow_orderNorm set to FALSE if orderNorm should not be applied
+#' @param standardize If TRUE, the transformed values are also centered and
+#'   scaled, such that the transformation attempts a standard normal. This
+#'   will not change the normality statistic.
 #' @param out_of_sample if FALSE, estimates quickly in-sample performance
 #' @param cluster name of cluster set using \code{makeCluster}
 #' @param k number of folds
@@ -85,8 +88,9 @@
 #'  \code{\link{orderNorm}},
 #'  \code{\link{yeojohnson}} 
 #' @export
-bestNormalize <- function(x, allow_orderNorm = TRUE, out_of_sample = TRUE, 
-                          cluster = NULL, k = 10, r = 5) {
+bestNormalize <- function(x, standardize = TRUE, allow_orderNorm = TRUE,
+                          out_of_sample = TRUE, cluster = NULL, k = 10, 
+                          r = 5) {
   stopifnot(is.numeric(x))
   x.t <- list()
   methods <- c('lambert', 'yeojohnson', 'boxcox')
@@ -94,7 +98,7 @@ bestNormalize <- function(x, allow_orderNorm = TRUE, out_of_sample = TRUE,
     methods <- c(methods, 'orderNorm')
   
   for(i in methods) {
-    trans_i <- try(do.call(i, list(x = x)), silent = TRUE)
+    trans_i <- try(do.call(i, list(x = x, standardize = standardize)), silent = TRUE)
     if(is.character(trans_i))
       warning(paste(i, ' did not work; ', trans_i))
     else
@@ -127,7 +131,8 @@ bestNormalize <- function(x, allow_orderNorm = TRUE, out_of_sample = TRUE,
     method = method,
     resampled_norm_stats = reps,
     chosen_transform = x.t[[best_idx]],
-    other_transforms = x.t[names(x.t) != best_idx]
+    other_transforms = x.t[names(x.t) != best_idx],
+    standardize = standardize
   )
   class(val) <- 'bestNormalize'
   val

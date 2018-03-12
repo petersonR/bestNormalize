@@ -1,5 +1,7 @@
 # bestNormalize 1.0.1.9000
 
+- Clarified that the transformations are standardized by default, and providing option to not standardize in transformations
+
 # bestNormalize 1.0.1
 
 - Added references for original papers (Van der Waerden, Bartlett) 

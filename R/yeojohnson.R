@@ -7,6 +7,8 @@
 #'  attempt normalization
 #'@param x A vector to normalize with Yeo-Johnson
 #'@param eps A value to compare lambda against to see if it is equal to zero
+#' @param standardize If TRUE, the transformed values are also centered and
+#'   scaled, such that the transformation attempts a standard normal
 #'@param ... Additional arguments that can be passed to the estimation of the
 #'  lambda parameter (lower, upper)
 #'@param newdata a vector of data to be (reverse) transformed
@@ -26,7 +28,7 @@
 #'  transformation} \item{sd}{sd of vector post-BC transformation}
 #'  \item{lambda}{estimated lambda value for skew transformation}
 #'  \item{n}{number of nonmissing observations} \item{norm_stat}{Pearson's P /
-#'  degrees of freedom}
+#'  degrees of freedom} \item{standardize}{Was the transformation standardized}
 #'
 #'  The \code{predict} function returns the numeric value of the transformation
 #'  performed on new data, and allows for the inverse transformation as well.
@@ -53,7 +55,7 @@
 #'
 #'@importFrom stats sd
 #'@export
-yeojohnson <- function(x, eps = .001, ...) {
+yeojohnson <- function(x, eps = .001, standardize = TRUE, ...) {
   stopifnot(is.numeric(x))
   lambda <- estimate_yeojohnson_lambda(x, eps = eps, ...)
   x.t <- x
@@ -61,7 +63,7 @@ yeojohnson <- function(x, eps = .001, ...) {
   x.t[!na_idx] <- yeojohnson_trans(x[!na_idx], lambda, eps)
   mu <- mean(x.t, na.rm = TRUE)
   sigma <- sd(x.t, na.rm = TRUE)
-  x.t <- (x.t - mu) / sigma
+  if (standardize) x.t <- (x.t - mu) / sigma
   
   ptest <- nortest::pearson.test(x.t)
   
@@ -72,7 +74,8 @@ yeojohnson <- function(x, eps = .001, ...) {
     sd = sigma,
     lambda = lambda,
     n = length(x.t) - sum(na_idx),
-    norm_stat = unname(ptest$statistic / ptest$df)
+    norm_stat = unname(ptest$statistic / ptest$df),
+    standardize = standardize
   )
   class(val) <- 'yeojohnson'
   val
@@ -93,11 +96,11 @@ predict.yeojohnson <- function(object,
   na_idx <- is.na(newdata)
   
   if (inverse) {
-    newdata <- newdata * object$sd + object$mean
+    if(object$standardize) newdata <- newdata * object$sd + object$mean
     newdata[!na_idx] <- inv_yeojohnson_trans(newdata[!na_idx], object$lambda)
   } else {
     newdata[!na_idx] <- yeojohnson_trans(newdata[!na_idx], object$lambda)
-    newdata <- (newdata - object$mean) / object$sd
+    if(object$standardize) newdata <- (newdata - object$mean) / object$sd
   }
   
   unname(newdata)
@@ -107,7 +110,8 @@ predict.yeojohnson <- function(object,
 #' @method print yeojohnson
 #' @export
 print.yeojohnson <- function(x, ...) {
-  cat('Yeo-Johnson Transformation with', x$n, 'nonmissing obs.:\n', 
+  cat(ifelse(x$standardize, "Standardized", "Non-Standardized"),
+      'Yeo-Johnson Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       '- lambda =', x$lambda, '\n',
       '- mean =', x$mean, '\n',

@@ -87,7 +87,7 @@
 #'  \code{\link{yeojohnson}} 
 #' @importFrom stats qnorm glm
 #' @export
-orderNorm <- function(x, warn = TRUE) {
+orderNorm <- function(x, ..., warn = TRUE) {
   stopifnot(is.numeric(x))
   ties_status <- 0
   nunique <- length(unique(x))

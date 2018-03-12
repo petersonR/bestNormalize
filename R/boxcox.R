@@ -6,6 +6,8 @@
 #' @description Perform a Box-Cox transformation and center/scale a vector to
 #'   attempt normalization
 #' @param x A vector to normalize with Box-Cox
+#' @param standardize If TRUE, the transformed values are also centered and
+#'   scaled, such that the transformation attempts a standard normal
 #' @param ... Additional arguments that can be passed to the estimation of the
 #'   lambda parameter (lower, upper, epsilon)
 #' @param object an object of class 'boxcox'
@@ -29,6 +31,7 @@
 #'   \item{lambda}{estimated lambda value for skew transformation} 
 #'   \item{n}{number of nonmissing observations}
 #'   \item{norm_stat}{Pearson's P / degrees of freedom}
+#'   \item{standardize}{was the transformation standardized}
 #'   
 #'   The \code{predict} function returns the numeric value of the transformation
 #'   performed on new data, and allows for the inverse transformation as well.
@@ -48,13 +51,13 @@
 #' @seealso  \code{\link[MASS]{boxcox}}
 #' @importFrom stats sd
 #' @export
-boxcox <- function(x, ...) {
+boxcox <- function(x, standardize = TRUE, ...) {
   stopifnot(is.numeric(x))
   l <- estimate_boxcox_lambda(x, ...)
   x.t <- boxcox_trans(x, l)
   mu <- mean(x.t, na.rm = TRUE)
   sigma <- sd(x.t, na.rm = TRUE)
-  x.t <- (x.t - mu) / sigma
+  if (standardize) x.t <- (x.t - mu) / sigma
   
   ptest <- nortest::pearson.test(x.t)
   
@@ -65,7 +68,8 @@ boxcox <- function(x, ...) {
     sd = sigma,
     lambda = l,
     n = length(x.t) - sum(is.na(x)),
-    norm_stat = unname(ptest$statistic / ptest$df)
+    norm_stat = unname(ptest$statistic / ptest$df),
+    standardize = standardize
   )
   class(val) <- c('boxcox', class(val))
   val
@@ -81,11 +85,11 @@ predict.boxcox <- function(object, newdata = NULL, inverse = FALSE, ...) {
     newdata <- object$x.t
   
   if (inverse) {
-    newdata <- newdata * object$sd + object$mean
+    if (object$standardize) newdata <- newdata * object$sd + object$mean
     newdata <-  inv_boxcox_trans(newdata, object$lambda)
   } else if (!inverse) {
     newdata <- boxcox_trans(newdata, object$lambda)
-    newdata <- (newdata - object$mean) / object$sd
+    if (object$standardize) newdata <- (newdata - object$mean) / object$sd
   }
   unname(newdata)
 }
@@ -94,7 +98,8 @@ predict.boxcox <- function(object, newdata = NULL, inverse = FALSE, ...) {
 #' @method print boxcox
 #' @export
 print.boxcox <- function(x, ...) {
-  cat('Box Cox Transformation with', x$n, 'nonmissing obs.:\n', 
+  cat(ifelse(x$standardize, "Standardized", "Non-Standardized"),
+      'Box Cox Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       '- lambda =', x$lambda, '\n',
       '- mean =', x$mean, '\n',

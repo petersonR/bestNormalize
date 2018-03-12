@@ -7,7 +7,7 @@
 \alias{print.orderNorm}
 \title{Calculate and perform Ordered Quantile normalizing transformation}
 \usage{
-orderNorm(x, warn = TRUE)
+orderNorm(x, ..., warn = TRUE)
 
 \method{predict}{orderNorm}(object, newdata = NULL, inverse = FALSE,
   warn = TRUE, ...)
@@ -17,6 +17,8 @@ orderNorm(x, warn = TRUE)
 \arguments{
 \item{x}{A vector to normalize}
 
+\item{...}{additional arguments}
+
 \item{warn}{transforms outside observed range or ties will yield warning}
 
 \item{object}{an object of class 'orderNorm'}
@@ -24,8 +26,6 @@ orderNorm(x, warn = TRUE)
 \item{newdata}{a vector of data to be (reverse) transformed}
 
 \item{inverse}{if TRUE, performs reverse transformation}
-
-\item{...}{additional arguments}
 }
 \value{
 A list of class \code{orderNorm} with elements

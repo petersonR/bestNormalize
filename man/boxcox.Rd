@@ -7,7 +7,7 @@
 \alias{print.boxcox}
 \title{Box-Cox Normalization}
 \usage{
-boxcox(x, ...)
+boxcox(x, standardize = TRUE, ...)
 
 \method{predict}{boxcox}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -15,6 +15,9 @@ boxcox(x, ...)
 }
 \arguments{
 \item{x}{A vector to normalize with Box-Cox}
+
+\item{standardize}{If TRUE, the transformed values are also centered and
+scaled, such that the transformation attempts a standard normal}
 
 \item{...}{Additional arguments that can be passed to the estimation of the
 lambda parameter (lower, upper, epsilon)}
@@ -36,6 +39,7 @@ A list of class \code{boxcox} with elements
   \item{lambda}{estimated lambda value for skew transformation} 
   \item{n}{number of nonmissing observations}
   \item{norm_stat}{Pearson's P / degrees of freedom}
+  \item{standardize}{was the transformation standardized}
   
   The \code{predict} function returns the numeric value of the transformation
   performed on new data, and allows for the inverse transformation as well.

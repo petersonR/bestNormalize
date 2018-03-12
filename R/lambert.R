@@ -8,6 +8,8 @@
 #' @param x A vector to normalize with Box-Cox
 #' @param type a character indicating which transformation to perform (options 
 #'   are "s", "h", and "hh", see details)
+#' @param standardize If TRUE, the transformed values are also centered and
+#'   scaled, such that the transformation attempts a standard normal
 #' @param ... Additional arguments that can be passed to the 
 #'   LambertW::Gaussianize function
 #' @param newdata a vector of data to be (reverse) transformed
@@ -36,6 +38,7 @@
 #'   \item{tau.mat}{estimated parameters of LambertW::Gaussianize} 
 #'   \item{n}{number of nonmissing observations}
 #'   \item{norm_stat}{Pearson's P / degrees of freedom}
+#'   \item{standardize}{was the transformation standardized}
 #'   
 #' The \code{predict} function returns the numeric value of the transformation 
 #' performed on new data, and allows for the inverse transformation as well.
@@ -64,7 +67,7 @@
 #' @seealso  \code{\link[LambertW]{Gaussianize}}
 #' @importFrom stats sd
 #' @export
-lambert <- function(x, type = 's', ...) {
+lambert <- function(x, type = 's', standardize = TRUE, ...) {
   stopifnot(is.numeric(x))
   na_idx <- is.na(x)
   x_complete <- x[!na_idx]
@@ -77,7 +80,7 @@ lambert <- function(x, type = 's', ...) {
   mu <- mean(x.t, na.rm = TRUE)
   sigma <- sd(x.t, na.rm = TRUE)
   
-  x.t <- (x.t - mu) / sigma
+  if (standardize) x.t <- (x.t - mu) / sigma
   
   attributes(x.t) <- NULL
   
@@ -91,7 +94,8 @@ lambert <- function(x, type = 's', ...) {
     tau.mat = tau.mat,
     n = length(x.t) - sum(na_idx),
     type = type,
-    norm_stat = unname(ptest$statistic / ptest$df)
+    norm_stat = unname(ptest$statistic / ptest$df),
+    standardize = standardize
   )
   
   class(val) <- 'lambert'
@@ -110,7 +114,7 @@ predict.lambert <- function(object,
   if (is.null(newdata) & inverse)
     newdata <- object$x.t
   
-  if (inverse)
+  if (inverse & object$standardize)
     newdata <- newdata * object$sd + object$mean
   
   stopifnot(is.numeric(newdata))
@@ -124,10 +128,10 @@ predict.lambert <- function(object,
     inverse = inverse
   )
   
-  if (!inverse)
+  if (!inverse & object$standardize)
     newdata <- (newdata - object$mean) / object$sd
-  attributes(newdata) <- NULL
   
+  attributes(newdata) <- NULL
   unname(newdata)
 }
 
@@ -141,7 +145,8 @@ print.lambert <- function(x, ...) {
   ), 1, paste, collapse = '')
 
   
-  cat('Lambert WxF Transformation of type', x$type, 
+  cat(ifelse(x$standardize, "Standardized", "Non-Standardized"),
+      'Lambert WxF Transformation of type', x$type, 
       'with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       prettyTau,

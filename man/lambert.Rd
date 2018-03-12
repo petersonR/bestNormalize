@@ -7,7 +7,7 @@
 \alias{print.lambert}
 \title{Lambert W x F Normalization}
 \usage{
-lambert(x, type = "s", ...)
+lambert(x, type = "s", standardize = TRUE, ...)
 
 \method{predict}{lambert}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -18,6 +18,9 @@ lambert(x, type = "s", ...)
 
 \item{type}{a character indicating which transformation to perform (options 
 are "s", "h", and "hh", see details)}
+
+\item{standardize}{If TRUE, the transformed values are also centered and
+scaled, such that the transformation attempts a standard normal}
 
 \item{...}{Additional arguments that can be passed to the 
 LambertW::Gaussianize function}
@@ -37,6 +40,7 @@ A list of class \code{lambert} with elements
   \item{tau.mat}{estimated parameters of LambertW::Gaussianize} 
   \item{n}{number of nonmissing observations}
   \item{norm_stat}{Pearson's P / degrees of freedom}
+  \item{standardize}{was the transformation standardized}
   
 The \code{predict} function returns the numeric value of the transformation 
 performed on new data, and allows for the inverse transformation as well.

@@ -7,8 +7,8 @@
 \alias{print.bestNormalize}
 \title{Calculate and perform best normalizing transformation}
 \usage{
-bestNormalize(x, allow_orderNorm = TRUE, out_of_sample = TRUE,
-  cluster = NULL, k = 10, r = 5)
+bestNormalize(x, standardize = TRUE, allow_orderNorm = TRUE,
+  out_of_sample = TRUE, cluster = NULL, k = 10, r = 5)
 
 \method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE,
   ...)
@@ -17,6 +17,10 @@ bestNormalize(x, allow_orderNorm = TRUE, out_of_sample = TRUE,
 }
 \arguments{
 \item{x}{A vector to normalize}
+
+\item{standardize}{If TRUE, the transformed values are also centered and
+scaled, such that the transformation attempts a standard normal. This
+will not change the normality statistic.}
 
 \item{allow_orderNorm}{set to FALSE if orderNorm should not be applied}
 
