@@ -167,7 +167,6 @@ print.bestNormalize <- function(x, ...) {
   print(x$chosen_transform)
 }
 
-#' @importFrom parallel parLapplyLB clusterExport clusterCall
 get_oos_estimates <- function(x, norm_methods, k, r, cluster) {
   x <- x[!is.na(x)]
   fold_size <- floor(length(x) / k)
