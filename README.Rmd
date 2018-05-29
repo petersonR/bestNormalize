@@ -65,4 +65,4 @@ all.equal(x2, x)
 
 ```
 
-For a more in depth tutorial, please consult [the package vignette](https://cran.r-project.org/web/packages/bestNormalize/vignettes/bestNormalize.html).
+For a more in depth tutorial, please consult [the package vignette](https://CRAN.R-project.org/package=bestNormalize/vignettes/bestNormalize.html).

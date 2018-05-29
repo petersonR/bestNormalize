@@ -7,8 +7,8 @@ train <- iris$Petal.Width
 yeojohnson_obj <- yeojohnson(train)
 
 test_that('yeojohnson Transforms original data consistently', {
-  expect_equal(yeojohnson_obj$x.t, predict.yeojohnson(yeojohnson_obj))
-  expect_equal(yeojohnson_obj$x, predict.yeojohnson(yeojohnson_obj, inverse = T))
+  expect_equal(yeojohnson_obj$x.t, predict(yeojohnson_obj))
+  expect_equal(yeojohnson_obj$x, predict(yeojohnson_obj, inverse = T))
 })
 
 test_that('yeojohnson Transforms new data consistently', {
@@ -38,8 +38,8 @@ test_that('yeojohnson correctly handles missing new data', {
 yeojohnson_obj <- yeojohnson(train, standardize = FALSE)
 
 test_that('yeojohnson without standardization Transforms original data consistently', {
-  expect_equal(yeojohnson_obj$x.t, predict.yeojohnson(yeojohnson_obj))
-  expect_equal(yeojohnson_obj$x, predict.yeojohnson(yeojohnson_obj, inverse = T))
+  expect_equal(yeojohnson_obj$x.t, predict(yeojohnson_obj))
+  expect_equal(yeojohnson_obj$x, predict(yeojohnson_obj, inverse = T))
 })
 
 test_that('yeojohnson without standardization Transforms new data consistently', {

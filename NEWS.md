@@ -1,6 +1,7 @@
-# bestNormalize 1.0.1.9000
+# bestNormalize 1.1.0
 
 - Clarified that the transformations are standardized by default, and providing option to not standardize in transformations
+- Updated tests to run a bit faster and to use proper S3 classes
 
 # bestNormalize 1.0.1
 

@@ -167,7 +167,7 @@ print.bestNormalize <- function(x, ...) {
   print(x$chosen_transform)
 }
 
-#' @importFrom parallel parLapplyLB clusterExport
+#' @importFrom parallel parLapplyLB clusterExport clusterCall
 get_oos_estimates <- function(x, norm_methods, k, r, cluster) {
   x <- x[!is.na(x)]
   fold_size <- floor(length(x) / k)
@@ -198,9 +198,14 @@ get_oos_estimates <- function(x, norm_methods, k, r, cluster) {
     })
     reps <- Reduce(rbind, reps)
   } else {
+    # Check cluster args
+    if (!("cluster" %in% class(cluster))) 
+      stop("cluster is not of class 'cluster'; see ?makeCluster")
     
-    clusterExport(cl = cluster, c("k", "x", "norm_methods", norm_methods), envir = environment())
-    reps <- parLapplyLB(cl = cluster, 1:r, function(rep) {
+    # Add fns to library
+    parallel::clusterExport(cl = cluster, c("k", "x", "norm_methods", norm_methods), envir = environment())
+    parallel::clusterCall(cluster, function() library(bestNormalize))
+    reps <- parallel::parLapplyLB(cl = cluster, 1:r, function(rep) {
       
       resamples <- create_folds(x, k)
       pstats <- matrix(NA, ncol = length(norm_methods), nrow = k)
