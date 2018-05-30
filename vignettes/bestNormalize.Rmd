@@ -30,7 +30,7 @@ All of the transformations contained in this package and implemented in `bestNor
 
 # Methods
 
-There are several normalization transformation options, each with their own implementations and limitations outlined in the table below. While some of these methods are implemented well in other R packages, the `bestNormalize` package puts them all under the same umbrella syntax that makes them easy to apply in a wide range of situations. 
+There are several normalization transformation options, each with their own implementations and limitations. While some of these methods are implemented well in other R packages, the `bestNormalize` package puts them all under the same umbrella syntax that makes them easy to apply in a wide range of situations. 
 
 ## The Lambert W x F transformation
 
@@ -39,6 +39,8 @@ The Lambert W x F transformation, proposed by Goerg and implemented in the `Lamb
 One of the package's main functions is `Gaussianize`, which is similar in spirit to the purpose of this package. However, I have found in practice that often times, this method does not perform as well as the Box Cox or the Yeo-Johnson transformation.
 
 This transformations can handle three types of transformations: skewed, heavy-tailed, and skewed heavy-tailed. For more details on this transformation, consult the documentation for the `Lambert W` package.
+
+Note: As of version 1.2.0, the Lambert transformation is not performed by default in `bestNormalize` since it was using too many threads on Linux and Solaris to pass CRAN checks. It can be turned back on via the `allow_lambert` argument.  
 
 ## The Box Cox tranformation
 
@@ -108,9 +110,18 @@ legend('bottomright',
 
 The reason for the shifted logit extrapolation is that it ensures that the function is 1-1, and can handle data outside the original (observed) domain. This approximation will usually be relatively minimal since we should not expect to see many observations outside the observed range if the sample size is large enough. 
 
-The ORQ technique will not guarantee a normal distribution in the presence of ties, but it still could yield the best normalizing transformation when compared to the Box Cox, Yeo Johnson, or Lambert W x F approaches.
+The ORQ technique will not guarantee a normal distribution in the presence of ties, but it still could yield the best normalizing transformation when compared to the other possible approaches.
 
-## Other techniques
+## Other included transformations
+
+In addition to the techniques above, the `bestNormalize` package performs and evaluates: 
+
+- $\log_b(x + a)$ with $a = \max(0, -\min(x) + \epsilon)$ by default
+- $\sqrt{x + a}$ with $a = \max(0, -\min(x) + \epsilon)$ by default
+- $\exp(x)$ 
+- $\text {arcsinh}(x) = log(x + \sqrt{x^2 + 1})$
+
+## Other not-included transformations
 
 There have been a range of other normalization techniques discussed since the original Box-Cox paper that are not included in this package (at the time of writing). Many of these transformations have their own strengths and weaknesses.
 
@@ -157,8 +168,10 @@ MASS::truehist(x, nbins = 12)
 This data is clearly not normal. Let's use the `bestNormalize` functionality to perform a suite of potential transformations, and see how each method performs.
 
 ```{r vis_code}
-# Lambert's W x F transfromation
-(lambert_obj <- lambert(x))
+# Perform some tranformations individually
+
+# arcsinh transformation
+(arcsinh_obj <- arcsinh_x(x))
 # Box Cox's Transformation
 (boxcox_obj <- boxcox(x))
 # Yeo-Johnson's Transformation
@@ -178,13 +191,13 @@ These objects can then be fed into the `predict` function to perform the transfo
 
 ```{r vis_data}
 xx <- seq(min(x), max(x), length = 100)
-plot(xx, predict(lambert_obj, newdata = xx), type = "l", col = 1, ylim = c(-4, 4),
+plot(xx, predict(arcsinh_obj, newdata = xx), type = "l", col = 1, ylim = c(-4, 4),
      xlab = 'x', ylab = "g(x)")
 lines(xx, predict(boxcox_obj, newdata = xx), col = 2)
 lines(xx, predict(yeojohnson_obj, newdata = xx), col = 3)
 lines(xx, predict(orderNorm_obj, newdata = xx), col = 4)
 
-legend("bottomright", legend = c("Lambert WxF", "Box Cox", "Yeo-Johnson", "OrderNorm"), 
+legend("bottomright", legend = c("arcsinh", "Box Cox", "Yeo-Johnson", "OrderNorm"), 
        col = 1:4, lty = 1, bty = 'n')
 ```
 
@@ -192,7 +205,7 @@ To examine how each of them performed (In-Sample), we can visualize the transfor
 
 ```{r hist_trans, fig.height=8, fig.width = 7}
 par(mfrow = c(2,2))
-MASS::truehist(lambert_obj$x.t, main = "Lambert WxF transformation", nbins = 12)
+MASS::truehist(arcsinh_obj$x.t, main = "Arcsinh transformation", nbins = 12)
 MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = 12)
 MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = 12)
 MASS::truehist(orderNorm_obj$x.t, main = "orderNorm transformation", nbins = 12)
@@ -204,17 +217,18 @@ The best transformation in this case is plotted below.
 par(mfrow = c(1,2))
 MASS::truehist(BNobject$x.t, 
                main = paste("Best Transformation:", 
-                            class(BNobject$chosen_transform)), nbins = 12)
+                            class(BNobject$chosen_transform)[1]), nbins = 12)
 plot(xx, predict(BNobject, newdata = xx), type = "l", col = 1, 
      main = "Best Normalizing transformation", ylab = "g(x)", xlab = "x")
 ```
 
 ## Visualizing out-of-sample estimates of normality
 
-The `bestNormalize` function will save the estimated normality statistics that it obtained for each fold and repeat of cross-validation. Users can visualize these relatively easily via a boxplot (see below), which may give some insight into how much the transformation is truly preferred by the normality statistic, or if it doesn't matter so much as much which transformation is chosen. In this example, Box-Cox, LambertW, and ORQ seem to be doing similarly to each other, whereas the Yeo-Johnson is under-performing.
+The `bestNormalize` function will save the estimated normality statistics that it obtained for each fold and repeat of cross-validation. Users can visualize these relatively easily via a boxplot (see below), which may give some insight into how much the transformation is truly preferred by the normality statistic, or if it doesn't matter so much as much which transformation is chosen. In this example, Box-Cox, Arcsin h, and ORQ seem to be doing similarly to each other, whereas the Yeo-Johnson is under-performing.
 
-```{r boxplot}
-boxplot(BNobject$resampled_norm_stats)
+```{r boxplot, fig.width=7}
+boxplot(log10(BNobject$resampled_norm_stats), yaxt = 'n')
+axis(2, at=log10(c(.1,.5, 1, 2, 5, 10)), labels=c(.1,.5, 1, 2, 5, 10))
 ```
 
 
@@ -234,23 +248,23 @@ This speed-up is dependent on the number of repeats, the length of the vector to
 
 The `autotrader` data set was scraped from the [autotrader website](https://www.autotrader.com/) as part of this package (and because at the time of writing, I needed to buy a car). I apply the `bestNormalize` functionality to de-skew mileage, age, and price in my pricing model. See `?autotrader` for more information on this data set.
 
-```{r load_appdata}
+```{r load_appdata, warning=FALSE}
 data("autotrader")
 autotrader$yearsold <- 2017 - autotrader$Year
 ### Using best-normalize
-(priceBN <- bestNormalize(autotrader$price))
+(priceBN <- bestNormalize(autotrader$price, r = 1, k = 5))
 ```
 
 Note that `orderNorm` throws a warning due to the ties in the price vector. We can see that the estimated normality statistic for the OrderNorm transformation is close to one, however, so we know it is performing quite well. It is also performing better than all of the other transformations. 
 
-```{r bn_mileage}
-(mileageBN <- bestNormalize(autotrader$mileage))
+```{r bn_mileage, warning=FALSE}
+(mileageBN <- bestNormalize(autotrader$mileage, r = 1, k = 5))
 ```
 
 Similarly, the ORQ normalization performed best for mileage, and the ties didn't seem to be too big of a deal.
 
-```{r bn_yearsold}
-(yearsoldBN <- bestNormalize(autotrader$yearsold))
+```{r bn_yearsold, warning=FALSE}
+(yearsoldBN <- bestNormalize(autotrader$yearsold, r = 1, k = 5))
 ```
 
 Here we see something peculiar; none of the normalizing transformations performed will according to the normality statistics. The frequency of ties in this case makes it very difficult to find a normalizing transformation (see figure below as to why this is). None the less, orderNorm is chosen as it has the lowest estimated P/df statistic. 

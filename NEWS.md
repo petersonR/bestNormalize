@@ -1,3 +1,11 @@
+# bestNormalize 1.2.0
+
+- Added other transformations commonly used to normalize a vector 
+    - exponential, log, square root, arcsinh
+- Lambert WxF is no longer done by default by bestNormalize since it is 
+  unstable on certain OS (Linux, Solaris), and does not abide by the CRAN
+  policy. 
+
 # bestNormalize 1.1.0
 
 - Clarified that the transformations are standardized by default, and providing option to not standardize in transformations

@@ -65,6 +65,7 @@ Perform Lambert's W x F transformation and center/scale a vector
   returned.
 }
 \examples{
+\dontrun{
 x <- rgamma(100, 1, 1)
 
 lambert_obj <- lambert(x)
@@ -73,6 +74,7 @@ p <- predict(lambert_obj)
 x2 <- predict(lambert_obj, newdata = p, inverse = TRUE)
 
 all.equal(x2, x)
+}
 
 }
 \references{

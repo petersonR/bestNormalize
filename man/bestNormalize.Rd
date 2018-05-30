@@ -8,7 +8,8 @@
 \title{Calculate and perform best normalizing transformation}
 \usage{
 bestNormalize(x, standardize = TRUE, allow_orderNorm = TRUE,
-  out_of_sample = TRUE, cluster = NULL, k = 10, r = 5)
+  allow_lambert = FALSE, out_of_sample = TRUE, cluster = NULL, k = 10,
+  warn = TRUE, r = 5)
 
 \method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE,
   ...)
@@ -19,16 +20,20 @@ bestNormalize(x, standardize = TRUE, allow_orderNorm = TRUE,
 \item{x}{A vector to normalize}
 
 \item{standardize}{If TRUE, the transformed values are also centered and
-scaled, such that the transformation attempts a standard normal. This
-will not change the normality statistic.}
+scaled, such that the transformation attempts a standard normal. This will
+not change the normality statistic.}
 
 \item{allow_orderNorm}{set to FALSE if orderNorm should not be applied}
+
+\item{allow_lambert}{Set to TRUE if lambertW should be applied (see details)}
 
 \item{out_of_sample}{if FALSE, estimates quickly in-sample performance}
 
 \item{cluster}{name of cluster set using \code{makeCluster}}
 
 \item{k}{number of folds}
+
+\item{warn}{Should bestNormalize warn when a method doesn't work?}
 
 \item{r}{number of repeats}
 
@@ -41,36 +46,37 @@ will not change the normality statistic.}
 \item{...}{additional arguments}
 }
 \value{
-A list of class \code{bestNormalize} with elements 
+A list of class \code{bestNormalize} with elements
 
-\item{x.t}{transformed original data} 
-\item{x}{original data} 
-\item{norm_stats}{Pearson's Pearson's P / degrees of freedom}
-\item{method}{out-of-sample or in-sample, number of folds + repeats}
-\item{chosen_transform}{the chosen transformation (of appropriate class)}
-\item{other_transforms}{the other transformations (of appropriate class)}
+  \item{x.t}{transformed original data} \item{x}{original data}
+  \item{norm_stats}{Pearson's Pearson's P / degrees of freedom}
+  \item{method}{out-of-sample or in-sample, number of folds + repeats}
+  \item{chosen_transform}{the chosen transformation (of appropriate class)}
+  \item{other_transforms}{the other transformations (of appropriate class)}
 
-The \code{predict} function returns the numeric value of the transformation
-performed on new data, and allows for the inverse transformation as well.
+  The \code{predict} function returns the numeric value of the transformation
+  performed on new data, and allows for the inverse transformation as well.
 }
 \description{
 Performs a suite of normalizing transformations, and selects the
-  best one on the basis of the Pearson P test statistic for normality. The 
-  transformation that has the lowest P (calculated on the transformed data) 
+  best one on the basis of the Pearson P test statistic for normality. The
+  transformation that has the lowest P (calculated on the transformed data)
   is selected. See details for more information.
 }
 \details{
-\code{bestNormalize} estimates the optimal normalizing 
-  transformation. This transformation can be performed on new data, and 
+\code{bestNormalize} estimates the optimal normalizing
+  transformation. This transformation can be performed on new data, and
   inverted, via the \code{predict} function.
 
 This function currently estimates the Yeo-Johnson transformation,
-  the Box Cox transformation (if the data is positive), and the Lambert WxF
-  Gaussianizing transformation of type "s". If allow_orderNorm == TRUE and if
-  out_of_sample == FALSE then the ordered quantile normalization technique
-  will likely be chosen since it essentially forces the data to follow a
-  normal distribution. More information on the orderNorm technique can be
-  found in the package vignette, or using \code{?orderNorm}.
+  the Box Cox transformation (if the data is positive), the log_10(x+a)
+  transformation, the square-root (x+a) transformation, and the arcsinh
+  transformation. a is set to max(0, -min(x) + eps) by default.  If
+  allow_orderNorm == TRUE and if out_of_sample == FALSE then the ordered
+  quantile normalization technique will likely be chosen since it essentially
+  forces the data to follow a normal distribution. More information on the
+  orderNorm technique can be found in the package vignette, or using
+  \code{?orderNorm}.
 
   Repeated cross-validation is used to estimate the out-of-sample performance
   of each transformation if out_of_sample = TRUE. While this can take some
@@ -87,6 +93,10 @@ This function currently estimates the Yeo-Johnson transformation,
   in \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not
   having this estimate 1-1 transform. These alternative types are effective
   when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
+  Additionally, as of v. 1.2.0, Lambert of type "s" is not used in
+  \code{bestNormalize()} since it uses multiple threads on some Linux systems,
+  which is not allowed on CRAN checks. Set allow_lambert = TRUE in order to 
+  test this transformation as well.
 }
 \examples{
 
@@ -94,7 +104,7 @@ x <- rgamma(100, 1, 1)
 
 \dontrun{
 # With Repeated CV
-BN_obj <- bestNormalize(x) 
+BN_obj <- bestNormalize(x)
 BN_obj
 p <- predict(BN_obj)
 x2 <- predict(BN_obj, newdata = p, inverse = TRUE)
@@ -103,7 +113,7 @@ all.equal(x2, x)
 }
 
 # Without Repeated CV
-BN_obj <- bestNormalize(x, allow_orderNorm = FALSE, out_of_sample = FALSE) 
+BN_obj <- bestNormalize(x, allow_orderNorm = FALSE, out_of_sample = FALSE)
 BN_obj
 p <- predict(BN_obj)
 x2 <- predict(BN_obj, newdata = p, inverse = TRUE)
@@ -113,8 +123,6 @@ all.equal(x2, x)
 
 }
 \seealso{
-\code{\link[bestNormalize]{boxcox}},
- \code{\link{lambert}}, 
- \code{\link{orderNorm}},
- \code{\link{yeojohnson}}
+\code{\link[bestNormalize]{boxcox}}, \code{\link{orderNorm}},
+  \code{\link{yeojohnson}}
 }

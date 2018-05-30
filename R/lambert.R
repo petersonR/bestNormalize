@@ -55,6 +55,7 @@
 #'   Scientific World Journal.
 #'   
 #' @examples 
+#' \dontrun{
 #' x <- rgamma(100, 1, 1)
 #' 
 #' lambert_obj <- lambert(x)
@@ -63,6 +64,7 @@
 #' x2 <- predict(lambert_obj, newdata = p, inverse = TRUE)
 #' 
 #' all.equal(x2, x)
+#' }
 #' 
 #' @seealso  \code{\link[LambertW]{Gaussianize}}
 #' @importFrom stats sd

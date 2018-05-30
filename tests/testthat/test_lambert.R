@@ -1,5 +1,10 @@
 context('lambert functionality')
 
+## LambertW package doesn't work quite right on linux and 
+# solaris machines (it uses too many threads)
+skip_on_os("linux")
+skip_on_os("solaris")
+
 data(iris)
 
 train <- iris$Petal.Width
