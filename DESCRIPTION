@@ -26,6 +26,7 @@ Imports:
     nortest
 Suggests: 
     knitr,
+    rmarkdown,
     MASS,
     testthat,
     mgcv,

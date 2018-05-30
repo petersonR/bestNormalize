@@ -75,17 +75,20 @@ BN_obj
 #> Best Normalizing transformation with 1000 Observations
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
 #>  - Box-Cox: 1.1176 
-#>  - Lambert's W: 1.1004 
+#>  - Log_b(x+a): 2.0489 
+#>  - sqrt(x+a): 1.6444 
+#>  - exp(x): 50.7939 
+#>  - arcsinh(x): 3.6245 
 #>  - Yeo-Johnson: 1.933 
 #>  - orderNorm: 1.2876 
 #> Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
 #>  
 #> Based off these, bestNormalize chose:
-#> Lambert WxF Transformation of type s with 1000 nonmissing obs.:
+#> Standardized Box Cox Transformation with 1000 nonmissing obs.:
 #>  Estimated statistics:
-#>  - gamma = 0.4129
-#>  - mean = 0.667563 
-#>  - sd = 0.7488649
+#>  - lambda = 0.2739638 
+#>  - mean = -0.3870903 
+#>  - sd = 1.045498
 
 # Perform transformation
 gx <- predict(BN_obj)
