@@ -87,8 +87,8 @@ BN_obj
 #> Standardized Box Cox Transformation with 1000 nonmissing obs.:
 #>  Estimated statistics:
 #>  - lambda = 0.2739638 
-#>  - mean = -0.3870903 
-#>  - sd = 1.045498
+#>  - mean (post-transform) = -0.3870903 
+#>  - sd (post-transform) = 1.045498
 
 # Perform transformation
 gx <- predict(BN_obj)

@@ -102,8 +102,8 @@ print.boxcox <- function(x, ...) {
       'Box Cox Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       '- lambda =', x$lambda, '\n',
-      '- mean =', x$mean, '\n',
-      '- sd =', x$sd, '\n')
+      '- mean (post-transform) =', x$mean, '\n',
+      '- sd (post-transform) =', x$sd, '\n')
 }
 
 # Modified version of boxcox from MASS package

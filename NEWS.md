@@ -1,5 +1,7 @@
 # bestNormalize 1.2.0.9000
 
+- Add "post-transformation" to printout of different transforms' means and sds to clarify output
+
 # bestNormalize 1.2.0
 
 - Added other transformations commonly used to normalize a vector 

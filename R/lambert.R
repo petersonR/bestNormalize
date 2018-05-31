@@ -152,6 +152,6 @@ print.lambert <- function(x, ...) {
       'with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       prettyTau,
-      '- mean =', x$mean, '\n',
-      '- sd =', x$sd, '\n')
+      '- mean (post-transform) =', x$mean, '\n',
+      '- sd (post-transform) =', x$sd, '\n')
 }
