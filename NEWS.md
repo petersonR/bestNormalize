@@ -1,3 +1,5 @@
+# bestNormalize 1.2.0.9000
+
 # bestNormalize 1.2.0
 
 - Added other transformations commonly used to normalize a vector 
