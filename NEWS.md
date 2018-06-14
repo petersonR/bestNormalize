@@ -1,5 +1,6 @@
 # bestNormalize 1.2.0.9000
 
+- Add support for lambert transforms of type "h" in the `bestNormalize` function via `allow_lambert_h` argument.
 - Add "post-transformation" to printout of different transforms' means and sds to clarify output
 
 # bestNormalize 1.2.0

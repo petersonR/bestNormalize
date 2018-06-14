@@ -8,8 +8,8 @@
 \title{Calculate and perform best normalizing transformation}
 \usage{
 bestNormalize(x, standardize = TRUE, allow_orderNorm = TRUE,
-  allow_lambert = FALSE, out_of_sample = TRUE, cluster = NULL, k = 10,
-  warn = TRUE, r = 5)
+  allow_lambert_s = FALSE, allow_lambert_h = FALSE, out_of_sample = TRUE,
+  cluster = NULL, k = 10, warn = TRUE, r = 5)
 
 \method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE,
   ...)
@@ -25,7 +25,11 @@ not change the normality statistic.}
 
 \item{allow_orderNorm}{set to FALSE if orderNorm should not be applied}
 
-\item{allow_lambert}{Set to TRUE if lambertW should be applied (see details)}
+\item{allow_lambert_s}{Set to TRUE if the lambertW of type "s"  should be
+applied (see details)}
+
+\item{allow_lambert_h}{Set to TRUE if the lambertW of type "h"  should be
+applied (see details)}
 
 \item{out_of_sample}{if FALSE, estimates quickly in-sample performance}
 
@@ -93,10 +97,12 @@ This function currently estimates the Yeo-Johnson transformation,
   in \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not
   having this estimate 1-1 transform. These alternative types are effective
   when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
-  Additionally, as of v. 1.2.0, Lambert of type "s" is not used in
+  Additionally, as of v. 1.2.0, Lambert of type "s" is not used by default in
   \code{bestNormalize()} since it uses multiple threads on some Linux systems,
-  which is not allowed on CRAN checks. Set allow_lambert = TRUE in order to 
-  test this transformation as well.
+  which is not allowed on CRAN checks. Set allow_lambert_s = TRUE in order to 
+  test this transformation as well. Note that the Lambert of type "h" can also
+  be done by setting allow_lambert_h = TRUE, however this can take 
+  significantly longer to run.
 }
 \examples{
 

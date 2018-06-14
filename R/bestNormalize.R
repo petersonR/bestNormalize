@@ -9,7 +9,10 @@
 #'
 #' @param x A vector to normalize
 #' @param allow_orderNorm set to FALSE if orderNorm should not be applied
-#' @param allow_lambert Set to TRUE if lambertW should be applied (see details)
+#' @param allow_lambert_s Set to TRUE if the lambertW of type "s"  should be
+#'   applied (see details)
+#' @param allow_lambert_h Set to TRUE if the lambertW of type "h"  should be
+#'   applied (see details)
 #' @param standardize If TRUE, the transformed values are also centered and
 #'   scaled, such that the transformation attempts a standard normal. This will
 #'   not change the normality statistic.
@@ -62,10 +65,12 @@
 #'   in \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not
 #'   having this estimate 1-1 transform. These alternative types are effective
 #'   when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
-#'   Additionally, as of v. 1.2.0, Lambert of type "s" is not used in
+#'   Additionally, as of v. 1.2.0, Lambert of type "s" is not used by default in
 #'   \code{bestNormalize()} since it uses multiple threads on some Linux systems,
-#'   which is not allowed on CRAN checks. Set allow_lambert = TRUE in order to 
-#'   test this transformation as well.
+#'   which is not allowed on CRAN checks. Set allow_lambert_s = TRUE in order to 
+#'   test this transformation as well. Note that the Lambert of type "h" can also
+#'   be done by setting allow_lambert_h = TRUE, however this can take 
+#'   significantly longer to run.
 #'
 #' @examples
 #'
@@ -94,7 +99,8 @@
 #'   \code{\link{yeojohnson}}
 #' @export
 bestNormalize <- function(x, standardize = TRUE, allow_orderNorm = TRUE,
-                          allow_lambert = FALSE,
+                          allow_lambert_s = FALSE,
+                          allow_lambert_h = FALSE,
                           out_of_sample = TRUE, cluster = NULL, k = 10, 
                           warn = TRUE, r = 5) {
   stopifnot(is.numeric(x))
@@ -102,32 +108,48 @@ bestNormalize <- function(x, standardize = TRUE, allow_orderNorm = TRUE,
   methods <- c("arcsinh_x", 'boxcox', "exp_x", "log_x", "sqrt_x", 'yeojohnson')
   if (allow_orderNorm) 
     methods <- c(methods, 'orderNorm')
-  if(allow_lambert)
-    methods <- c(methods, "lambert")
+  if(allow_lambert_s)
+    methods <- c(methods, "lambert_s")
+  if(allow_lambert_h)
+    methods <- c(methods, "lambert_h")
+  
   
   methods <- methods[order(methods)]
-    
-  for(i in methods) {
-    args <- list(x=x, standardize = standardize)
+  args <- lapply(methods, function(i) {
+    val <- list(standardize = standardize)
     if(i %in% c("orderNorm", "exp_x", "log_x")) {
-      args[['warn']] <- warn
+      val[['warn']] <- warn
+    } else if(i == "lambert_s") {
+      val[["type"]] <- "s"
+    } else if(i == "lambert_h") {
+      val[["type"]] <- "h"
     }
+    val
+  })
   
-    trans_i <- try(do.call(i, args), silent = TRUE)
+  method_names <- methods
+  method_calls <- gsub("_s|_h", "", methods)
+
+  for(i in 1:length(methods)) {
+    args_i <- args[[i]]
+    args_i$x <- x
+  
+     trans_i <- try(do.call(method_calls[i], args_i), silent = TRUE)
     if(is.character(trans_i)) {
       if(warn) 
         warning(paste(i, ' did not work; ', trans_i))
-    } else x.t[[i]] <- trans_i
+    } else x.t[[method_names[i]]] <- trans_i
   }
 
   # Select methods that worked
-  methods <- names(x.t)
+  method_names <- names(x.t)
+  method_calls <- gsub("_s|_h", "", method_names)
   
   ## Estimate out-of-sample P/df
   if(out_of_sample) {
     k <- as.integer(k)
     r <- as.integer(r)
-    reps <- get_oos_estimates(x, standardize, methods, k, r, cluster)
+    reps <- get_oos_estimates(x, standardize, method_names, k, r, cluster)
     norm_stats <- colMeans(reps)
     best_idx <- names(which.min(norm_stats))
     method <- paste("Out-of-sample via CV with", k, "folds and", r, "repeats")
@@ -169,8 +191,10 @@ print.bestNormalize <- function(x, ...) {
     'Estimated Normality Statistics (Pearson P / df, lower => more normal):\n',
     ifelse("boxcox" %in% names(x$norm_stats), 
            paste(" - Box-Cox:", round(x$norm_stats['boxcox'], 4), '\n'), ''),
-    ifelse("lambert" %in% names(x$norm_stats), 
-           paste(" - Lambert's W:", round(x$norm_stats['lambert'], 4), '\n'), ''),
+    ifelse("lambert_s" %in% names(x$norm_stats), 
+           paste(" - Lambert's W (type s):", round(x$norm_stats['lambert_s'], 4), '\n'), ''),
+    ifelse("lambert_h" %in% names(x$norm_stats), 
+           paste(" - Lambert's W (type h):", round(x$norm_stats['lambert_h'], 4), '\n'), ''),
     ifelse("log_x" %in% names(x$norm_stats), 
            paste(" - Log_b(x+a):", round(x$norm_stats['log_x'], 4), '\n'), ''),
     ifelse("sqrt_x" %in% names(x$norm_stats), 
@@ -194,16 +218,20 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster) {
   x <- x[!is.na(x)]
   fold_size <- floor(length(x) / k)
   if(fold_size < 20) warning("fold_size is ", fold_size, " (< 20), therefore P/df estimates may be off") 
+  method_names <- norm_methods
+  method_calls <- gsub("_s|_h", "", method_names)
   
-  # Perform in this session is cluster unspecified
+  # Perform in this session if cluster unspecified
   if(is.null(cluster)) {
     reps <- lapply(1:r, function(rep) {
-      
       resamples <- create_folds(x, k)
       pstats <- matrix(NA, ncol = length(norm_methods), nrow = k)
       for(i in 1:k) {
         for(m in 1:length(norm_methods)) {
-          trans_m <- suppressWarnings(try(do.call(norm_methods[m], list(x = x[resamples != i])), silent = TRUE))
+          args <- list(x = x[resamples != i])
+          if(method_names[m] == "lambert_h") 
+            args$type <- "h"
+          trans_m <- suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
           if(is.character(trans_m)) {
             stop(paste(norm_methods[m], ' did not work; ', trans_m))
             pstats[i, m] <- NA
@@ -225,15 +253,20 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster) {
       stop("cluster is not of class 'cluster'; see ?makeCluster")
     
     # Add fns to library
-    parallel::clusterExport(cl = cluster, c("k", "x", "norm_methods", norm_methods), envir = environment())
     parallel::clusterCall(cluster, function() library(bestNormalize))
+    parallel::clusterExport(cl = cluster, c("k", "x", "norm_methods"), envir = environment())
     reps <- parallel::parLapplyLB(cl = cluster, 1:r, function(rep) {
+      method_names <- norm_methods
+      method_calls <- gsub("_s|_h", "", method_names)
       
       resamples <- create_folds(x, k)
       pstats <- matrix(NA, ncol = length(norm_methods), nrow = k)
       for(i in 1:k) {
         for(m in 1:length(norm_methods)) {
-          trans_m <-  suppressWarnings(try(do.call(norm_methods[m], list(x = x[resamples != i])), silent = TRUE))
+          args <- list(x = x[resamples != i])
+          if(method_names[m] == "lambert_h") 
+            args$type <- "h"
+          trans_m <-  suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
           if(is.character(trans_m)) {
             stop(paste(norm_methods[m], ' did not work; ', trans_m))
             pstats[i, m] <- NA
