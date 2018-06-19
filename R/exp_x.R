@@ -46,9 +46,11 @@ exp_x <- function(x, standardize = TRUE, warn = TRUE) {
   
   x.t <- exp(x)
   
-  stopifnot(!all(infinite_idx <- is.infinite(x.t)))
+  if (all(infinite_idx <- is.infinite(x.t))) {
+    stop("Transformation infinite for all x")
+  }
   if(any(infinite_idx)) {
-    warning("Some values are infinite")
+    warning("Some values (but not all) transformed values are infinite")
     standardize <- FALSE
   }
   

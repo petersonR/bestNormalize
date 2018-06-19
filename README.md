@@ -7,6 +7,7 @@
 Status](https://travis-ci.org/petersonR/bestNormalize.svg?branch=master)](https://travis-ci.org/petersonR/bestNormalize)
 [![CRAN
 version](http://www.r-pkg.org/badges/version/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
+[![downloads](https://cranlogs.r-pkg.org/badges/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
 
 The `bestNormalize` R package was designed to help find a normalizing
 transformation for a vector. There are many techniques that have been
@@ -87,8 +88,8 @@ BN_obj
 #> Standardized Box Cox Transformation with 1000 nonmissing obs.:
 #>  Estimated statistics:
 #>  - lambda = 0.2739638 
-#>  - mean (post-transform) = -0.3870903 
-#>  - sd (post-transform) = 1.045498
+#>  - mean = -0.3870903 
+#>  - sd = 1.045498
 
 # Perform transformation
 gx <- predict(BN_obj)

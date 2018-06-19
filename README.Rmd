@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 [![Travis-CI Build Status](https://travis-ci.org/petersonR/bestNormalize.svg?branch=master)](https://travis-ci.org/petersonR/bestNormalize)
 [![CRAN version](http://www.r-pkg.org/badges/version/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
+[![downloads](https://cranlogs.r-pkg.org/badges/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
 
 The `bestNormalize` R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is oberved. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the *most* normal. 
 
