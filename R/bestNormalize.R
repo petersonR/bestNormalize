@@ -137,7 +137,7 @@ bestNormalize <- function(x, standardize = TRUE, allow_orderNorm = TRUE,
      trans_i <- try(do.call(method_calls[i], args_i), silent = TRUE)
     if(is.character(trans_i)) {
       if(warn) 
-        warning(paste(i, ' did not work; ', trans_i))
+        warning(paste(method_names[i], ' did not work; ', trans_i))
     } else x.t[[method_names[i]]] <- trans_i
   }
 
