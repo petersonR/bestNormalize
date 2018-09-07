@@ -19,6 +19,8 @@ no_transform(x, standardize = FALSE, warn = TRUE)
 \item{standardize}{If TRUE, the transformed values are centered and
 scaled}
 
+\item{warn}{Should a warning result from infinite values?}
+
 \item{object}{an object of class 'no_transform'}
 
 \item{newdata}{a vector of data to be (potentially reverse) transformed}

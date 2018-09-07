@@ -11,7 +11,7 @@
 #' @param x A vector 
 #' @param standardize If TRUE, the transformed values are centered and
 #'   scaled
-#'   
+#' @param warn Should a warning result from infinite values?
 #' @param object an object of class 'no_transform'
 #' @param newdata a vector of data to be (potentially reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
