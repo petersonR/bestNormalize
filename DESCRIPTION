@@ -1,8 +1,8 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 1.2.0.9000
-Date: 2018-05-31
+Version: 1.2.0.9001
+Date: 2018-09-07
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan-peterson@uiowa.edu", 
                   role = c("aut", "cre"))
@@ -35,3 +35,4 @@ Suggests:
 VignetteBuilder: knitr 
 LazyData: true
 RoxygenNote: 6.0.1
+Encoding: UTF-8

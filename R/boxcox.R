@@ -25,9 +25,8 @@
 #' \item{x.t}{transformed 
 #'   original data} 
 #'   \item{x}{original data} 
-#'   \item{mean}{mean of vector post-BC 
-#'   transformation} 
-#'   \item{sd}{sd of vector post-BC transformation} 
+#'   \item{mean}{mean after transformation but prior to standardization} 
+#'   \item{sd}{sd after transformation but prior to standardization} 
 #'   \item{lambda}{estimated lambda value for skew transformation} 
 #'   \item{n}{number of nonmissing observations}
 #'   \item{norm_stat}{Pearson's P / degrees of freedom}
@@ -102,8 +101,8 @@ print.boxcox <- function(x, ...) {
       'Box Cox Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       '- lambda =', x$lambda, '\n',
-      '- mean (post-transform) =', x$mean, '\n',
-      '- sd (post-transform) =', x$sd, '\n')
+      '- mean (before standardization) =', x$mean, '\n',
+      '- sd (before standardization) =', x$sd, '\n')
 }
 
 # Modified version of boxcox from MASS package

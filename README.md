@@ -75,6 +75,7 @@ BN_obj <- bestNormalize(x)
 BN_obj
 #> Best Normalizing transformation with 1000 Observations
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
+#>  - No transform: 6.966 
 #>  - Box-Cox: 1.1176 
 #>  - Log_b(x+a): 2.0489 
 #>  - sqrt(x+a): 1.6444 
@@ -88,8 +89,8 @@ BN_obj
 #> Standardized Box Cox Transformation with 1000 nonmissing obs.:
 #>  Estimated statistics:
 #>  - lambda = 0.2739638 
-#>  - mean = -0.3870903 
-#>  - sd = 1.045498
+#>  - mean (before standardization) = -0.3870903 
+#>  - sd (before standardization) = 1.045498
 
 # Perform transformation
 gx <- predict(BN_obj)

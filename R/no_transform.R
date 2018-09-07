@@ -1,50 +1,52 @@
-#' exp(x) Transformation
-#' 
-#' @name exp_x
-#' @aliases predict.exp_x
+#' Identity transformation
+#'
+#' @name no_transform
+#' @aliases predict.no_transform
+#'
+#' @description Perform an identity transformation. Admittedly it seems odd to
+#'   have a dedicated function to essentially do I(x), but it makes sense to
+#'   keep the same syntax as the other transformations so it plays nicely
+#'   with them. As a benefit, the bestNormalize function will also show
+#'   a comparable normalization statistic for the untransformed data.
+#' @param x A vector 
+#' @param standardize If TRUE, the transformed values are centered and
+#'   scaled
 #'   
-#' @description Perform a exp(x) transformation 
-#' @param x A vector to normalize with with x
-#' @param standardize If TRUE, the transformed values are also centered and
-#'   scaled, such that the transformation attempts a standard normal
-#' @param warn Should a warning result from infinite values?
-#' @param object an object of class 'exp_x'
+#' @param object an object of class 'no_transform'
 #' @param newdata a vector of data to be (potentially reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
 #' @param ... additional arguments
-#' @details \code{exp_x} performs a simple exponential transformation in the context of 
-#' bestNormalize, such that it creates a transformation that can be estimated
-#' and applied to new data via the \code{predict} function. 
-#'  
-#' @return A list of class \code{exp_x} with elements 
-#' \item{x.t}{transformed 
-#'   original data} 
-#'   \item{x}{original data} 
+#' @details \code{no_transform} creates a identity transformation object 
+#'   that can be applied to new data via the \code{predict} function.
+#'
+#' @return A list of class \code{no_transform} with elements
+#'   \item{x.t}{transformed original data} 
+#'   \item{x}{original data}
 #'   \item{mean}{mean after transformation but prior to standardization} 
 #'   \item{sd}{sd after transformation but prior to standardization} 
 #'   \item{n}{number of nonmissing observations}
-#'   \item{norm_stat}{Pearson's P / degrees of freedom}
+#'   \item{norm_stat}{Pearson's P / degrees of freedom} 
 #'   \item{standardize}{was the transformation standardized}
-#'   
+#'
 #'   The \code{predict} function returns the numeric value of the transformation
 #'   performed on new data, and allows for the inverse transformation as well.
 #'   
-#' @examples 
+#' @examples
 #' x <- rgamma(100, 1, 1)
-#' 
-#' exp_x_obj <- exp_x(x)
-#' exp_x_obj
-#' p <- predict(exp_x_obj)
-#' x2 <- predict(exp_x_obj, newdata = p, inverse = TRUE)
-#' 
+#'
+#' no_transform_obj <- no_transform(x)
+#' no_transform_obj
+#' p <- predict(no_transform_obj)
+#' x2 <- predict(no_transform_obj, newdata = p, inverse = TRUE)
+#'
 #' all.equal(x2, x)
-#' 
+#'
 #' @importFrom stats sd
 #' @export
-exp_x <- function(x, standardize = TRUE, warn = TRUE) {
+no_transform <- function(x, standardize = FALSE, warn = TRUE) {
   stopifnot(is.numeric(x))
   
-  x.t <- exp(x)
+  x.t <- x
   
   if (all(infinite_idx <- is.infinite(x.t))) {
     stop("Transformation infinite for all x")
@@ -69,14 +71,14 @@ exp_x <- function(x, standardize = TRUE, warn = TRUE) {
     norm_stat = unname(ptest$statistic / ptest$df),
     standardize = standardize
   )
-  class(val) <- c('exp_x', class(val))
+  class(val) <- c('no_transform', class(val))
   val
 }
 
-#' @rdname exp_x
-#' @method predict exp_x
+#' @rdname no_transform
+#' @method predict no_transform
 #' @export
-predict.exp_x <- function(object, newdata = NULL, inverse = FALSE, ...) {
+predict.no_transform <- function(object, newdata = NULL, inverse = FALSE, ...) {
   if (is.null(newdata) & !inverse)
     newdata <- object$x
   if (is.null(newdata) & inverse)
@@ -85,21 +87,21 @@ predict.exp_x <- function(object, newdata = NULL, inverse = FALSE, ...) {
   if (inverse) {
     if (object$standardize) 
       newdata <- newdata * object$sd + object$mean
-    newdata <-  log(newdata)
+    newdata <-  newdata
   } else if (!inverse) {
-    newdata <- exp(newdata)
+    newdata <- newdata
     if (object$standardize) 
       newdata <- (newdata - object$mean) / object$sd
   }
   unname(newdata)
 }
 
-#' @rdname exp_x
-#' @method print exp_x
+#' @rdname no_transform
+#' @method print no_transform
 #' @export
-print.exp_x <- function(x, ...) {
+print.no_transform <- function(x, ...) {
   cat(ifelse(x$standardize, "Standardized", "Non-Standardized"),
-      'exp(x) Transformation with', x$n, 'nonmissing obs.:\n', 
+      'I(x) Transformation with', x$n, 'nonmissing obs.:\n', 
       'Relevant statistics:\n',
       '- mean (before standardization) =', x$mean, '\n',
       '- sd (before standardization) =', x$sd, '\n')

@@ -23,8 +23,8 @@
 #' @return A list of class \code{sqrt_x} with elements \item{x.t}{transformed
 #'   original data} 
 #'   \item{x}{original data} 
-#'   \item{mean}{mean of vector post-transformation} 
-#'   \item{sd}{sd of vector post-transformation}
+#'   \item{mean}{mean after transformation but prior to standardization} 
+#'   \item{sd}{sd after transformation but prior to standardization} 
 #'   \item{n}{number of nonmissing observations} 
 #'   \item{norm_stat}{Pearson's P / degrees of freedom} 
 #'   \item{standardize}{was the transformation standardized}
@@ -107,8 +107,8 @@ print.sqrt_x <- function(x, ...) {
       'sqrt(x + a) Transformation with', x$n, 'nonmissing obs.:\n', 
       'Relevant statistics:\n',
       '- a =', x$a, '\n',
-      '- mean (post-transform) =', x$mean, '\n',
-      '- sd (post-transform) =', x$sd, '\n')
+      '- mean (before standardization) =', x$mean, '\n',
+      '- sd (before standardization) =', x$sd, '\n')
 }
 
 

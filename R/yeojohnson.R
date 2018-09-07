@@ -23,12 +23,16 @@
 #'  function in the \code{recipes} package is another useful resource (see
 #'  references).
 #'
-#'@return A list of class \code{yeojohnson} with elements \item{x.t}{transformed
-#'  original data} \item{x}{original data} \item{mean}{mean of vector post-YJ
-#'  transformation} \item{sd}{sd of vector post-BC transformation}
-#'  \item{lambda}{estimated lambda value for skew transformation}
-#'  \item{n}{number of nonmissing observations} \item{norm_stat}{Pearson's P /
-#'  degrees of freedom} \item{standardize}{Was the transformation standardized}
+#'@return A list of class \code{yeojohnson} with elements
+#'
+#'   \item{x.t}{transformed original data} 
+#'   \item{x}{original data}
+#'   \item{mean}{mean after transformation but prior to standardization} 
+#'   \item{sd}{sd after transformation but prior to standardization} 
+#'   \item{lambda}{estimated lambda value for skew transformation}
+#'   \item{n}{number of nonmissing observations} 
+#'   \item{norm_stat}{Pearson's P / degrees of freedom} 
+#'   \item{standardize}{Was the transformation standardized}
 #'
 #'  The \code{predict} function returns the numeric value of the transformation
 #'  performed on new data, and allows for the inverse transformation as well.
@@ -114,8 +118,8 @@ print.yeojohnson <- function(x, ...) {
       'Yeo-Johnson Transformation with', x$n, 'nonmissing obs.:\n', 
       'Estimated statistics:\n',
       '- lambda =', x$lambda, '\n',
-      '- mean (post-transform) =', x$mean, '\n',
-      '- sd (post-transform) =', x$sd, '\n')
+      '- mean (before standardization) =', x$mean, '\n',
+      '- sd (before standardization) =', x$sd, '\n')
 }
 
 # Helper functions that estimates yj lambda parameter

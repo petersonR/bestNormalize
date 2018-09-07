@@ -105,7 +105,8 @@ bestNormalize <- function(x, standardize = TRUE, allow_orderNorm = TRUE,
                           warn = TRUE, r = 5) {
   stopifnot(is.numeric(x))
   x.t <- list()
-  methods <- c("arcsinh_x", 'boxcox', "exp_x", "log_x", "sqrt_x", 'yeojohnson')
+  methods <- c("no_transform", "arcsinh_x", 'boxcox', "exp_x", 
+               "log_x", "sqrt_x", 'yeojohnson')
   if (allow_orderNorm) 
     methods <- c(methods, 'orderNorm')
   if(allow_lambert_s)
@@ -189,6 +190,8 @@ predict.bestNormalize <- function(object, newdata = NULL, inverse = FALSE, ...) 
 print.bestNormalize <- function(x, ...) {
   prettyD <- paste0(
     'Estimated Normality Statistics (Pearson P / df, lower => more normal):\n',
+    ifelse("no_transform" %in% names(x$norm_stats), 
+           paste(" - No transform:", round(x$norm_stats['no_transform'], 4), '\n'), ''),
     ifelse("boxcox" %in% names(x$norm_stats), 
            paste(" - Box-Cox:", round(x$norm_stats['boxcox'], 4), '\n'), ''),
     ifelse("lambert_s" %in% names(x$norm_stats), 

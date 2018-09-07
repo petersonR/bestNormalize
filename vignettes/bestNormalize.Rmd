@@ -226,7 +226,7 @@ plot(xx, predict(BNobject, newdata = xx), type = "l", col = 1,
 
 The `bestNormalize` function will save the estimated normality statistics that it obtained for each fold and repeat of cross-validation. Users can visualize these relatively easily via a boxplot (see below), which may give some insight into how much the transformation is truly preferred by the normality statistic, or if it doesn't matter so much as much which transformation is chosen. In this example, Box-Cox, Arcsin h, and ORQ seem to be doing similarly to each other, whereas the Yeo-Johnson is under-performing.
 
-```{r boxplot, fig.width=7}
+```{r boxplot, fig.width=10, out.width="100%"}
 boxplot(log10(BNobject$resampled_norm_stats), yaxt = 'n')
 axis(2, at=log10(c(.1,.5, 1, 2, 5, 10)), labels=c(.1,.5, 1, 2, 5, 10))
 ```

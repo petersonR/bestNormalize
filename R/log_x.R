@@ -26,8 +26,8 @@
 #' \item{x.t}{transformed 
 #'   original data} 
 #'   \item{x}{original data} 
-#'   \item{mean}{mean of vector post-transformation} 
-#'   \item{sd}{sd of vector post-transformation} 
+#'   \item{mean}{mean after transformation but prior to standardization} 
+#'   \item{sd}{sd after transformation but prior to standardization} 
 #'   \item{a}{estimated a value} 
 #'   \item{b}{estimated base b value} 
 #'   \item{n}{number of nonmissing observations}
@@ -121,8 +121,8 @@ print.log_x <- function(x, ...) {
       'Relevant statistics:\n',
       '- a =', x$a, '\n',
       '- b =', x$b, '\n',
-      '- mean (post-transform) =', x$mean, '\n',
-      '- sd (post-transform) =', x$sd, '\n')
+      '- mean (before standardization) =', x$mean, '\n',
+      '- sd (before standardization) =', x$sd, '\n')
 }
 
 

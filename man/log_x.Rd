@@ -41,8 +41,8 @@ A list of class \code{log_x} with elements
 \item{x.t}{transformed 
   original data} 
   \item{x}{original data} 
-  \item{mean}{mean of vector post-transformation} 
-  \item{sd}{sd of vector post-transformation} 
+  \item{mean}{mean after transformation but prior to standardization} 
+  \item{sd}{sd after transformation but prior to standardization} 
   \item{a}{estimated a value} 
   \item{b}{estimated base b value} 
   \item{n}{number of nonmissing observations}

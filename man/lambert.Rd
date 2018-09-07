@@ -35,8 +35,8 @@ LambertW::Gaussianize function}
 A list of class \code{lambert} with elements 
   \item{x.t}{transformed original data} 
   \item{x}{original data} 
-  \item{mean}{mean of vector} 
-  \item{sd}{sd of vector post-BC transformation} 
+  \item{mean}{mean after transformation but prior to standardization} 
+  \item{sd}{sd after transformation but prior to standardization} 
   \item{tau.mat}{estimated parameters of LambertW::Gaussianize} 
   \item{n}{number of nonmissing observations}
   \item{norm_stat}{Pearson's P / degrees of freedom}
