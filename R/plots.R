@@ -20,12 +20,16 @@
 #' @param inverse if TRUE, plots the inverse transformation
 #' @param bounds a vector of bounds to plot for the transformation
 #' @param cols a vector of colors to use for the transforms (see details)
+#' @param exclude a vector of names NOT to plot
 #' @param leg_loc the location of the legend on the plot
 #' @param ... further parameters to be passed to \code{plot} and \code{lines}
 #' @importFrom graphics legend lines plot points
 #' @export
 plot.bestNormalize <- function(x, inverse = FALSE, bounds = NULL, 
-                               cols = c("green3", 1, 2, 4:6), leg_loc = 'top', 
+                               cols = c("green3", 1, 2, 4:6), 
+                               methods = c('boxcox', 'yeojohnson', "orderNorm", 
+                                           "lambert_s", "lambert_h"), 
+                               leg_loc = 'top', 
                                ...) {
   
   if(!inverse) {
@@ -42,8 +46,9 @@ plot.bestNormalize <- function(x, inverse = FALSE, bounds = NULL,
     xx <- seq(min(bounds), max(bounds), length = 1000)
   
   yy <- predict(x, newdata = xx, inverse = inverse, warn = FALSE)
-  
-  ys <- lapply(1:length(x$other_transforms), function(i) {
+  methods <- methods[methods != names(x$norm_stats)[which.min(x$norm_stats)]]
+  methods <- methods[methods %in% names(x$norm_stats)]
+  ys <- lapply(methods, function(i) {
     obj <- x$other_transforms[[i]]
     y_i <- predict(obj, newdata = xx, inverse = inverse, warn = FALSE)
     y_i
@@ -58,7 +63,7 @@ plot.bestNormalize <- function(x, inverse = FALSE, bounds = NULL,
   
   lapply(1:length(ys), function(i) {lines(xx, ys[[i]], col = cols[i + 1], lwd = 2, ...)})
   
-  labs <- c(class(x$chosen_transform), names(x$other_transforms))
+  labs <- c(class(x$chosen_transform), methods)
   
   legend(leg_loc, labs, col = cols, bty = 'n', lwd = 2)
   if(!inverse) 

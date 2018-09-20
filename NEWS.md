@@ -1,5 +1,7 @@
 # bestNormalize 1.2.0.9001
 
+- Add option `loo` for leave-one-out cross-validation
+- Add progress bar for cross-validation methods (both with/without parallel) 
 - Add "no_transform" function - does the same thing as I(x) but in the syntax of other transformations 
   (this allows the normalization statistics to also be calculated if no transformation is performed). 
 - Add support for lambert transforms of type "h" in the `bestNormalize` function via `allow_lambert_h` argument.
