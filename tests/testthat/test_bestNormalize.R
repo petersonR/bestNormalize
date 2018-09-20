@@ -98,12 +98,6 @@ test_that("bestNormalize works with lambert of type h", {
   expect_true(!is.null(b$other_transforms$lambert_h))
 })
 
-## Test progress bar functionality in bestNormalize
-test_that("bestNormalize progress bar works", {
-  expect_output(suppressWarnings(bestNormalize(train, quiet = F)))
-  expect_output(suppressWarnings(bestNormalize(train, quiet = F, loo = T)))
-})
-
 test_that("bestNormalize works with lambert of type h", {
   skip_on_cran()
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = T))

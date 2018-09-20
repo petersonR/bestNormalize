@@ -22,13 +22,14 @@ Description: Estimate a suite of normalizing transformations, including
 URL: https://github.com/petersonR/bestNormalize
 License: GPL-3
 Depends: 
-    R (>= 3.1.0),
-    doSNOW,
-    doRNG
+    R (>= 3.1.0)
 Imports: 
     LambertW,
     nortest,
-    dplyr
+    dplyr,
+    doSNOW,
+    foreach,
+    doRNG
 Suggests: 
     knitr,
     rmarkdown,

@@ -38,11 +38,5 @@ test_that("Parallel functionality works for LOO", {
   
 }) 
 
-test_that("bestNormalize progress bar works in parallel", {
-  expect_output(suppressWarnings(bestNormalize(train, warn = FALSE, cluster = cl, quiet = F)))
-  expect_output(suppressWarnings(bestNormalize(train, warn = FALSE, cluster = cl, quiet = F, loo = T)))
-})
-
-
 parallel::stopCluster(cl)
 

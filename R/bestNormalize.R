@@ -261,6 +261,9 @@ print.bestNormalize <- function(x, ...) {
 }
 
 # Get out-of-sample normality statistics via repeated CV
+#' @importFrom doSNOW registerDoSNOW
+#' @importFrom doRNG "%dorng%"
+#' @importFrom foreach foreach
 get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet, warn) {
   x <- x[!is.na(x)]
   fold_size <- floor(length(x) / k)
@@ -354,6 +357,9 @@ create_folds <- function(x, k) {
 }
 
 # Get out-of-sample normality statistics via leave-one-out CV
+#' @importFrom doSNOW registerDoSNOW
+#' @importFrom foreach %dopar%
+#' @importFrom foreach foreach
 get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
   x <- x[!is.na(x)]
   n <- length(x)
