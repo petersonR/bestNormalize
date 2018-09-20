@@ -3,7 +3,6 @@
 \name{boxcox}
 \alias{boxcox}
 \alias{predict.boxcox}
-\alias{predict.boxcox}
 \alias{print.boxcox}
 \title{Box-Cox Normalization}
 \usage{

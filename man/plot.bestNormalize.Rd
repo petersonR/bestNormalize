@@ -6,14 +6,11 @@
 \alias{plot.boxcox}
 \alias{plot.yeojohnson}
 \alias{plot.lambert}
-\alias{plot.orderNorm}
-\alias{plot.boxcox}
-\alias{plot.yeojohnson}
-\alias{plot.lambert}
 \title{Transformation plotting}
 \usage{
 \method{plot}{bestNormalize}(x, inverse = FALSE, bounds = NULL,
-  cols = c("green3", 1, 2, 4:6), leg_loc = "top", ...)
+  cols = c("green3", 1, 2, 4:6), methods = c("boxcox", "yeojohnson",
+  "orderNorm", "lambert_s", "lambert_h"), leg_loc = "top", ...)
 
 \method{plot}{orderNorm}(x, inverse = FALSE, bounds = NULL, ...)
 
@@ -31,6 +28,8 @@
 \item{bounds}{a vector of bounds to plot for the transformation}
 
 \item{cols}{a vector of colors to use for the transforms (see details)}
+
+\item{methods}{a vector of transformations to plot}
 
 \item{leg_loc}{the location of the legend on the plot}
 

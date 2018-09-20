@@ -84,12 +84,12 @@ ORQ normalization, while based on this transformation, is a little more complica
 
 On new data *within* the range of the original data, this transformation refers to the linear interpolation between two of the original data points. On new data *outside* the range of the original data, the transformation returns a warning and extrapolates using a shifted logit approximation of the ranks to the original data. This is visualized below via the `iris` data set, on the `Petal.Width` variable. 
 
-```{r orq_vis, echo = FALSE, warning = FALSE}
+```{r orq_vis, echo = FALSE}
 
 x <- iris$Petal.Width
-on <- orderNorm(x)
+on <- orderNorm(x, warn = FALSE)
 xx <- seq(min(x) - 1, max(x) + 1, length = 1000)
-yy <- predict(on, xx)
+yy <- suppressWarnings(predict(on, xx))
 r <- (rank(x) / (length(x) + 1))
 f  <- suppressWarnings(glm(r ~ x, family = "binomial"))
 p <- qnorm(predict(f, newdata = data.frame(x = xx), type = 'response'))
@@ -227,14 +227,15 @@ plot(xx, predict(BNobject, newdata = xx), type = "l", col = 1,
 The `bestNormalize` function will save the estimated normality statistics that it obtained for each fold and repeat of cross-validation. Users can visualize these relatively easily via a boxplot (see below), which may give some insight into how much the transformation is truly preferred by the normality statistic, or if it doesn't matter so much as much which transformation is chosen. In this example, Box-Cox, Arcsin h, and ORQ seem to be doing similarly to each other, whereas the Yeo-Johnson is under-performing.
 
 ```{r boxplot, fig.width=10, out.width="100%"}
-boxplot(log10(BNobject$resampled_norm_stats), yaxt = 'n')
+boxplot(log10(BNobject$oos_preds), yaxt = 'n')
 axis(2, at=log10(c(.1,.5, 1, 2, 5, 10)), labels=c(.1,.5, 1, 2, 5, 10))
 ```
 
 
+
 ## Improving speed of estimation
 
-The `bestNormalize` function can be quite slow, since it's using repeated CV to estimate the out-of-sample efficacy. If the user specifies `out_of_sample = FALSE"`, this will highly speed up the process, however the ORQ normalization will virtually always be chosen. If this method is chosen, we recommend setting `allow_orderNorm = FALSE` in order to pick the best of the other transformations.
+The `bestNormalize` function can be quite slow, since it's using cross validation to estimate the out-of-sample efficacy. If the user specifies `out_of_sample = FALSE"`, this will highly speed up the process, however the ORQ normalization will virtually always be chosen. If this method is chosen, we recommend setting `allow_orderNorm = FALSE` in order to pick the best of the other transformations. 
 
 ```{r bn_output}
 bestNormalize(x, allow_orderNorm = FALSE, out_of_sample = FALSE)
@@ -244,27 +245,31 @@ We also make it easy for users to parallelize the repeated CV process via the `c
 
 This speed-up is dependent on the number of repeats, the length of the vector to be transformed, and the number of cores in the cluster. It could well make the computation slower due to the overhead computations of setting up the process, so in cases where the sample size is relatively small and the number of repeats is also small, it is probably better to not worry about the parallelization.
 
+## Leave-one-out CV
+
+As of version 1.3, `bestNormalize` has the `loo` argument, which if set to `TRUE` will compute the leave-one-out cross-validation transformations for each observation and method. Instead of the out-of-sample estimates for normality being the mean of the values over repeated folds, now the estimate for normality is simply calculated for the distribution of leave-one-out transformed values. This is computationally difficult, so it also works with the `cluster` argument if desired. 
+
 # Application to `autotrader` data
 
 The `autotrader` data set was scraped from the [autotrader website](https://www.autotrader.com/) as part of this package (and because at the time of writing, I needed to buy a car). I apply the `bestNormalize` functionality to de-skew mileage, age, and price in my pricing model. See `?autotrader` for more information on this data set.
 
-```{r load_appdata, warning=FALSE}
+```{r load_appdata}
 data("autotrader")
 autotrader$yearsold <- 2017 - autotrader$Year
 ### Using best-normalize
-(priceBN <- bestNormalize(autotrader$price, r = 1, k = 5))
+(priceBN <- bestNormalize(autotrader$price, r = 1, k = 5, warn = F))
 ```
 
 Note that `orderNorm` throws a warning due to the ties in the price vector. We can see that the estimated normality statistic for the OrderNorm transformation is close to one, however, so we know it is performing quite well. It is also performing better than all of the other transformations. 
 
-```{r bn_mileage, warning=FALSE}
-(mileageBN <- bestNormalize(autotrader$mileage, r = 1, k = 5))
+```{r bn_mileage}
+(mileageBN <- bestNormalize(autotrader$mileage, r = 1, k = 5, warn = F))
 ```
 
 Similarly, the ORQ normalization performed best for mileage, and the ties didn't seem to be too big of a deal.
 
-```{r bn_yearsold, warning=FALSE}
-(yearsoldBN <- bestNormalize(autotrader$yearsold, r = 1, k = 5))
+```{r bn_yearsold}
+(yearsoldBN <- bestNormalize(autotrader$yearsold, r = 1, k = 5, warn = F))
 ```
 
 Here we see something peculiar; none of the normalizing transformations performed well according to the normality statistics. The frequency of ties in this case makes it very difficult to find a normalizing transformation (see figure below as to why this is). Even so, orderNorm is chosen as it has the lowest estimated P/df statistic. 

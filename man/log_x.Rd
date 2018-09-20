@@ -3,7 +3,6 @@
 \name{log_x}
 \alias{log_x}
 \alias{predict.log_x}
-\alias{predict.log_x}
 \alias{print.log_x}
 \title{Log(x + a) Transformation}
 \usage{

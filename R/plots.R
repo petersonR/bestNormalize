@@ -20,7 +20,7 @@
 #' @param inverse if TRUE, plots the inverse transformation
 #' @param bounds a vector of bounds to plot for the transformation
 #' @param cols a vector of colors to use for the transforms (see details)
-#' @param exclude a vector of names NOT to plot
+#' @param methods a vector of transformations to plot
 #' @param leg_loc the location of the legend on the plot
 #' @param ... further parameters to be passed to \code{plot} and \code{lines}
 #' @importFrom graphics legend lines plot points

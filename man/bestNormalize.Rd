@@ -3,16 +3,16 @@
 \name{bestNormalize}
 \alias{bestNormalize}
 \alias{predict.bestNormalize}
-\alias{predict.bestNormalize}
 \alias{print.bestNormalize}
 \title{Calculate and perform best normalizing transformation}
 \usage{
 bestNormalize(x, standardize = TRUE, allow_orderNorm = TRUE,
-  allow_lambert_s = FALSE, allow_lambert_h = FALSE, out_of_sample = TRUE,
-  cluster = NULL, k = 10, warn = TRUE, r = 5)
+  allow_lambert_s = FALSE, allow_lambert_h = FALSE,
+  out_of_sample = TRUE, cluster = NULL, k = 10, r = 5,
+  loo = FALSE, warn = TRUE, quiet = FALSE)
 
-\method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE,
-  ...)
+\method{predict}{bestNormalize}(object, newdata = NULL,
+  inverse = FALSE, ...)
 
 \method{print}{bestNormalize}(x, ...)
 }
@@ -37,9 +37,13 @@ applied (see details)}
 
 \item{k}{number of folds}
 
+\item{r}{number of repeats}
+
+\item{loo}{should leave-one-out CV be used instead of repeated CV? (see details)}
+
 \item{warn}{Should bestNormalize warn when a method doesn't work?}
 
-\item{r}{number of repeats}
+\item{quiet}{Should a progress-bar not be displayed for cross-validation progress?}
 
 \item{object}{an object of class 'bestNormalize'}
 
@@ -57,7 +61,8 @@ A list of class \code{bestNormalize} with elements
   \item{method}{out-of-sample or in-sample, number of folds + repeats}
   \item{chosen_transform}{the chosen transformation (of appropriate class)}
   \item{other_transforms}{the other transformations (of appropriate class)}
-
+  \item{oos_preds}{Out-of-sample predictions (if loo == TRUE) or normalization stats}
+  
   The \code{predict} function returns the numeric value of the transformation
   performed on new data, and allows for the inverse transformation as well.
 }
@@ -81,8 +86,9 @@ This function currently estimates the Yeo-Johnson transformation,
   forces the data to follow a normal distribution. More information on the
   orderNorm technique can be found in the package vignette, or using
   \code{?orderNorm}.
+  
 
-  Repeated cross-validation is used to estimate the out-of-sample performance
+  Repeated cross-validation is used by default to estimate the out-of-sample performance
   of each transformation if out_of_sample = TRUE. While this can take some
   time, users can speed it up by creating a cluster via the \code{parallel}
   package's \code{makeCluster} function, and passing the name of this cluster
@@ -91,6 +97,15 @@ This function currently estimates the Yeo-Johnson transformation,
   should be taken to account for the number of observations per fold; to
   small a number and the estimated normality statistic could be inaccurate,
   or at least suffer from high variability.
+  
+  
+  As of version 1.3, users can use leave-one-out cross-validation as well for
+  each method by setting \code{loo} to \code{TRUE}.  This will take a lot of
+  time for bigger vectors, but it will have the most accurate estimate of
+  normalization efficacy. Note that if this method is selected, arguments
+  \code{k, r} are ignored. This method will still work in parallel with the
+  \code{cl} argument.
+  
 
   NOTE: Only the Lambert technique of type = "s" (skew) ensures that the
   transformation is consistently 1-1, so it is the only method currently used
@@ -118,7 +133,18 @@ x2 <- predict(BN_obj, newdata = p, inverse = TRUE)
 all.equal(x2, x)
 }
 
-# Without Repeated CV
+
+\dontrun{
+# With leave-one-out CV
+BN_obj <- bestNormalize(x, loo = TRUE)
+BN_obj
+p <- predict(BN_obj)
+x2 <- predict(BN_obj, newdata = p, inverse = TRUE)
+
+all.equal(x2, x)
+}
+
+# Without CV
 BN_obj <- bestNormalize(x, allow_orderNorm = FALSE, out_of_sample = FALSE)
 BN_obj
 p <- predict(BN_obj)

@@ -3,7 +3,6 @@
 \name{exp_x}
 \alias{exp_x}
 \alias{predict.exp_x}
-\alias{predict.exp_x}
 \alias{print.exp_x}
 \title{exp(x) Transformation}
 \usage{

@@ -3,13 +3,13 @@
 \name{binarize}
 \alias{binarize}
 \alias{predict.binarize}
-\alias{predict.binarize}
 \alias{print.binarize}
 \title{Binarize}
 \usage{
 binarize(x, location_measure = "median")
 
-\method{predict}{binarize}(object, newdata = NULL, inverse = FALSE, ...)
+\method{predict}{binarize}(object, newdata = NULL, inverse = FALSE,
+  ...)
 
 \method{print}{binarize}(x, ...)
 }

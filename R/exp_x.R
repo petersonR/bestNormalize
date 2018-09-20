@@ -45,19 +45,20 @@ exp_x <- function(x, standardize = TRUE, warn = TRUE) {
   stopifnot(is.numeric(x))
   
   x.t <- exp(x)
+  mu <- mean(x.t, na.rm = TRUE)
+  sigma <- sd(x.t, na.rm = TRUE)
+  if (standardize) x.t <- (x.t - mu) / sigma
+  infinite_idx <- is.infinite(x.t)
   
-  if (all(infinite_idx <- is.infinite(x.t))) {
-    stop("Transformation infinite for all x")
+  if(sum(is.finite(x.t)) < 5) {
+    stop("Transformation finite for less than 3 x values")
   }
-  if(any(infinite_idx)) {
+  if(any(infinite_idx) & warn) {
     warning("Some values (but not all) transformed values are infinite")
     standardize <- FALSE
   }
   
-  mu <- mean(x.t, na.rm = TRUE)
-  sigma <- sd(x.t, na.rm = TRUE)
-  if (standardize) x.t <- (x.t - mu) / sigma
-  
+
   ptest <- nortest::pearson.test(x.t)
   
   val <- list(

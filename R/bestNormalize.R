@@ -66,7 +66,7 @@
 #'   
 #'   
 #'   As of version 1.3, users can use leave-one-out cross-validation as well for
-#'   each method by setting \code{loo} to \code {TRUE}.  This will take a lot of
+#'   each method by setting \code{loo} to \code{TRUE}.  This will take a lot of
 #'   time for bigger vectors, but it will have the most accurate estimate of
 #'   normalization efficacy. Note that if this method is selected, arguments
 #'   \code{k, r} are ignored. This method will still work in parallel with the
@@ -283,11 +283,11 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
             args$type <- "h"
           trans_m <- suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
           if(is.character(trans_m)) {
-            stop(paste(norm_methods[m], ' did not work; ', trans_m))
+            if(warn) warning(paste(norm_methods[m], ' did not work; ', trans_m))
             pstats[i, m] <- NA
           } else {
             vec <- suppressWarnings(predict(trans_m, newdata = x[resamples == i]))
-            p <- nortest::pearson.test(vec)
+            p <- suppressWarnings(nortest::pearson.test(vec))
             pstats[i, m] <- p$stat / p$df
           }
         }
@@ -333,11 +333,11 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
          args$type <- "h"
        trans_m <-  suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
        if(is.character(trans_m)) {
-         stop(paste(norm_methods[m], ' did not work; ', trans_m))
+         if(warn) warning(paste(norm_methods[m], ' did not work; ', trans_m))
          ip[m] <- NA
        } else {
          vec <- suppressWarnings(predict(trans_m, newdata = x[resamples == i]))
-         p <- nortest::pearson.test(vec)
+         p <- suppressWarnings(nortest::pearson.test(vec))
          ip[m] <- p$stat / p$df
        }
      }

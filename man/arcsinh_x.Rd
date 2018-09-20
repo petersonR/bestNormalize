@@ -3,13 +3,13 @@
 \name{arcsinh_x}
 \alias{arcsinh_x}
 \alias{predict.arcsinh_x}
-\alias{predict.arcsinh_x}
 \alias{print.arcsinh_x}
 \title{arcsinh(x) Transformation}
 \usage{
 arcsinh_x(x, standardize = TRUE)
 
-\method{predict}{arcsinh_x}(object, newdata = NULL, inverse = FALSE, ...)
+\method{predict}{arcsinh_x}(object, newdata = NULL, inverse = FALSE,
+  ...)
 
 \method{print}{arcsinh_x}(x, ...)
 }

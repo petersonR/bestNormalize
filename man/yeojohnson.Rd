@@ -3,13 +3,13 @@
 \name{yeojohnson}
 \alias{yeojohnson}
 \alias{predict.yeojohnson}
-\alias{predict.yeojohnson}
 \alias{print.yeojohnson}
 \title{Yeo-Johnson Normalization}
 \usage{
 yeojohnson(x, eps = 0.001, standardize = TRUE, ...)
 
-\method{predict}{yeojohnson}(object, newdata = NULL, inverse = FALSE, ...)
+\method{predict}{yeojohnson}(object, newdata = NULL, inverse = FALSE,
+  ...)
 
 \method{print}{yeojohnson}(x, ...)
 }

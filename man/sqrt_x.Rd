@@ -3,7 +3,6 @@
 \name{sqrt_x}
 \alias{sqrt_x}
 \alias{predict.sqrt_x}
-\alias{predict.sqrt_x}
 \alias{print.sqrt_x}
 \title{sqrt(x + a) Normalization}
 \usage{

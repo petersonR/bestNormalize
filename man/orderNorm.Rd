@@ -3,7 +3,6 @@
 \name{orderNorm}
 \alias{orderNorm}
 \alias{predict.orderNorm}
-\alias{predict.orderNorm}
 \alias{print.orderNorm}
 \title{Calculate and perform Ordered Quantile normalizing transformation}
 \usage{

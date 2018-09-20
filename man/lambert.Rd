@@ -3,7 +3,6 @@
 \name{lambert}
 \alias{lambert}
 \alias{predict.lambert}
-\alias{predict.lambert}
 \alias{print.lambert}
 \title{Lambert W x F Normalization}
 \usage{
