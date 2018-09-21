@@ -261,7 +261,7 @@ print.bestNormalize <- function(x, ...) {
 }
 
 # Get out-of-sample normality statistics via repeated CV
-#' @importFrom doSNOW registerDoSNOW
+#' @importFrom doParallel registerDoParallel
 #' @importFrom doRNG "%dorng%"
 #' @importFrom foreach foreach
 get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet, warn) {
@@ -309,7 +309,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
     # Add fns to library
     parallel::clusterCall(cluster, function() library(bestNormalize))
     parallel::clusterExport(cl = cluster, c("k", "x", "norm_methods"), envir = environment())
-    doSNOW::registerDoSNOW(cluster)
+    doParallel::registerDoParallel(cluster)
     
     opts <- list()
     if(!quiet) {
@@ -359,7 +359,7 @@ create_folds <- function(x, k) {
 }
 
 # Get out-of-sample normality statistics via leave-one-out CV
-#' @importFrom doSNOW registerDoSNOW
+#' @importFrom doParallel registerDoParallel
 #' @importFrom foreach %dopar%
 #' @importFrom foreach foreach
 get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
@@ -403,7 +403,7 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
     # Add fns to library
     parallel::clusterCall(cluster, function() library(bestNormalize))
     parallel::clusterExport(cl = cluster, c("x", "norm_methods"), envir = environment())
-    doSNOW::registerDoSNOW(cluster)
+    doParallel::registerDoParallel(cluster)
     
     opts <- list()
     if(!quiet) {

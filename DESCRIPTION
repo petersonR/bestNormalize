@@ -27,7 +27,7 @@ Imports:
     LambertW,
     nortest,
     dplyr,
-    doSNOW,
+    doParallel,
     foreach,
     doRNG
 Suggests: 
