@@ -309,7 +309,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
     # Add fns to library
     parallel::clusterCall(cluster, function() library(bestNormalize))
     parallel::clusterExport(cl = cluster, c("k", "x", "norm_methods"), envir = environment())
-    registerDoSNOW(cluster)
+    doSNOW::registerDoSNOW(cluster)
     
     opts <- list()
     if(!quiet) {
@@ -322,10 +322,12 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
     # Metadata for cv procedure
     cvparams <- expand.grid(i = 1:k, rep = 1:r)[,2:1]
     resamples <- sapply(1:r, function(ii) create_folds(x=x, k=k))
-    
-    reps <- foreach(rep = 1:nrow(cvparams), 
-                      .combine = "rbind", 
-                      .options.snow = opts) %dorng% {
+    `%dorng%` <- doRNG::`%dorng%`
+    reps <- foreach::foreach(
+      rep = 1:nrow(cvparams),
+      .combine = "rbind",
+      .options.snow = opts
+    ) %dorng% {
      rr <- cvparams$rep[rep]
      i <- cvparams$i[rep]
      resample <- resamples[,rr]
@@ -401,7 +403,7 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
     # Add fns to library
     parallel::clusterCall(cluster, function() library(bestNormalize))
     parallel::clusterExport(cl = cluster, c("x", "norm_methods"), envir = environment())
-    registerDoSNOW(cluster)
+    doSNOW::registerDoSNOW(cluster)
     
     opts <- list()
     if(!quiet) {
@@ -411,7 +413,12 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
       opts <- list(progress=progress)
     }
     
-    p <- foreach(i = 1:n, .combine = "rbind", .options.snow=opts) %dopar% {
+    `%dopar%` <- foreach::`%dopar%`
+    
+    p <- foreach::foreach(
+      i = 1:n,
+      .combine = "rbind",
+      .options.snow = opts) %dopar% {               
       ip <- numeric(length(norm_methods))
       for(m in 1:length(norm_methods)) {
         args <- list(x = x[-i])
