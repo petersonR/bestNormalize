@@ -28,16 +28,14 @@ orderNorm(x, ..., warn = TRUE)
 }
 \value{
 A list of class \code{orderNorm} with elements
-  
-\item{x.t}{transformed original data} 
-\item{x}{original data} 
-\item{n}{number of nonmissing observations}
-\item{ties_status}{indicator if ties are present}
-\item{fit}{fit to be used for extrapolation, if needed}
-\item{norm_stat}{Pearson's P / degrees of freedom}
 
-The \code{predict} function returns the numeric value of the transformation 
-performed on new data, and allows for the inverse transformation as well.
+  \item{x.t}{transformed original data} \item{x}{original data}
+  \item{n}{number of nonmissing observations} \item{ties_status}{indicator if
+  ties are present} \item{fit}{fit to be used for extrapolation, if needed}
+  \item{norm_stat}{Pearson's P / degrees of freedom}
+
+  The \code{predict} function returns the numeric value of the transformation
+  performed on new data, and allows for the inverse transformation as well.
 }
 \description{
 The Ordered Quantile (ORQ) normalization transformation,
@@ -47,18 +45,18 @@ The Ordered Quantile (ORQ) normalization transformation,
   essentially guarantees that the transformation leads to a uniform
   distribution.
 
-  The transformation is: \deqn{g(x) = \Phi ^ {-1} (rank(x) / (length(x) +
-  1))}
+  The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) + .5) /
+  (length(x) + 1))}
 
   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each
   observation's rank, and length(x) refers to the number of observations.
-  
+
   By itself, this method is certainly not new; the earliest mention of it
   that I could find is in a 1947 paper by Bartlett (see references). This
   formula was outlined explicitly in Van der Waerden, and expounded upon in
-  Beasley (2009). However there is a key difference to this version of it,
-  as explained below.
-  
+  Beasley (2009). However there is a key difference to this version of it, as
+  explained below.
+
   Using linear interpolation between these percentiles, the ORQ normalization
   becomes a 1-1 transformation that can be applied to new data. However,
   outside of the observed domain of x, it is unclear how to extrapolate the
@@ -71,7 +69,7 @@ The Ordered Quantile (ORQ) normalization transformation,
   warning unless warn = FALSE.) However, we found that the extrapolation was
   able to perform very well even on data as heavy-tailed as a Cauchy
   distribution (paper to be published).
-  
+
   This transformation can be performed on new data and inverted via the
   \code{predict} function.
 }
@@ -87,20 +85,17 @@ x2 <- predict(orderNorm_obj, newdata = p, inverse = TRUE)
 all.equal(x2, x)
 }
 \references{
-Bartlett, M. S. "The Use of Transformations." Biometrics, 
-  vol. 3, no. 1, 1947, pp. 39-52. JSTOR 
-  www.jstor.org/stable/3001536.
+Bartlett, M. S. "The Use of Transformations." Biometrics, vol. 3, no. 1,
+1947, pp. 39-52. JSTOR www.jstor.org/stable/3001536.
 
- Van der Waerden BL. Order tests for the two-sample problem and 
-   their power. 1952;55:453-458. Ser A. 
-   
- Beasley TM, Erickson S, Allison DB. Rank-based inverse normal transformations
-   are increasingly used, but are they merited? Behav. Genet. 2009;39(5): 
-   580-595. pmid:19526352
+Van der Waerden BL. Order tests for the two-sample problem and their power.
+1952;55:453-458. Ser A.
+
+Beasley TM, Erickson S, Allison DB. Rank-based inverse normal transformations
+are increasingly used, but are they merited? Behav. Genet. 2009;39(5):
+580-595. pmid:19526352
 }
 \seealso{
-\code{\link{boxcox}},
- \code{\link{lambert}}, 
- \code{\link{bestNormalize}},
- \code{\link{yeojohnson}}
+\code{\link{boxcox}}, \code{\link{lambert}},
+  \code{\link{bestNormalize}}, \code{\link{yeojohnson}}
 }

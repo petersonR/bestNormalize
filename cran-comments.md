@@ -1,6 +1,6 @@
 ## Test environments 
 - win-builder (devel, release)
-- local Windows (10), R 3.4.3
+- local Windows (10), R 3.5.1
 - travis-ci.org Ubuntu (R-oldrel, R-release, R-devel)
 - builder.r-hub.io Linux (Fedora, R-devel) 
 

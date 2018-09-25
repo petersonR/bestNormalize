@@ -10,18 +10,18 @@
 #'   essentially guarantees that the transformation leads to a uniform
 #'   distribution.
 #'
-#'   The transformation is: \deqn{g(x) = \Phi ^ {-1} (rank(x) / (length(x) +
-#'   1))}
+#'   The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) + .5) /
+#'   (length(x) + 1))}
 #'
 #'   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each
 #'   observation's rank, and length(x) refers to the number of observations.
-#'   
+#'
 #'   By itself, this method is certainly not new; the earliest mention of it
 #'   that I could find is in a 1947 paper by Bartlett (see references). This
 #'   formula was outlined explicitly in Van der Waerden, and expounded upon in
-#'   Beasley (2009). However there is a key difference to this version of it,
-#'   as explained below.
-#'   
+#'   Beasley (2009). However there is a key difference to this version of it, as
+#'   explained below.
+#'
 #'   Using linear interpolation between these percentiles, the ORQ normalization
 #'   becomes a 1-1 transformation that can be applied to new data. However,
 #'   outside of the observed domain of x, it is unclear how to extrapolate the
@@ -34,57 +34,52 @@
 #'   warning unless warn = FALSE.) However, we found that the extrapolation was
 #'   able to perform very well even on data as heavy-tailed as a Cauchy
 #'   distribution (paper to be published).
-#'   
+#'
 #'   This transformation can be performed on new data and inverted via the
 #'   \code{predict} function.
-#'   
+#'
 #' @param x A vector to normalize
 #' @param newdata a vector of data to be (reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
 #' @param object an object of class 'orderNorm'
 #' @param warn transforms outside observed range or ties will yield warning
 #' @param ... additional arguments
-#' 
+#'
 #' @return A list of class \code{orderNorm} with elements
-#'   
-#' \item{x.t}{transformed original data} 
-#' \item{x}{original data} 
-#' \item{n}{number of nonmissing observations}
-#' \item{ties_status}{indicator if ties are present}
-#' \item{fit}{fit to be used for extrapolation, if needed}
-#' \item{norm_stat}{Pearson's P / degrees of freedom}
-#' 
-#' The \code{predict} function returns the numeric value of the transformation 
-#' performed on new data, and allows for the inverse transformation as well.
-#' 
-#' @examples 
-#' 
+#'
+#'   \item{x.t}{transformed original data} \item{x}{original data}
+#'   \item{n}{number of nonmissing observations} \item{ties_status}{indicator if
+#'   ties are present} \item{fit}{fit to be used for extrapolation, if needed}
+#'   \item{norm_stat}{Pearson's P / degrees of freedom}
+#'
+#'   The \code{predict} function returns the numeric value of the transformation
+#'   performed on new data, and allows for the inverse transformation as well.
+#'
+#' @examples
+#'
 #' x <- rgamma(100, 1, 1)
-#' 
+#'
 #' orderNorm_obj <- orderNorm(x)
 #' orderNorm_obj
 #' p <- predict(orderNorm_obj)
 #' x2 <- predict(orderNorm_obj, newdata = p, inverse = TRUE)
-#' 
+#'
 #' all.equal(x2, x)
-#' @references 
-#' 
-#' Bartlett, M. S. "The Use of Transformations." Biometrics, 
-#'   vol. 3, no. 1, 1947, pp. 39-52. JSTOR 
-#'   www.jstor.org/stable/3001536.
-#' 
-#'  Van der Waerden BL. Order tests for the two-sample problem and 
-#'    their power. 1952;55:453-458. Ser A. 
-#'    
-#'  Beasley TM, Erickson S, Allison DB. Rank-based inverse normal transformations
-#'    are increasingly used, but are they merited? Behav. Genet. 2009;39(5): 
-#'    580-595. pmid:19526352
-#'  
-#' 
-#' @seealso  \code{\link{boxcox}},
-#'  \code{\link{lambert}}, 
-#'  \code{\link{bestNormalize}},
-#'  \code{\link{yeojohnson}} 
+#' @references
+#'
+#' Bartlett, M. S. "The Use of Transformations." Biometrics, vol. 3, no. 1,
+#' 1947, pp. 39-52. JSTOR www.jstor.org/stable/3001536.
+#'
+#' Van der Waerden BL. Order tests for the two-sample problem and their power.
+#' 1952;55:453-458. Ser A.
+#'
+#' Beasley TM, Erickson S, Allison DB. Rank-based inverse normal transformations
+#' are increasingly used, but are they merited? Behav. Genet. 2009;39(5):
+#' 580-595. pmid:19526352
+#'
+#'
+#' @seealso  \code{\link{boxcox}}, \code{\link{lambert}},
+#'   \code{\link{bestNormalize}}, \code{\link{yeojohnson}}
 #' @importFrom stats qnorm glm
 #' @export
 orderNorm <- function(x, ..., warn = TRUE) {
@@ -98,7 +93,7 @@ orderNorm <- function(x, ..., warn = TRUE) {
     ties_status <- 1
   }
   
-  q.x <- rank(x, na.last = 'keep') / (length(x) + 1 - sum(na_idx))
+  q.x <- (rank(x, na.last = 'keep') + .5) / (length(x) + 1 - sum(na_idx))
   x.t <- qnorm(q.x)
   
   # fit model for future extrapolation
@@ -170,7 +165,7 @@ orderNorm_trans <- function(orderNorm_obj, new_points, warn) {
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
-    if (warn) warning('Transformations requested outside observed domain; logistic approx. on ranks applied')
+    if (warn) warning('Transformations requested outside observed domain; logit approx. on ranks applied')
     fit <- orderNorm_obj$fit
     p <- qnorm(fitted(fit, type = "response"))
     l_idx <- vals$x < min(old_points)
@@ -199,7 +194,7 @@ inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t, warn) {
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
-    if(warn) warning('Transformations requested outside observed domain; logistic approx. on ranks applied')
+    if(warn) warning('Transformations requested outside observed domain; logit approx. on ranks applied')
     
     fit <- orderNorm_obj$fit
     p <- qnorm(fitted(fit, type = "response"))

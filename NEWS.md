@@ -1,5 +1,6 @@
 # bestNormalize 1.2.0.9001
 
+- Add 1/2 to ranks in ORQ transformation to make quantile estimation unbiased (should have minimal impact)
 - Add option `loo` for leave-one-out cross-validation
 - Add progress bar for cross-validation methods (both with/without parallel) 
 - Add "no_transform" function - does the same thing as I(x) but in the syntax of other transformations 
