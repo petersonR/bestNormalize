@@ -1,3 +1,5 @@
+# bestNormalize 1.3.0.9000
+
 # bestNormalize 1.3.0
 
 - Add 1/2 to ranks in ORQ transformation to make quantile estimation unbiased (should have minimal impact)
