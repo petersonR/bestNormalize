@@ -86,7 +86,7 @@ BN_obj
 #>  - exp(x): 50.7939 
 #>  - arcsinh(x): 3.6245 
 #>  - Yeo-Johnson: 1.933 
-#>  - orderNorm: 1.2876 
+#>  - orderNorm: 1.2694 
 #> Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
 #>  
 #> Based off these, bestNormalize chose:
@@ -116,7 +116,7 @@ here).
 
 ``` r
 (BN_loo <- bestNormalize(x, allow_orderNorm = FALSE, allow_lambert_s = TRUE, loo = TRUE))
-#> Note: passing a cluster (?makeCluster) can speed up CV process
+#> Note: passing a cluster (?makeCluster) to bestNormalize can speed up CV process
 #> Best Normalizing transformation with 1000 Observations
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
 #>  - No transform: 26.624 

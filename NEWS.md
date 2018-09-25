@@ -1,4 +1,4 @@
-# bestNormalize 1.2.0.9001
+# bestNormalize 1.3.0
 
 - Add 1/2 to ranks in ORQ transformation to make quantile estimation unbiased (should have minimal impact)
 - Add option `loo` for leave-one-out cross-validation
