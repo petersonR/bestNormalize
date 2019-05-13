@@ -11,7 +11,7 @@
 #'   distribution.
 #'
 #'   The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) - .5) /
-#'   (length(x) + 1))}
+#'   (length(x)))}
 #'
 #'   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each
 #'   observation's rank, and length(x) refers to the number of observations.
@@ -93,7 +93,7 @@ orderNorm <- function(x, ..., warn = TRUE) {
     ties_status <- 1
   }
   
-  q.x <- (rank(x, na.last = 'keep') - .5) / (length(x) + 1 - sum(na_idx))
+  q.x <- (rank(x, na.last = 'keep') - .5) / (length(x) - sum(na_idx))
   x.t <- qnorm(q.x)
   
   # fit model for future extrapolation

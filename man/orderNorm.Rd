@@ -46,7 +46,7 @@ The Ordered Quantile (ORQ) normalization transformation,
   distribution.
 
   The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) - .5) /
-  (length(x) + 1))}
+  (length(x)))}
 
   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each
   observation's rank, and length(x) refers to the number of observations.
