@@ -1,6 +1,6 @@
-# bestNormalize 1.4.0
+# bestNormalize 1.4.1
 
-- Correctly subtract 1/2 from ranks in ORQ transformation to make quantile estimation unbiased (this was a bug in 1.3.0, as ranks start at 1, not zero).
+- Correctly subtract 1/2 from ranks in ORQ transformation to make quantile estimation unbiased (this was a bug in 1.3.0, as ranks start at 1, not zero). Divides by n instead of n+1. 
 - Specify the weights for the GLM in the ORQ transformation to be the number of observations. This doesn't change the transformation but seems to have a bit faster computational speed, and it's more mathematically tractable. 
 - Other various bug fixes to tests and to plotting functions.
 
