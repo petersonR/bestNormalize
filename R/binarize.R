@@ -56,7 +56,7 @@ binarize <- function(x, location_measure = 'median') {
   } else if (location_measure == 'mean') {
     loc <- mean(x, na.rm = T)
   } else if (location_measure == 'mode') {
-    dens <- density(x)
+    dens <- density(x[!is.na(x)])
     loc <- dens$x[which.max(dens$y)]
   }
   

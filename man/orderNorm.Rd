@@ -45,7 +45,7 @@ The Ordered Quantile (ORQ) normalization transformation,
   essentially guarantees that the transformation leads to a uniform
   distribution.
 
-  The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) + .5) /
+  The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) - .5) /
   (length(x) + 1))}
 
   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each

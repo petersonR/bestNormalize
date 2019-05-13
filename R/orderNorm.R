@@ -10,7 +10,7 @@
 #'   essentially guarantees that the transformation leads to a uniform
 #'   distribution.
 #'
-#'   The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) + .5) /
+#'   The transformation is: \deqn{g(x) = \Phi ^ {-1} ((rank(x) - .5) /
 #'   (length(x) + 1))}
 #'
 #'   Where \eqn{\Phi} refers to the standard normal cdf, rank(x) refers to each
@@ -93,11 +93,14 @@ orderNorm <- function(x, ..., warn = TRUE) {
     ties_status <- 1
   }
   
-  q.x <- (rank(x, na.last = 'keep') + .5) / (length(x) + 1 - sum(na_idx))
+  q.x <- (rank(x, na.last = 'keep') - .5) / (length(x) + 1 - sum(na_idx))
   x.t <- qnorm(q.x)
   
   # fit model for future extrapolation
-  fit <- suppressWarnings(glm(q.x ~ x, family = 'binomial'))
+  fit <- suppressWarnings(
+    glm(q.x ~ x, family = 'binomial', 
+        weights = rep(length(x) - sum(is.na(x)), length(x)))
+  )
   
   ptest <- nortest::pearson.test(x.t)
   
@@ -154,32 +157,36 @@ print.orderNorm <- function(x, ...) {
         paste0('ties\n - ', length(unique(x$x)), ' unique values'),
         'no ties'), '\n',
       '- Original quantiles:\n')
-  print(round(quantile(x$x), 3))
+  print(round(quantile(x$x, na.rm = T), 3))
 }
 
 #' @importFrom stats approx fitted predict.glm qnorm
 orderNorm_trans <- function(orderNorm_obj, new_points, warn) {
   x_t <- orderNorm_obj$x.t
   old_points <- orderNorm_obj$x
-  vals <- approx(old_points, x_t, xout = new_points, rule = 1)
+  vals <- suppressWarnings(
+    approx(old_points, x_t, xout = new_points, rule = 1)
+  )
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
     if (warn) warning('Transformations requested outside observed domain; logit approx. on ranks applied')
     fit <- orderNorm_obj$fit
     p <- qnorm(fitted(fit, type = "response"))
-    l_idx <- vals$x < min(old_points)
-    h_idx <- vals$x > max(old_points)
+    l_idx <- vals$x < min(old_points, na.rm = T)
+    h_idx <- vals$x > max(old_points, na.rm = T)
     
     # Check 
     if (any(l_idx)) {
       xx <- data.frame(x = vals$x[l_idx])
-      vals$y[l_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - (min(p) - min(x_t))
+      vals$y[l_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - 
+        (min(p, na.rm = T) - min(x_t, na.rm = T))
       
     }
     if (any(h_idx)) {
       xx <- data.frame(x = vals$x[h_idx])
-      vals$y[h_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - (max(p) - max(x_t))
+      vals$y[h_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - 
+        (max(p, na.rm = T) - max(x_t, na.rm = T))
     }
   }
   
@@ -190,7 +197,9 @@ orderNorm_trans <- function(orderNorm_obj, new_points, warn) {
 inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t, warn) {
   x_t <- orderNorm_obj$x.t
   old_points <- orderNorm_obj$x
-  vals <- approx(x_t, old_points, xout = new_points_x_t, rule = 1)
+  vals <- suppressWarnings(
+    approx(x_t, old_points, xout = new_points_x_t, rule = 1)
+  )
   
   # If predictions have been made outside observed domain
   if (any(is.na(vals$y))) {
@@ -198,20 +207,20 @@ inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t, warn) {
     
     fit <- orderNorm_obj$fit
     p <- qnorm(fitted(fit, type = "response"))
-    l_idx <- vals$x < min(x_t)
-    h_idx <- vals$x > max(x_t)
+    l_idx <- vals$x < min(x_t, na.rm = T)
+    h_idx <- vals$x > max(x_t, na.rm = T)
     
     # Check 
     if (any(l_idx)) {
       # Solve algebraically from original transformation
-      logits <- log(pnorm(vals$x[l_idx] + min(p) - min(x_t)) / 
-                      (1 - pnorm(vals$x[l_idx] + min(p) - min(x_t))))
+      logits <- log(pnorm(vals$x[l_idx] + min(p, na.rm = T) - min(x_t, na.rm = T)) / 
+                      (1 - pnorm(vals$x[l_idx] + min(p, na.rm = T) - min(x_t, na.rm = T))))
       vals$y[l_idx] <- 
         unname((logits - fit$coef[1]) / fit$coef[2])
     }
     if (any(h_idx)) {
-      logits <- log(pnorm(vals$x[h_idx] + max(p) - max(x_t)) / 
-                      (1 - pnorm(vals$x[h_idx] + max(p) - max(x_t))))
+      logits <- log(pnorm(vals$x[h_idx] + max(p, na.rm = T) - max(x_t, na.rm = T)) / 
+                      (1 - pnorm(vals$x[h_idx] + max(p, na.rm = T) - max(x_t, na.rm = T))))
       vals$y[h_idx] <- 
         unname((logits - fit$coef[1]) / fit$coef[2])
     }

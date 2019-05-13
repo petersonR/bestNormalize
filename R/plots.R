@@ -26,9 +26,8 @@
 #' @importFrom graphics legend lines plot points
 #' @export
 plot.bestNormalize <- function(x, inverse = FALSE, bounds = NULL, 
-                               cols = c("green3", 1, 2, 4:6), 
-                               methods = c('boxcox', 'yeojohnson', "orderNorm", 
-                                           "lambert_s", "lambert_h"), 
+                               cols = NULL, 
+                               methods = NULL, 
                                leg_loc = 'top', 
                                ...) {
   
@@ -41,18 +40,36 @@ plot.bestNormalize <- function(x, inverse = FALSE, bounds = NULL,
   }
   
   if(is.null(bounds)) {
-    xx <- seq(min(xvals), max(xvals), length = 1000)
+    xx <- seq(min(xvals, na.rm = T), max(xvals, na.rm = T), length = 1000)
   } else 
     xx <- seq(min(bounds), max(bounds), length = 1000)
   
   yy <- predict(x, newdata = xx, inverse = inverse, warn = FALSE)
-  methods <- methods[methods != names(x$norm_stats)[which.min(x$norm_stats)]]
-  methods <- methods[methods %in% names(x$norm_stats)]
-  ys <- lapply(methods, function(i) {
-    obj <- x$other_transforms[[i]]
-    y_i <- predict(obj, newdata = xx, inverse = inverse, warn = FALSE)
-    y_i
-  })
+  
+  ## Other methods to plot
+  if(is.null(methods)) {
+    methods <- c(names(x$other_transforms))
+    ys <- lapply(x$other_transforms, function(obj) {
+      predict(obj, newdata = xx, inverse = inverse, warn = F)
+    })
+  } else {
+    methods_found <- intersect(names(x$other_transforms), methods)
+    if(length(methods_found) != length(methods)) 
+      stop("Not all specified methods found")
+    methods <- methods_found
+    
+    other_transforms <- x$other_transforms[names(x$other_transforms) %in% methods]
+    
+    ys <- lapply(other_transforms, function(obj) {
+      predict(obj, newdata = xx, inverse = inverse, warn = F)
+    })
+  }
+  
+  ## Color palette
+  if(is.null(cols)) {
+    cols <- 1:(length(methods) + 1)
+  }
+  
   
   plot(xx, yy, ylim = range(yy, ys, na.rm = TRUE), 
        xlim = range(xx), type = 'l', 
@@ -67,7 +84,7 @@ plot.bestNormalize <- function(x, inverse = FALSE, bounds = NULL,
   
   legend(leg_loc, labs, col = cols, bty = 'n', lwd = 2)
   if(!inverse) 
-    points(x = xvals, y = rep(min(range(ys, yy, na.rm = T)), length(xvals)), pch = '|')
+    points(x = jitter(xvals), y = rep(min(range(ys, yy, na.rm = T)), length(xvals)), pch = '|')
   else 
     points(x =  rep(min(xvals, bounds), length(x$x)), y = x$x, pch = '_')
   invisible(x)
@@ -87,9 +104,9 @@ plot.orderNorm <- function(x, inverse = FALSE, bounds = NULL, ...) {
   }
     
   if(is.null(bounds)) {
-    xx <- seq(min(xvals), max(xvals), length = 1000)
+    xx <- seq(min(xvals, na.rm = T), max(xvals, na.rm = T), length = 1000)
   } else 
-    xx <- seq(min(bounds), max(bounds), length = 100)
+    xx <- seq(min(bounds, na.rm = T), max(bounds, na.rm = T), length = 100)
     
   yy <- predict(x, newdata = xx, inverse = inverse, warn = FALSE)
   plot(xvals, x_t, pch = 20, ylim = range(yy, na.rm = TRUE), xlim = range(xx), ...)

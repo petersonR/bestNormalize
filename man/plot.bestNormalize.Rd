@@ -9,8 +9,7 @@
 \title{Transformation plotting}
 \usage{
 \method{plot}{bestNormalize}(x, inverse = FALSE, bounds = NULL,
-  cols = c("green3", 1, 2, 4:6), methods = c("boxcox", "yeojohnson",
-  "orderNorm", "lambert_s", "lambert_h"), leg_loc = "top", ...)
+  cols = NULL, methods = NULL, leg_loc = "top", ...)
 
 \method{plot}{orderNorm}(x, inverse = FALSE, bounds = NULL, ...)
 
