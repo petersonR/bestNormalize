@@ -1,6 +1,6 @@
 ## Test environments 
 - win-builder (devel, release)
-- local Windows (10), R 3.6.0
+- local macOS (Mojave 10.14.6)
 - travis-ci.org Ubuntu (R-release, R-devel)
 
 ## R CMD check results

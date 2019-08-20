@@ -1,3 +1,8 @@
+# bestNormalize 1.4.2
+
+- Update citation to point to newly published work.
+- Update maintainer email to new address (same person, new affiliation). 
+
 # bestNormalize 1.4.1
 
 - Correctly subtract 1/2 from ranks in ORQ transformation to make quantile estimation unbiased (this was a bug in 1.3.0, as ranks start at 1, not zero). Divides by n instead of n+1. 
