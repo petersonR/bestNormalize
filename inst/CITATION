@@ -1,13 +1,14 @@
-citHeader("To cite 'bestNormalize' in publications use:")
+citHeader("To cite 'bestNormalize' and the orderNorm (ORQ) technique in publications use:")
 
-citEntry(entry = "Manual",
-  title        = "bestNormalize: A suite of normalizing transformations",
-  author       = personList(as.person("Ryan Andrew Peterson")),
-  year         = "2017",
-  note         = "R package version 3.4.1",
-  url          = "https://github.com/petersonR/bestNormalize",
-  textVersion  =
-  paste("Ryan A Peterson (2017).",
-        "Estimating normalization transformations with bestNormalize",
-        "URL https://github.com/petersonR/bestNormalize")
+citEntry(entry = "article",
+         title = "Ordered quantile normalization: a semiparametric transformation built for the cross-validation era",
+         author = personList(as.person("Ryan A. Peterson"), 
+		  as.person("Joseph E. Cavanaugh")),
+         year = "2019",
+	 journal = "Journal of Applied Statistics",
+	 publisher = "Taylor & Francis",
+         pages = "1-16",
+         doi = "10.1080/02664763.2019.1630372", 
+	 textVersion = 
+        "Ryan A. Peterson (2019). Ordered quantile normalization: a semiparametric transformation built for the cross-validation era. Journal of Applied Statistics, 1-16."
 )
