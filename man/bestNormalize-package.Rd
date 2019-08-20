@@ -21,6 +21,6 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ryan Andrew Peterson \email{ryan-peterson@uiowa.edu}
+\strong{Maintainer}: Ryan Andrew Peterson \email{ryan.a.peterson@cuanschutz.edu}
 
 }
