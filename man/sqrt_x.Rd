@@ -6,7 +6,7 @@
 \alias{print.sqrt_x}
 \title{sqrt(x + a) Normalization}
 \usage{
-sqrt_x(x, a = NULL, standardize = TRUE, eps = 0.001)
+sqrt_x(x, a = NULL, standardize = TRUE)
 
 \method{predict}{sqrt_x}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -15,12 +15,10 @@ sqrt_x(x, a = NULL, standardize = TRUE, eps = 0.001)
 \arguments{
 \item{x}{A vector to normalize with with x}
 
-\item{a}{The constant to add to x (defaults to max(0, -min(x) + eps))}
+\item{a}{The constant to add to x (defaults to max(0, -min(x)))}
 
 \item{standardize}{If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal}
-
-\item{eps}{The allowed error in the expression for the selected a}
 
 \item{object}{an object of class 'sqrt_x'}
 
@@ -51,7 +49,7 @@ Perform a sqrt (x+a) normalization transformation
   context of bestNormalize, such that it creates a transformation that can be
   estimated and applied to new data via the \code{predict} function. The
   parameter a is essentially estimated by the training set by default
-  (estimated as the minimum possible to some extent epsilon), while the base
+  (estimated as the minimum possible), while the base
   must be specified beforehand.
 }
 \examples{

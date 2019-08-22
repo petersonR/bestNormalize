@@ -1,3 +1,13 @@
+# bestNormalize 1.4.2.9000
+
+- Slight bug fix to square root transformation (a = 0 by default, not .001)
+- Slight bug fix in the "quiet" argument for bestNormalize with LOO
+- `exp_x` having trouble with `standardize` option, so added option `allow_exp_x` to 
+  `bestNormalize` to allow a workaround, and changed it so if any infinite values
+  are produced during the transformation, exp_x will not work (that way, `bestNormalize`
+  will not include this in its results).
+- Progress bar will now only displayed if `quiet` is `FALSE` and `length(x) > 2000`
+
 # bestNormalize 1.4.2
 
 - Update citation to point to newly published work.

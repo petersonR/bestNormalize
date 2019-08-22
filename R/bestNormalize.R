@@ -13,6 +13,8 @@
 #'   applied (see details)
 #' @param allow_lambert_h Set to TRUE if the lambertW of type "h"  should be
 #'   applied (see details)
+#' @param allow_exp Set to TRUE if the exponential transformation should be 
+#'   applied (sometimes this will cause errors with heavy right skew)
 #' @param standardize If TRUE, the transformed values are also centered and
 #'   scaled, such that the transformation attempts a standard normal. This will
 #'   not change the normality statistic.
@@ -126,6 +128,7 @@ bestNormalize <- function(x, standardize = TRUE,
                           allow_orderNorm = TRUE,
                           allow_lambert_s = FALSE,
                           allow_lambert_h = FALSE,
+                          allow_exp = TRUE,
                           out_of_sample = TRUE, 
                           cluster = NULL, 
                           k = 10, 
@@ -135,8 +138,11 @@ bestNormalize <- function(x, standardize = TRUE,
                           quiet = FALSE) {
   stopifnot(is.numeric(x))
   x.t <- list()
-  methods <- c("no_transform", "arcsinh_x", 'boxcox', "exp_x", 
+  methods <- c("no_transform", "arcsinh_x", 'boxcox', 
                "log_x", "sqrt_x", 'yeojohnson')
+  
+  if(allow_exp) 
+    methods <- c(methods, "exp_x")
   if (allow_orderNorm) 
     methods <- c(methods, 'orderNorm')
   if(allow_lambert_s)
@@ -165,7 +171,7 @@ bestNormalize <- function(x, standardize = TRUE,
     args_i <- args[[i]]
     args_i$x <- x
   
-     trans_i <- try(do.call(method_calls[i], args_i), silent = TRUE)
+    trans_i <- try(do.call(method_calls[i], args_i), silent = TRUE)
     if(is.character(trans_i)) {
       if(warn) 
         warning(paste(method_names[i], ' did not work; ', trans_i))
@@ -274,7 +280,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
   # Perform in this session if cluster unspecified
   if(is.null(cluster)) {
     
-    if(!quiet) pb <- dplyr::progress_estimated(r*k)
+    if(!quiet & length(x) > 2000) pb <- dplyr::progress_estimated(r*k)
     
     reps <- lapply(1:r, function(rep) {
       resamples <- create_folds(x, k)
@@ -294,7 +300,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
             pstats[i, m] <- p$stat / p$df
           }
         }
-        if(!quiet) pb$tick()$print()
+        if(!quiet & length(x) > 2000) pb$tick()$print()
       }
       colnames(pstats) <- norm_methods
       rownames(pstats) <- paste0("Rep", rep, "Fold", 1:k)
@@ -312,7 +318,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
     doParallel::registerDoParallel(cluster)
     
     opts <- list()
-    if(!quiet) {
+    if(!quiet & length(x) > 2000) {
       pb <- dplyr::progress_estimated(k*r)
       
       progress <- function() pb$tick()$print()
@@ -349,7 +355,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
      ip
     }
   }
-  if(!quiet) cat("\n")
+  if(!quiet & length(x) > 2000) cat("\n")
   colnames(reps) <- norm_methods
   list(norm_stats = colMeans(reps), oos_preds = as.data.frame(reps))
 }
@@ -371,12 +377,12 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
   # Perform in this session if cluster unspecified
   if(is.null(cluster)) {
     
-    if(!quiet & n > 500) 
+    if(!quiet & length(x) > 2000) 
       cat("Note: passing a cluster (?makeCluster) to bestNormalize can speed up CV process\n")
     
     # For every subject and normalization method, create prediction
     p <- matrix(NA, ncol = length(norm_methods), nrow = n)
-    pb <- dplyr::progress_estimated(n)
+    if(!quiet & length(x) > 2000) pb <- dplyr::progress_estimated(n)
     for(i in 1:n) {
       for(m in 1:length(norm_methods)) {
         args <- list(x = x[-i])
@@ -391,7 +397,7 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
           
         }
       }
-      pb$tick()$print()
+      if(!quiet & length(x) > 2000) pb$tick()$print()
     }
     colnames(p) <- norm_methods
   
@@ -406,7 +412,7 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
     doParallel::registerDoParallel(cluster)
     
     opts <- list()
-    if(!quiet) {
+    if(!quiet & length(x) > 2000) {
       pb <- dplyr::progress_estimated(n)
       
       progress <- function() pb$tick()$print()
@@ -441,6 +447,6 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
     ptest <- nortest::pearson.test(xx)
     ptest$statistic / ptest$df
   })
-  if(!quiet) cat("\n")
+  if(!quiet & length(x) > 2000) cat("\n")
   list(norm_stats = normstats, oos_preds = as.data.frame(p))
 }

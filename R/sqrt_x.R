@@ -7,8 +7,7 @@
 #' @param x A vector to normalize with with x
 #' @param standardize If TRUE, the transformed values are also centered and
 #'   scaled, such that the transformation attempts a standard normal
-#' @param a The constant to add to x (defaults to max(0, -min(x) + eps))
-#' @param eps The allowed error in the expression for the selected a
+#' @param a The constant to add to x (defaults to max(0, -min(x)))
 #' @param object an object of class 'sqrt_x'
 #' @param newdata a vector of data to be (potentially reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
@@ -17,7 +16,7 @@
 #'   context of bestNormalize, such that it creates a transformation that can be
 #'   estimated and applied to new data via the \code{predict} function. The
 #'   parameter a is essentially estimated by the training set by default
-#'   (estimated as the minimum possible to some extent epsilon), while the base
+#'   (estimated as the minimum possible), while the base
 #'   must be specified beforehand.
 #'
 #' @return A list of class \code{sqrt_x} with elements \item{x.t}{transformed
@@ -44,14 +43,14 @@
 #'
 #' @importFrom stats sd
 #' @export
-sqrt_x <- function(x, a = NULL, standardize = TRUE, eps = .001) {
+sqrt_x <- function(x, a = NULL, standardize = TRUE) {
   stopifnot(is.numeric(x))
   
-  min_a <- max(0, -(min(x, na.rm = TRUE) - eps))
+  min_a <- max(0, -(min(x, na.rm = TRUE)))
   if(!length(a)) 
     a <- min_a
   if(a < min_a) {
-    warning("Setting a <  max(0, -(min(x) - eps)) can lead to transformation issues",
+    warning("Setting a <  max(0, -(min(x))) can lead to transformation issues",
             "Standardize set to FALSE")
     standardize <- FALSE
   }

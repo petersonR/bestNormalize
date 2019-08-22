@@ -7,7 +7,7 @@
 \title{Calculate and perform best normalizing transformation}
 \usage{
 bestNormalize(x, standardize = TRUE, allow_orderNorm = TRUE,
-  allow_lambert_s = FALSE, allow_lambert_h = FALSE,
+  allow_lambert_s = FALSE, allow_lambert_h = FALSE, allow_exp = TRUE,
   out_of_sample = TRUE, cluster = NULL, k = 10, r = 5,
   loo = FALSE, warn = TRUE, quiet = FALSE)
 
@@ -30,6 +30,9 @@ applied (see details)}
 
 \item{allow_lambert_h}{Set to TRUE if the lambertW of type "h"  should be
 applied (see details)}
+
+\item{allow_exp}{Set to TRUE if the exponential transformation should be 
+applied (sometimes this will cause errors with heavy right skew)}
 
 \item{out_of_sample}{if FALSE, estimates quickly in-sample performance}
 
