@@ -77,6 +77,7 @@ yeojohnson <- function(x, eps = .001, standardize = TRUE, ...) {
     mean = mu,
     sd = sigma,
     lambda = lambda,
+    eps = eps,
     n = length(x.t) - sum(na_idx),
     norm_stat = unname(ptest$statistic / ptest$df),
     standardize = standardize

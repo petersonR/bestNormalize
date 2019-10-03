@@ -1,5 +1,7 @@
 # bestNormalize 1.4.2.9000
 
+
+- Allow options to be passed through bestNormalize to specific transformation functions 
 - Slight bug fix to square root transformation (a = 0 by default, not .001)
 - Slight bug fix in the "quiet" argument for bestNormalize with LOO
 - `exp_x` having trouble with `standardize` option, so added option `allow_exp_x` to 

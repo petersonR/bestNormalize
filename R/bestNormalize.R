@@ -13,22 +13,26 @@
 #'   applied (see details)
 #' @param allow_lambert_h Set to TRUE if the lambertW of type "h"  should be
 #'   applied (see details)
-#' @param allow_exp Set to TRUE if the exponential transformation should be 
+#' @param allow_exp Set to TRUE if the exponential transformation should be
 #'   applied (sometimes this will cause errors with heavy right skew)
 #' @param standardize If TRUE, the transformed values are also centered and
 #'   scaled, such that the transformation attempts a standard normal. This will
 #'   not change the normality statistic.
 #' @param out_of_sample if FALSE, estimates quickly in-sample performance
 #' @param cluster name of cluster set using \code{makeCluster}
-#' @param k number of folds 
+#' @param k number of folds
 #' @param r number of repeats
-#' @param loo should leave-one-out CV be used instead of repeated CV? (see details)
+#' @param loo should leave-one-out CV be used instead of repeated CV? (see
+#'   details)
 #' @param warn Should bestNormalize warn when a method doesn't work?
-#' @param quiet Should a progress-bar not be displayed for cross-validation progress?
+#' @param quiet Should a progress-bar not be displayed for cross-validation
+#'   progress?
 #' @param newdata a vector of data to be (reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
 #' @param object an object of class 'bestNormalize'
-#' @param ... additional arguments
+#' @param tr_opts a list (of lists), specifying options to be passed to each
+#'   transformation (see details)
+#' @param ... additional arguments.
 #' @details \code{bestNormalize} estimates the optimal normalizing
 #'   transformation. This transformation can be performed on new data, and
 #'   inverted, via the \code{predict} function.
@@ -40,8 +44,9 @@
 #'   \item{method}{out-of-sample or in-sample, number of folds + repeats}
 #'   \item{chosen_transform}{the chosen transformation (of appropriate class)}
 #'   \item{other_transforms}{the other transformations (of appropriate class)}
-#'   \item{oos_preds}{Out-of-sample predictions (if loo == TRUE) or normalization stats}
-#'   
+#'   \item{oos_preds}{Out-of-sample predictions (if loo == TRUE) or
+#'   normalization stats}
+#'
 #'   The \code{predict} function returns the numeric value of the transformation
 #'   performed on new data, and allows for the inverse transformation as well.
 #'
@@ -54,26 +59,26 @@
 #'   forces the data to follow a normal distribution. More information on the
 #'   orderNorm technique can be found in the package vignette, or using
 #'   \code{?orderNorm}.
-#'   
 #'
-#'   Repeated cross-validation is used by default to estimate the out-of-sample performance
-#'   of each transformation if out_of_sample = TRUE. While this can take some
-#'   time, users can speed it up by creating a cluster via the \code{parallel}
-#'   package's \code{makeCluster} function, and passing the name of this cluster
-#'   to \code{bestNormalize} via the cl argument. For best performance, we
-#'   recommend the number of clusters to be set to the number of repeats r. Care
-#'   should be taken to account for the number of observations per fold; to
-#'   small a number and the estimated normality statistic could be inaccurate,
-#'   or at least suffer from high variability.
-#'   
-#'   
+#'
+#'   Repeated cross-validation is used by default to estimate the out-of-sample
+#'   performance of each transformation if out_of_sample = TRUE. While this can
+#'   take some time, users can speed it up by creating a cluster via the
+#'   \code{parallel} package's \code{makeCluster} function, and passing the name
+#'   of this cluster to \code{bestNormalize} via the cl argument. For best
+#'   performance, we recommend the number of clusters to be set to the number of
+#'   repeats r. Care should be taken to account for the number of observations
+#'   per fold; to small a number and the estimated normality statistic could be
+#'   inaccurate, or at least suffer from high variability.
+#'
+#'
 #'   As of version 1.3, users can use leave-one-out cross-validation as well for
 #'   each method by setting \code{loo} to \code{TRUE}.  This will take a lot of
 #'   time for bigger vectors, but it will have the most accurate estimate of
 #'   normalization efficacy. Note that if this method is selected, arguments
 #'   \code{k, r} are ignored. This method will still work in parallel with the
 #'   \code{cl} argument.
-#'   
+#'
 #'
 #'   NOTE: Only the Lambert technique of type = "s" (skew) ensures that the
 #'   transformation is consistently 1-1, so it is the only method currently used
@@ -81,11 +86,15 @@
 #'   having this estimate 1-1 transform. These alternative types are effective
 #'   when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
 #'   Additionally, as of v. 1.2.0, Lambert of type "s" is not used by default in
-#'   \code{bestNormalize()} since it uses multiple threads on some Linux systems,
-#'   which is not allowed on CRAN checks. Set allow_lambert_s = TRUE in order to 
-#'   test this transformation as well. Note that the Lambert of type "h" can also
-#'   be done by setting allow_lambert_h = TRUE, however this can take 
-#'   significantly longer to run.
+#'   \code{bestNormalize()} since it uses multiple threads on some Linux
+#'   systems, which is not allowed on CRAN checks. Set allow_lambert_s = TRUE in
+#'   order to test this transformation as well. Note that the Lambert of type
+#'   "h" can also be done by setting allow_lambert_h = TRUE, however this can
+#'   take significantly longer to run.
+#'   
+#'   Use \code{tr_opts} in order to set options for each transformation. For
+#'   instance, if you want to overide the default a selection for \code{log_x},
+#'   set \code{tr_opts$log_x = list(a = 1)}.
 #'
 #' @examples
 #'
@@ -135,7 +144,8 @@ bestNormalize <- function(x, standardize = TRUE,
                           r = 5, 
                           loo = FALSE,
                           warn = TRUE, 
-                          quiet = FALSE) {
+                          quiet = FALSE, 
+                          tr_opts = list()) {
   stopifnot(is.numeric(x))
   x.t <- list()
   methods <- c("no_transform", "arcsinh_x", 'boxcox', 
@@ -166,6 +176,20 @@ bestNormalize <- function(x, standardize = TRUE,
   
   method_names <- methods
   method_calls <- gsub("_s|_h", "", methods)
+  names(args) <- methods
+  
+  ## Set transformation options (if any)
+  if(length(tr_opts)) {
+    stopifnot(is.list(tr_opts))
+    if(any(nr <- !(names(tr_opts) %in% names(args))))
+      stop(names(tr_opts)[nr], " not recognized")
+    
+    for(i in 1:length(tr_opts)) {
+      tr <- names(tr_opts)[i]
+      args[[tr]] <- c(args[[tr]], tr_opts[[tr]])
+    }
+  }
+  
 
   for(i in 1:length(methods)) {
     args_i <- args[[i]]

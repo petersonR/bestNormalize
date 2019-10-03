@@ -83,6 +83,7 @@ log_x <- function(x, a = NULL, b = 10, standardize = TRUE, eps = .001, warn = TR
     sd = sigma,
     a = a,
     b = b,
+    eps = eps,
     n = length(x.t) - sum(is.na(x)),
     norm_stat = unname(ptest$statistic / ptest$df),
     standardize = standardize
