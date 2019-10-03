@@ -4,6 +4,7 @@
 - Allow options to be passed through bestNormalize to specific transformation functions 
 - Slight bug fix to square root transformation (a = 0 by default, not .001)
 - Slight bug fix in the "quiet" argument for bestNormalize with LOO
+- Slight bug fix to `plot.bestNormalize` which was improperly labeling transformations
 - `exp_x` having trouble with `standardize` option, so added option `allow_exp_x` to 
   `bestNormalize` to allow a workaround, and changed it so if any infinite values
   are produced during the transformation, exp_x will not work (that way, `bestNormalize`

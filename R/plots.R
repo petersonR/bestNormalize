@@ -80,7 +80,7 @@ plot.bestNormalize <- function(x, inverse = FALSE, bounds = NULL,
   
   lapply(1:length(ys), function(i) {lines(xx, ys[[i]], col = cols[i + 1], lwd = 2, ...)})
   
-  labs <- c(class(x$chosen_transform), methods)
+  labs <- c(class(x$chosen_transform)[1], methods)
   
   legend(leg_loc, labs, col = cols, bty = 'n', lwd = 2)
   if(!inverse) 
