@@ -29,7 +29,7 @@ Imports:
     dplyr,
     doParallel,
     foreach,
-    doRNG (>= 1.8.2)
+    doRNG 
 Suggests: 
     knitr,
     rmarkdown,
