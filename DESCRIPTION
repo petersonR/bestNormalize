@@ -1,8 +1,8 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 1.4.2.9000
-Date: 2019-08-20
+Version: 1.4.3
+Date: 2020-01-27
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan.a.peterson@cuanschutz.edu", 
                   role = c("aut", "cre"))
@@ -29,7 +29,7 @@ Imports:
     dplyr,
     doParallel,
     foreach,
-    doRNG
+    doRNG (>= 1.8.2)
 Suggests: 
     knitr,
     rmarkdown,

@@ -1,5 +1,4 @@
-# bestNormalize 1.4.2.9000
-
+# bestNormalize 1.4.3
 
 - Allow options to be passed through bestNormalize to specific transformation functions 
 - Slight bug fix to square root transformation (a = 0 by default, not .001)
