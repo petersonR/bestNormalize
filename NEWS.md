@@ -1,3 +1,5 @@
+# bestNormalize 1.4.3.9000
+
 # bestNormalize 1.4.3
 
 - Allow options to be passed through bestNormalize to specific transformation functions 
