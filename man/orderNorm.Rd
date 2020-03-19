@@ -8,8 +8,7 @@
 \usage{
 orderNorm(x, ..., warn = TRUE)
 
-\method{predict}{orderNorm}(object, newdata = NULL, inverse = FALSE,
-  warn = TRUE, ...)
+\method{predict}{orderNorm}(object, newdata = NULL, inverse = FALSE, warn = TRUE, ...)
 
 \method{print}{orderNorm}(x, ...)
 }

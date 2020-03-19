@@ -6,13 +6,24 @@
 \alias{print.bestNormalize}
 \title{Calculate and perform best normalizing transformation}
 \usage{
-bestNormalize(x, standardize = TRUE, allow_orderNorm = TRUE,
-  allow_lambert_s = FALSE, allow_lambert_h = FALSE, allow_exp = TRUE,
-  out_of_sample = TRUE, cluster = NULL, k = 10, r = 5,
-  loo = FALSE, warn = TRUE, quiet = FALSE, tr_opts = list())
+bestNormalize(
+  x,
+  standardize = TRUE,
+  allow_orderNorm = TRUE,
+  allow_lambert_s = FALSE,
+  allow_lambert_h = FALSE,
+  allow_exp = TRUE,
+  out_of_sample = TRUE,
+  cluster = NULL,
+  k = 10,
+  r = 5,
+  loo = FALSE,
+  warn = TRUE,
+  quiet = FALSE,
+  tr_opts = list()
+)
 
-\method{predict}{bestNormalize}(object, newdata = NULL,
-  inverse = FALSE, ...)
+\method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE, ...)
 
 \method{print}{bestNormalize}(x, ...)
 }

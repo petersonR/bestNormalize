@@ -8,8 +8,15 @@
 \alias{plot.lambert}
 \title{Transformation plotting}
 \usage{
-\method{plot}{bestNormalize}(x, inverse = FALSE, bounds = NULL,
-  cols = NULL, methods = NULL, leg_loc = "top", ...)
+\method{plot}{bestNormalize}(
+  x,
+  inverse = FALSE,
+  bounds = NULL,
+  cols = NULL,
+  methods = NULL,
+  leg_loc = "top",
+  ...
+)
 
 \method{plot}{orderNorm}(x, inverse = FALSE, bounds = NULL, ...)
 

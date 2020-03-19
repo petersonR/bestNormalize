@@ -8,8 +8,7 @@
 \usage{
 no_transform(x, standardize = FALSE, warn = TRUE)
 
-\method{predict}{no_transform}(object, newdata = NULL, inverse = FALSE,
-  ...)
+\method{predict}{no_transform}(object, newdata = NULL, inverse = FALSE, ...)
 
 \method{print}{no_transform}(x, ...)
 }

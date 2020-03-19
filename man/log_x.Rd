@@ -6,8 +6,7 @@
 \alias{print.log_x}
 \title{Log(x + a) Transformation}
 \usage{
-log_x(x, a = NULL, b = 10, standardize = TRUE, eps = 0.001,
-  warn = TRUE)
+log_x(x, a = NULL, b = 10, standardize = TRUE, eps = 0.001, warn = TRUE)
 
 \method{predict}{log_x}(object, newdata = NULL, inverse = FALSE, ...)
 
