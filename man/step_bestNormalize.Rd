@@ -20,62 +20,69 @@ step_bestNormalize(
 \method{tidy}{step_bestNormalize}(x, ...)
 }
 \arguments{
-\item{...}{One or more selector functions to choose which
-variables are affected by the step. See [selections()]
-for more details. For the `tidy` method, these are not
-currently used.}
+\item{recipe}{A formula or recipe}
 
-\item{role}{Not used by this step since no new variables are
-created.}
+\item{...}{One or more selector functions to choose which variables are
+affected by the step. See [selections()] for more details. For the `tidy`
+method, these are not currently used.}
 
-\item{transform_info}{A numeric vector of transformation values. This (was transform_info)
-is `NULL` until computed by [prep.recipe()].}
+\item{role}{Not used by this step since no new variables are created.}
+
+\item{trained}{For recipes functionality}
+
+\item{transform_info}{A numeric vector of transformation values. This (was
+transform_info) is `NULL` until computed by [prep.recipe()].}
 
 \item{transform_options}{options to be passed to bestNormalize}
 
-\item{num_unique}{An integer where data that have less possible
-values will not be evaluate for a transformation.}
+\item{num_unique}{An integer where data that have less possible values will
+not be evaluate for a transformation.}
+
+\item{skip}{For recipes functionality}
+
+\item{id}{For recipes functionality}
 
 \item{x}{A `step_bestNormalize` object.}
 }
 \value{
-An updated version of `recipe` with the new step
- added to the sequence of existing steps (if any). For the
- `tidy` method, a tibble with columns `terms` (the
- selectors or variables selected) and `value` (the
- lambda estimate).
+An updated version of `recipe` with the new step added to the
+  sequence of existing steps (if any). For the `tidy` method, a tibble with
+  columns `terms` (the selectors or variables selected) and `value` (the
+  lambda estimate).
 }
 \description{
 `step_bestNormalize` creates a specification of a recipe step
   (see `recipes` package) that will transform data using the best of a suite
-  of normalization transformations. **continue here**
+  of normalization transformations estimated (by default) using
+  cross-validation.
 }
 \details{
-The bestnormalize transformation can be used to rescale a variable to be more
- similar to a normal distribution. See `?bestNormalize` for more information; `step_bestNormalize` is 
- the implementation of `bestNormalize` in the `recipes` context.
+The bestnormalize transformation can be used to rescale a variable
+  to be more similar to a normal distribution. See `?bestNormalize` for more
+  information; `step_bestNormalize` is the implementation of `bestNormalize`
+  in the `recipes` context.
 }
 \examples{
 
-rec <- recipe(~ ., data = as.data.frame(state.x77))
+library(recipes)
+rec <- recipe(~ ., data = as.data.frame(iris))
 
 bn_trans <- step_bestNormalize(rec, all_numeric())
 
-bn_estimates <- prep(bn_trans, training = as.data.frame(state.x77))
+bn_estimates <- prep(bn_trans, training = as.data.frame(iris))
 
-bn_data <- bake(bn_estimates, as.data.frame(state.x77))
+bn_data <- bake(bn_estimates, as.data.frame(iris))
 
-plot(density(state.x77[, "Illiteracy"]), main = "before")
-plot(density(bn_data$Illiteracy), main = "after")
+plot(density(iris[, "Petal.Length"]), main = "before")
+plot(density(bn_data$Petal.Length), main = "after")
 
 tidy(bn_trans, number = 1)
 tidy(bn_estimates, number = 1)
 
-
 }
 \seealso{
-\code{\link[bestNormalize]{bestNormalize}} \code{\link{orderNorm}}, [recipe()]
-  [prep.recipe()] [bake.recipe()]
+\code{\link[bestNormalize]{bestNormalize}} \code{\link{orderNorm}},
+  [recipe()] [prep.recipe()] [bake.recipe()]
 }
 \concept{preprocessing}
 \concept{transformation_methods}

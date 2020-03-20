@@ -20,43 +20,50 @@ step_orderNorm(
 \method{tidy}{step_orderNorm}(x, ...)
 }
 \arguments{
-\item{...}{One or more selector functions to choose which
-variables are affected by the step. See [selections()]
-for more details. For the `tidy` method, these are not
-currently used.}
+\item{recipe}{A formula or recipe}
 
-\item{role}{Not used by this step since no new variables are
-created.}
+\item{...}{One or more selector functions to choose which variables are
+affected by the step. See [selections()] for more details. For the `tidy`
+method, these are not currently used.}
 
-\item{transform_info}{A numeric vector of transformation values. This (was transform_info)
-is `NULL` until computed by [prep.recipe()].}
+\item{role}{Not used by this step since no new variables are created.}
+
+\item{trained}{For recipes functionality}
+
+\item{transform_info}{A numeric vector of transformation values. This (was
+transform_info) is `NULL` until computed by [prep.recipe()].}
 
 \item{transform_options}{options to be passed to orderNorm}
 
-\item{num_unique}{An integer where data that have less possible
-values will not be evaluate for a transformation.}
+\item{num_unique}{An integer where data that have less possible values will
+not be evaluate for a transformation.}
+
+\item{skip}{For recipes functionality}
+
+\item{id}{For recipes functionality}
 
 \item{x}{A `step_orderNorm` object.}
 }
 \value{
-An updated version of `recipe` with the new step
- added to the sequence of existing steps (if any). For the
- `tidy` method, a tibble with columns `terms` (the
- selectors or variables selected) and `value` (the
- lambda estimate).
+An updated version of `recipe` with the new step added to the
+  sequence of existing steps (if any). For the `tidy` method, a tibble with
+  columns `terms` (the selectors or variables selected) and `value` (the
+  lambda estimate).
 }
 \description{
-`step_orderNorm` creates a specification of a recipe step
-  (see `recipes` package) that will transform data using the best of a suite
-  of normalization transformations. **continue here**
+`step_orderNorm` creates a specification of a recipe step (see
+  `recipes` package) that will transform data using the ORQ (orderNorm)
+  transformation, which approximates the "true" normalizing tranformation if
+  one exists. This is considerably faster than `step_bestNormalize`.
 }
 \details{
-The orderNorm transformation can be used to rescale a variable to be more
- similar to a normal distribution. See `?orderNorm` for more information; `step_orderNorm` is 
- the implementation of `orderNorm` in the `recipes` context.
+The orderNorm transformation can be used to rescale a variable to be
+  more similar to a normal distribution. See `?orderNorm` for more
+  information; `step_orderNorm` is the implementation of `orderNorm` in the
+  `recipes` context.
 }
 \examples{
-
+library(recipes)
 rec <- recipe(~ ., data = as.data.frame(state.x77))
 
 bn_trans <- step_orderNorm(rec, all_numeric())
@@ -74,12 +81,13 @@ tidy(bn_estimates, number = 1)
 
 }
 \references{
-Ryan A. Peterson (2019). Ordered quantile normalization: a semiparametric
-  transformation built for the cross-validation era. Journal of Applied Statistics, 1-16.
+Ryan A. Peterson (2019). Ordered quantile normalization: a
+  semiparametric transformation built for the cross-validation era. Journal
+  of Applied Statistics, 1-16.
 }
 \seealso{
-\code{\link[bestNormalize]{orderNorm}} \code{\link{bestNormalize}}, [recipe()]
-  [prep.recipe()] [bake.recipe()]
+\code{\link[bestNormalize]{orderNorm}} \code{\link{bestNormalize}},
+  [recipe()] [prep.recipe()] [bake.recipe()]
 }
 \concept{preprocessing}
 \concept{transformation_methods}

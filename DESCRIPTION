@@ -30,7 +30,8 @@ Imports:
     doParallel,
     foreach,
     doRNG,
-    recipes
+    recipes,
+    tibble
 Suggests: 
     knitr,
     rmarkdown,

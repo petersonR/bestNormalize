@@ -1,57 +1,63 @@
 #' ORQ normalization (orderNorm) for \code{recipes} implementation
 #'
-#' @description `step_orderNorm` creates a specification of a recipe step
-#'   (see `recipes` package) that will transform data using the best of a suite
-#'   of normalization transformations. **continue here**
+#' @description `step_orderNorm` creates a specification of a recipe step (see
+#'   `recipes` package) that will transform data using the ORQ (orderNorm)
+#'   transformation, which approximates the "true" normalizing tranformation if
+#'   one exists. This is considerably faster than `step_bestNormalize`.
 #'
-#' @param ... One or more selector functions to choose which
-#'  variables are affected by the step. See [selections()]
-#'  for more details. For the `tidy` method, these are not
-#'  currently used.
-#' @param role Not used by this step since no new variables are
-#'  created.
-#' @param transform_info A numeric vector of transformation values. This (was transform_info)
-#'  is `NULL` until computed by [prep.recipe()].
+#' @param recipe A formula or recipe
+#' @param ... One or more selector functions to choose which variables are
+#'   affected by the step. See [selections()] for more details. For the `tidy`
+#'   method, these are not currently used.
+#' @param role Not used by this step since no new variables are created.
+#' @param transform_info A numeric vector of transformation values. This (was
+#'   transform_info) is `NULL` until computed by [prep.recipe()].
 #' @param transform_options options to be passed to orderNorm
-#' @param num_unique An integer where data that have less possible
-#'  values will not be evaluate for a transformation.
-#' @return An updated version of `recipe` with the new step
-#'  added to the sequence of existing steps (if any). For the
-#'  `tidy` method, a tibble with columns `terms` (the
-#'  selectors or variables selected) and `value` (the
-#'  lambda estimate).
+#' @param num_unique An integer where data that have less possible values will
+#'   not be evaluate for a transformation.
+#' @param trained For recipes functionality
+#' @param skip For recipes functionality
+#' @param id For recipes functionality
+#'
+#'
+#' @return An updated version of `recipe` with the new step added to the
+#'   sequence of existing steps (if any). For the `tidy` method, a tibble with
+#'   columns `terms` (the selectors or variables selected) and `value` (the
+#'   lambda estimate).
 #' @concept preprocessing
 #' @concept transformation_methods
 #' @export
-#' 
-#' @details The orderNorm transformation can be used to rescale a variable to be more
-#'  similar to a normal distribution. See `?orderNorm` for more information; `step_orderNorm` is 
-#'  the implementation of `orderNorm` in the `recipes` context. 
+#'
+#' @details The orderNorm transformation can be used to rescale a variable to be
+#'   more similar to a normal distribution. See `?orderNorm` for more
+#'   information; `step_orderNorm` is the implementation of `orderNorm` in the
+#'   `recipes` context.
 #'
 #' @examples
+#' library(recipes)
+#' rec <- recipe(~ ., data = as.data.frame(iris))
 #'
-#' rec <- recipe(~ ., data = as.data.frame(state.x77))
+#' orq_trans <- step_orderNorm(rec, all_numeric())
 #'
-#' bn_trans <- step_orderNorm(rec, all_numeric())
+#' orq_estimates <- prep(bn_trans, training = as.data.frame(iris))
 #'
-#' bn_estimates <- prep(bn_trans, training = as.data.frame(state.x77))
+#' orq_data <- bake(bn_estimates, as.data.frame(iris))
 #'
-#' bn_data <- bake(bn_estimates, as.data.frame(state.x77))
+#' plot(density(iris[, "Petal.Length"]), main = "before")
+#' plot(density(bn_data$Petal.Length), main = "after")
 #'
-#' plot(density(state.x77[, "Illiteracy"]), main = "before")
-#' plot(density(bn_data$Illiteracy), main = "after")
-#'
-#' tidy(bn_trans, number = 1)
-#' tidy(bn_estimates, number = 1)
+#' tidy(orq_trans, number = 1)
+#' tidy(orq_estimates, number = 1)
 #'
 #'
-#' @seealso  \code{\link[bestNormalize]{orderNorm}} \code{\link{bestNormalize}}, [recipe()]
-#'   [prep.recipe()] [bake.recipe()]
-#'   
-#' @references Ryan A. Peterson (2019). Ordered quantile normalization: a semiparametric
-#'   transformation built for the cross-validation era. Journal of Applied Statistics, 1-16.
-#'   
-#' @importFrom recipes recipe
+#' @seealso  \code{\link[bestNormalize]{orderNorm}} \code{\link{bestNormalize}},
+#'   [recipe()] [prep.recipe()] [bake.recipe()]
+#'
+#' @references Ryan A. Peterson (2019). Ordered quantile normalization: a
+#'   semiparametric transformation built for the cross-validation era. Journal
+#'   of Applied Statistics, 1-16.
+#'
+#' @importFrom recipes recipe rand_id add_step ellipse_check step
 #'   
 step_orderNorm <-
   function(recipe,
@@ -94,6 +100,7 @@ step_orderNorm_new <-
   }
 
 #' @export
+#' @importFrom recipes prep terms_select check_type
 prep.step_orderNorm <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names])
@@ -119,6 +126,7 @@ prep.step_orderNorm <- function(x, training, info = NULL, ...) {
 }
 
 #' @export
+#' @importFrom tibble as_tibble
 bake.step_orderNorm <- function(object, new_data, ...) {
   if (length(object$transform_info) == 0)
     return(as_tibble(new_data))
@@ -128,7 +136,9 @@ bake.step_orderNorm <- function(object, new_data, ...) {
       predict(object$transform_info[[param[i]]], getElement(new_data, param[i]), warn = FALSE)
   as_tibble(new_data)
 }
+
 #' @export
+#' @importFrom recipes printer
 print.step_orderNorm <-
   function(x, width = max(20, options()$width - 35), ...) {
     cat("orderNorm transformation on ", sep = "")
@@ -158,6 +168,8 @@ if(is.null(transform_options$warn))
 #' @rdname step_orderNorm
 #' @param x A `step_orderNorm` object.
 #' @export
+#' @importFrom recipes tidy is_trained sel2char
+#' @importFrom tibble tibble
 tidy.step_orderNorm <- function(x, ...) {
   if (is_trained(x)) {
     res <- tibble(terms = names(x$transform_info),

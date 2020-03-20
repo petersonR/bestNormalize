@@ -2,53 +2,59 @@
 #'
 #' @description `step_bestNormalize` creates a specification of a recipe step
 #'   (see `recipes` package) that will transform data using the best of a suite
-#'   of normalization transformations. **continue here**
+#'   of normalization transformations estimated (by default) using
+#'   cross-validation.
 #'
-#' @param ... One or more selector functions to choose which
-#'  variables are affected by the step. See [selections()]
-#'  for more details. For the `tidy` method, these are not
-#'  currently used.
-#' @param role Not used by this step since no new variables are
-#'  created.
-#' @param transform_info A numeric vector of transformation values. This (was transform_info)
-#'  is `NULL` until computed by [prep.recipe()].
+#' @param recipe A formula or recipe
+#' @param ... One or more selector functions to choose which variables are
+#'   affected by the step. See [selections()] for more details. For the `tidy`
+#'   method, these are not currently used.
+#' @param role Not used by this step since no new variables are created.
+#' @param transform_info A numeric vector of transformation values. This (was
+#'   transform_info) is `NULL` until computed by [prep.recipe()].
 #' @param transform_options options to be passed to bestNormalize
-#' @param num_unique An integer where data that have less possible
-#'  values will not be evaluate for a transformation.
-#' @return An updated version of `recipe` with the new step
-#'  added to the sequence of existing steps (if any). For the
-#'  `tidy` method, a tibble with columns `terms` (the
-#'  selectors or variables selected) and `value` (the
-#'  lambda estimate).
+#' @param num_unique An integer where data that have less possible values will
+#'   not be evaluate for a transformation.
+#' @param trained For recipes functionality
+#' @param skip For recipes functionality
+#' @param id For recipes functionality
+#'
+#'
+#'
+#' @return An updated version of `recipe` with the new step added to the
+#'   sequence of existing steps (if any). For the `tidy` method, a tibble with
+#'   columns `terms` (the selectors or variables selected) and `value` (the
+#'   lambda estimate).
 #' @concept preprocessing
 #' @concept transformation_methods
 #' @export
-#' 
-#' @details The bestnormalize transformation can be used to rescale a variable to be more
-#'  similar to a normal distribution. See `?bestNormalize` for more information; `step_bestNormalize` is 
-#'  the implementation of `bestNormalize` in the `recipes` context. 
+#'
+#' @details The bestnormalize transformation can be used to rescale a variable
+#'   to be more similar to a normal distribution. See `?bestNormalize` for more
+#'   information; `step_bestNormalize` is the implementation of `bestNormalize`
+#'   in the `recipes` context.
 #'
 #' @examples
 #'
-#' rec <- recipe(~ ., data = as.data.frame(state.x77))
+#' library(recipes)
+#' rec <- recipe(~ ., data = as.data.frame(iris))
 #'
 #' bn_trans <- step_bestNormalize(rec, all_numeric())
 #'
-#' bn_estimates <- prep(bn_trans, training = as.data.frame(state.x77))
+#' bn_estimates <- prep(bn_trans, training = as.data.frame(iris))
 #'
-#' bn_data <- bake(bn_estimates, as.data.frame(state.x77))
+#' bn_data <- bake(bn_estimates, as.data.frame(iris))
 #'
-#' plot(density(state.x77[, "Illiteracy"]), main = "before")
-#' plot(density(bn_data$Illiteracy), main = "after")
+#' plot(density(iris[, "Petal.Length"]), main = "before")
+#' plot(density(bn_data$Petal.Length), main = "after")
 #'
 #' tidy(bn_trans, number = 1)
 #' tidy(bn_estimates, number = 1)
 #'
+#' @seealso  \code{\link[bestNormalize]{bestNormalize}} \code{\link{orderNorm}},
+#'   [recipe()] [prep.recipe()] [bake.recipe()]
 #'
-#' @seealso  \code{\link[bestNormalize]{bestNormalize}} \code{\link{orderNorm}}, [recipe()]
-#'   [prep.recipe()] [bake.recipe()]
-#'   
-#' @importFrom recipes recipe
+#' @importFrom recipes recipe rand_id add_step ellipse_check step
 #'   
 step_bestNormalize <-
   function(recipe,
@@ -91,7 +97,7 @@ step_bestNormalize_new <-
   }
 
 #' @export
-#' @importFrom recipes prep
+#' @importFrom recipes prep terms_select check_type
 prep.step_bestNormalize <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names])
@@ -118,6 +124,7 @@ prep.step_bestNormalize <- function(x, training, info = NULL, ...) {
 
 #' @export
 #' @importFrom recipes bake
+#' @importFrom tibble as_tibble
 bake.step_bestNormalize <- function(object, new_data, ...) {
   if (length(object$transform_info) == 0)
     return(as_tibble(new_data))
@@ -128,6 +135,7 @@ bake.step_bestNormalize <- function(object, new_data, ...) {
   as_tibble(new_data)
 }
 #' @export
+#' @importFrom recipes printer
 print.step_bestNormalize <-
   function(x, width = max(20, options()$width - 35), ...) {
     cat("bestNormalize transformation on ", sep = "")
@@ -161,7 +169,9 @@ estimate_bn <- function(dat,
 #' @rdname step_bestNormalize
 #' @param x A `step_bestNormalize` object.
 #' @export
-#' @importFrom recipes tidy
+#' @importFrom recipes tidy is_trained sel2char
+#' @importFrom tibble tibble
+#' 
 tidy.step_bestNormalize <- function(x, ...) {
   if (is_trained(x)) {
     res <- tibble(terms = names(x$transform_info),
