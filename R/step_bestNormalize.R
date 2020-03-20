@@ -47,6 +47,9 @@
 #'
 #' @seealso  \code{\link[bestNormalize]{bestNormalize}} \code{\link{orderNorm}}, [recipe()]
 #'   [prep.recipe()] [bake.recipe()]
+#'   
+#' @importFrom recipes recipe
+#'   
 step_bestNormalize <-
   function(recipe,
            ...,
@@ -121,10 +124,10 @@ bake.step_bestNormalize <- function(object, new_data, ...) {
   param <- names(object$transform_info)
   for (i in seq_along(object$transform_info))
     new_data[, param[i]] <- 
-      predict(object$transform_info[[param[i]]], getElement(new_data, param[i]))
+      predict(object$transform_info[[param[i]]], getElement(new_data, param[i]), warn = FALSE)
   as_tibble(new_data)
 }
-
+#' @export
 print.step_bestNormalize <-
   function(x, width = max(20, options()$width - 35), ...) {
     cat("bestNormalize transformation on ", sep = "")

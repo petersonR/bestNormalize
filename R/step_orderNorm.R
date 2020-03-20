@@ -51,6 +51,8 @@
 #' @references Ryan A. Peterson (2019). Ordered quantile normalization: a semiparametric
 #'   transformation built for the cross-validation era. Journal of Applied Statistics, 1-16.
 #'   
+#' @importFrom recipes recipe
+#'   
 step_orderNorm <-
   function(recipe,
            ...,
@@ -123,10 +125,10 @@ bake.step_orderNorm <- function(object, new_data, ...) {
   param <- names(object$transform_info)
   for (i in seq_along(object$transform_info))
     new_data[, param[i]] <- 
-      predict(object$transform_info[[param[i]]], getElement(new_data, param[i]))
+      predict(object$transform_info[[param[i]]], getElement(new_data, param[i]), warn = FALSE)
   as_tibble(new_data)
 }
-
+#' @export
 print.step_orderNorm <-
   function(x, width = max(20, options()$width - 35), ...) {
     cat("orderNorm transformation on ", sep = "")
