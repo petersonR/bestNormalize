@@ -143,7 +143,7 @@ bestNormalize <- function(x, standardize = TRUE,
                           k = 10, 
                           r = 5, 
                           loo = FALSE,
-                          warn = TRUE, 
+                          warn = FALSE, 
                           quiet = FALSE, 
                           tr_opts = list()) {
   stopifnot(is.numeric(x))
@@ -170,7 +170,7 @@ bestNormalize <- function(x, standardize = TRUE,
       val[["type"]] <- "s"
     } else if(i == "lambert_h") {
       val[["type"]] <- "h"
-    }
+    } 
     val
   })
   

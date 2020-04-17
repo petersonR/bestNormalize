@@ -18,7 +18,7 @@ bestNormalize(
   k = 10,
   r = 5,
   loo = FALSE,
-  warn = TRUE,
+  warn = FALSE,
   quiet = FALSE,
   tr_opts = list()
 )

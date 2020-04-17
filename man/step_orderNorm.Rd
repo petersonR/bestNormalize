@@ -64,19 +64,19 @@ The orderNorm transformation can be used to rescale a variable to be
 }
 \examples{
 library(recipes)
-rec <- recipe(~ ., data = as.data.frame(state.x77))
+rec <- recipe(~ ., data = as.data.frame(iris))
 
-bn_trans <- step_orderNorm(rec, all_numeric())
+orq_trans <- step_orderNorm(rec, all_numeric())
 
-bn_estimates <- prep(bn_trans, training = as.data.frame(state.x77))
+orq_estimates <- prep(orq_trans, training = as.data.frame(iris))
 
-bn_data <- bake(bn_estimates, as.data.frame(state.x77))
+orq_data <- bake(orq_estimates, as.data.frame(iris))
 
-plot(density(state.x77[, "Illiteracy"]), main = "before")
-plot(density(bn_data$Illiteracy), main = "after")
+plot(density(iris[, "Petal.Length"]), main = "before")
+plot(density(orq_data$Petal.Length), main = "after")
 
-tidy(bn_trans, number = 1)
-tidy(bn_estimates, number = 1)
+tidy(orq_trans, number = 1)
+tidy(orq_estimates, number = 1)
 
 
 }

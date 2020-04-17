@@ -39,12 +39,12 @@
 #'
 #' orq_trans <- step_orderNorm(rec, all_numeric())
 #'
-#' orq_estimates <- prep(bn_trans, training = as.data.frame(iris))
+#' orq_estimates <- prep(orq_trans, training = as.data.frame(iris))
 #'
-#' orq_data <- bake(bn_estimates, as.data.frame(iris))
+#' orq_data <- bake(orq_estimates, as.data.frame(iris))
 #'
 #' plot(density(iris[, "Petal.Length"]), main = "before")
-#' plot(density(bn_data$Petal.Length), main = "after")
+#' plot(density(orq_data$Petal.Length), main = "after")
 #'
 #' tidy(orq_trans, number = 1)
 #' tidy(orq_estimates, number = 1)

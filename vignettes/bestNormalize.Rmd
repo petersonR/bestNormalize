@@ -257,19 +257,19 @@ The `autotrader` data set was scraped from the [autotrader website](https://www.
 data("autotrader")
 autotrader$yearsold <- 2017 - autotrader$Year
 ### Using best-normalize
-(priceBN <- bestNormalize(autotrader$price, r = 1, k = 5, warn = F))
+(priceBN <- bestNormalize(autotrader$price, r = 1, k = 5))
 ```
 
 Note that `orderNorm` throws a warning due to the ties in the price vector. We can see that the estimated normality statistic for the OrderNorm transformation is close to one, however, so we know it is performing quite well. It is also performing better than all of the other transformations. 
 
 ```{r bn_mileage}
-(mileageBN <- bestNormalize(autotrader$mileage, r = 1, k = 5, warn = F))
+(mileageBN <- bestNormalize(autotrader$mileage, r = 1, k = 5))
 ```
 
 Similarly, the ORQ normalization performed best for mileage, and the ties didn't seem to be too big of a deal.
 
 ```{r bn_yearsold}
-(yearsoldBN <- bestNormalize(autotrader$yearsold, r = 1, k = 5, warn = F))
+(yearsoldBN <- bestNormalize(autotrader$yearsold, r = 1, k = 5))
 ```
 
 Here we see something peculiar; none of the normalizing transformations performed well according to the normality statistics. The frequency of ties in this case makes it very difficult to find a normalizing transformation (see figure below as to why this is). Even so, orderNorm is chosen as it has the lowest estimated P/df statistic. 
