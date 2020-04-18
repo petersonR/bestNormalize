@@ -1,3 +1,5 @@
+# bestNormalize 1.5.0.9000
+
 # bestNormalize 1.5.0
 
 - Added `step_bestNormalize` and `step_orderNorm` functions for implementation within `recipes`. 
