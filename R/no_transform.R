@@ -9,8 +9,6 @@
 #'   with them. As a benefit, the bestNormalize function will also show
 #'   a comparable normalization statistic for the untransformed data.
 #' @param x A vector 
-#' @param standardize If TRUE, the transformed values are centered and
-#'   scaled
 #' @param warn Should a warning result from infinite values?
 #' @param object an object of class 'no_transform'
 #' @param newdata a vector of data to be (potentially reverse) transformed
@@ -22,11 +20,8 @@
 #' @return A list of class \code{no_transform} with elements
 #'   \item{x.t}{transformed original data} 
 #'   \item{x}{original data}
-#'   \item{mean}{mean after transformation but prior to standardization} 
-#'   \item{sd}{sd after transformation but prior to standardization} 
 #'   \item{n}{number of nonmissing observations}
 #'   \item{norm_stat}{Pearson's P / degrees of freedom} 
-#'   \item{standardize}{was the transformation standardized}
 #'
 #'   The \code{predict} function returns the numeric value of the transformation
 #'   performed on new data, and allows for the inverse transformation as well.
@@ -43,7 +38,7 @@
 #'
 #' @importFrom stats sd
 #' @export
-no_transform <- function(x, standardize = FALSE, warn = TRUE) {
+no_transform <- function(x, warn = TRUE) {
   stopifnot(is.numeric(x))
   
   x.t <- x
@@ -51,15 +46,13 @@ no_transform <- function(x, standardize = FALSE, warn = TRUE) {
   if (all(infinite_idx <- is.infinite(x.t))) {
     stop("Transformation infinite for all x")
   }
-  if(any(infinite_idx)) {
+  if(any(infinite_idx) & warn) {
     warning("Some values (but not all) transformed values are infinite")
-    standardize <- FALSE
   }
   
   mu <- mean(x.t, na.rm = TRUE)
   sigma <- sd(x.t, na.rm = TRUE)
-  if (standardize) x.t <- (x.t - mu) / sigma
-  
+
   ptest <- nortest::pearson.test(x.t)
   
   val <- list(
@@ -68,8 +61,7 @@ no_transform <- function(x, standardize = FALSE, warn = TRUE) {
     mean = mu,
     sd = sigma,
     n = length(x.t) - sum(is.na(x)),
-    norm_stat = unname(ptest$statistic / ptest$df),
-    standardize = standardize
+    norm_stat = unname(ptest$statistic / ptest$df)
   )
   class(val) <- c('no_transform', class(val))
   val
@@ -85,13 +77,9 @@ predict.no_transform <- function(object, newdata = NULL, inverse = FALSE, ...) {
     newdata <- object$x.t
   
   if (inverse) {
-    if (object$standardize) 
-      newdata <- newdata * object$sd + object$mean
     newdata <-  newdata
   } else if (!inverse) {
     newdata <- newdata
-    if (object$standardize) 
-      newdata <- (newdata - object$mean) / object$sd
   }
   unname(newdata)
 }
@@ -100,11 +88,7 @@ predict.no_transform <- function(object, newdata = NULL, inverse = FALSE, ...) {
 #' @method print no_transform
 #' @export
 print.no_transform <- function(x, ...) {
-  cat(ifelse(x$standardize, "Standardized", "Non-Standardized"),
-      'I(x) Transformation with', x$n, 'nonmissing obs.:\n', 
-      'Relevant statistics:\n',
-      '- mean (before standardization) =', x$mean, '\n',
-      '- sd (before standardization) =', x$sd, '\n')
+  cat('I(x) Transformation with', x$n, 'nonmissing obs.\n')
 }
 
 

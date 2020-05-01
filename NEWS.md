@@ -1,5 +1,7 @@
 # bestNormalize 1.5.0.9000
 
+- Take out `standardize` option from `no_transform` so `x.t` always matches input vector.
+
 # bestNormalize 1.5.0
 
 - Added `step_bestNormalize` and `step_orderNorm` functions for implementation within `recipes`. 
