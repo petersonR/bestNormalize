@@ -2,7 +2,7 @@ Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
 Version: 1.5.0.9000
-Date: 2020-04-17
+Date: 2020-05-19
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan.a.peterson@cuanschutz.edu", 
                   role = c("aut", "cre"))
@@ -18,7 +18,8 @@ Description: Estimate a suite of normalizing transformations, including
     the Box-Cox transformation, the Yeo-Johnson transformation, three types 
     of Lambert WxF transformations, and the ordered quantile normalization 
     transformation. It also estimates the normalization efficacy of other
-    commonly used transformations. 
+    commonly used transformations, and finally it allows users to specify 
+    custom transformations or normalization statistics.
 URL: https://github.com/petersonR/bestNormalize
 License: GPL-3
 Depends: 
@@ -31,7 +32,8 @@ Imports:
     foreach,
     doRNG,
     recipes,
-    tibble
+    tibble,
+    methods
 Suggests: 
     knitr,
     rmarkdown,

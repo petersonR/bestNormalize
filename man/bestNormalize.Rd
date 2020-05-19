@@ -20,7 +20,10 @@ bestNormalize(
   loo = FALSE,
   warn = FALSE,
   quiet = FALSE,
-  tr_opts = list()
+  tr_opts = list(),
+  new_transforms = list(),
+  norm_stat_fn = NULL,
+  ...
 )
 
 \method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE, ...)
@@ -64,13 +67,19 @@ progress?}
 \item{tr_opts}{a list (of lists), specifying options to be passed to each
 transformation (see details)}
 
+\item{new_transforms}{a named list of new transformation functions and their
+predict methods (see details)}
+
+\item{norm_stat_fn}{if specified, a function to calculate to assess normality
+(default is the pearson chi-squared statistic divided by its d.f.)}
+
+\item{...}{additional arguments.}
+
 \item{object}{an object of class 'bestNormalize'}
 
 \item{newdata}{a vector of data to be (reverse) transformed}
 
 \item{inverse}{if TRUE, performs reverse transformation}
-
-\item{...}{additional arguments.}
 }
 \value{
 A list of class \code{bestNormalize} with elements
@@ -138,10 +147,16 @@ This function currently estimates the Yeo-Johnson transformation,
   order to test this transformation as well. Note that the Lambert of type
   "h" can also be done by setting allow_lambert_h = TRUE, however this can
   take significantly longer to run.
-  
+
   Use \code{tr_opts} in order to set options for each transformation. For
   instance, if you want to overide the default a selection for \code{log_x},
   set \code{tr_opts$log_x = list(a = 1)}.
+
+  See the package's vignette on how to use custom functions with
+  bestNormalize. All it takes is to create an S3 class and predict method for
+  the new transformation and load it into the environment, then the new
+  custom function (and its predict method) can be passed to bestNormalize
+  with \code{new_transform}.
 }
 \examples{
 
@@ -175,7 +190,6 @@ p <- predict(BN_obj)
 x2 <- predict(BN_obj, newdata = p, inverse = TRUE)
 
 all.equal(x2, x)
-
 
 }
 \seealso{

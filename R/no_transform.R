@@ -38,7 +38,7 @@
 #'
 #' @importFrom stats sd
 #' @export
-no_transform <- function(x, warn = TRUE) {
+no_transform <- function(x, warn = TRUE, ...) {
   stopifnot(is.numeric(x))
   
   x.t <- x

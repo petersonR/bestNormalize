@@ -1,6 +1,9 @@
 # bestNormalize 1.5.0.9000
 
+- Added ability to supply user-defined transformations and associated vignette
+- Added in ability to supply user-defined normalization statistics and (the same) associated vignette
 - Take out `standardize` option from `no_transform` so `x.t` always matches input vector.
+- Minor programming improvements
 
 # bestNormalize 1.5.0
 

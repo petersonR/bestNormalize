@@ -6,7 +6,7 @@
 \alias{print.no_transform}
 \title{Identity transformation}
 \usage{
-no_transform(x, warn = TRUE)
+no_transform(x, warn = TRUE, ...)
 
 \method{predict}{no_transform}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -17,13 +17,13 @@ no_transform(x, warn = TRUE)
 
 \item{warn}{Should a warning result from infinite values?}
 
+\item{...}{additional arguments}
+
 \item{object}{an object of class 'no_transform'}
 
 \item{newdata}{a vector of data to be (potentially reverse) transformed}
 
 \item{inverse}{if TRUE, performs reverse transformation}
-
-\item{...}{additional arguments}
 }
 \value{
 A list of class \code{no_transform} with elements

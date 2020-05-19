@@ -32,6 +32,10 @@
 #' @param object an object of class 'bestNormalize'
 #' @param tr_opts a list (of lists), specifying options to be passed to each
 #'   transformation (see details)
+#' @param new_transforms a named list of new transformation functions and their
+#'   predict methods (see details)
+#' @param norm_stat_fn if specified, a function to calculate to assess normality
+#'   (default is the pearson chi-squared statistic divided by its d.f.)
 #' @param ... additional arguments.
 #' @details \code{bestNormalize} estimates the optimal normalizing
 #'   transformation. This transformation can be performed on new data, and
@@ -91,10 +95,16 @@
 #'   order to test this transformation as well. Note that the Lambert of type
 #'   "h" can also be done by setting allow_lambert_h = TRUE, however this can
 #'   take significantly longer to run.
-#'   
+#'
 #'   Use \code{tr_opts} in order to set options for each transformation. For
 #'   instance, if you want to overide the default a selection for \code{log_x},
 #'   set \code{tr_opts$log_x = list(a = 1)}.
+#'
+#'   See the package's vignette on how to use custom functions with
+#'   bestNormalize. All it takes is to create an S3 class and predict method for
+#'   the new transformation and load it into the environment, then the new
+#'   custom function (and its predict method) can be passed to bestNormalize
+#'   with \code{new_transform}.
 #'
 #' @examples
 #'
@@ -129,7 +139,6 @@
 #'
 #' all.equal(x2, x)
 #'
-#'
 #' @seealso  \code{\link[bestNormalize]{boxcox}}, \code{\link{orderNorm}},
 #'   \code{\link{yeojohnson}}
 #' @export
@@ -145,7 +154,9 @@ bestNormalize <- function(x, standardize = TRUE,
                           loo = FALSE,
                           warn = FALSE, 
                           quiet = FALSE, 
-                          tr_opts = list()) {
+                          tr_opts = list(),
+                          new_transforms = list(), 
+                          norm_stat_fn= NULL, ...) {
   stopifnot(is.numeric(x))
   x.t <- list()
   methods <- c("no_transform", "arcsinh_x", 'boxcox', 
@@ -159,6 +170,24 @@ bestNormalize <- function(x, standardize = TRUE,
     methods <- c(methods, "lambert_s")
   if(allow_lambert_h)
     methods <- c(methods, "lambert_h")
+  
+  # Check for new methods
+  if(length(new_transforms)) {
+    stopifnot(all(sapply(new_transforms, is.function)))
+    
+    # Makes sure predict methods are found
+    found_predict_methods <- names(new_transforms)[!grepl('predict|print', names(new_transforms))] %in%
+      gsub("predict\\.", "", names(new_transforms)[grepl('predict', names(new_transforms))])
+    
+    
+    if(any(!found_predict_methods))
+      stop("'new_transforms' associated predict methods must be supplied")
+    methods <- c(methods, names(new_transforms))
+    
+    # Make sure R can find new method function calls
+    for (m in 1:length(new_transforms)) 
+      assign(names(new_transforms)[m], new_transforms[[m]])
+  }
   
   
   methods <- methods[order(methods)]
@@ -206,20 +235,33 @@ bestNormalize <- function(x, standardize = TRUE,
   method_names <- names(x.t)
   method_calls <- gsub("_s|_h", "", method_names)
   
+  # Normality statistic if not specified
+  if(!length(norm_stat_fn)) {
+    norm_stat_fn <- function(x) {
+      val <- nortest::pearson.test(x)
+      unname(val$stat/val$df)
+    }
+    custom_norm_stat_fn <- TRUE
+  } else
+    custom_norm_stat_fn <- FALSE
+    
+  
+  stopifnot(is.function(norm_stat_fn))
+  
   ## Estimate out-of-sample P/df
   if(out_of_sample) {
     ## Repeated CV
     if(!loo) {
       k <- as.integer(k)
       r <- as.integer(r)
-      oos_est <- get_oos_estimates(x, standardize, method_names, k, r, cluster, quiet, warn)
+      oos_est <- get_oos_estimates(x, standardize, method_names, k, r, cluster, quiet, warn, args, new_transforms, norm_stat_fn)
       oos_preds <- oos_est$oos_preds
       norm_stats <- oos_est$norm_stats
       best_idx <- names(which.min(norm_stats))
       method <- paste("Out-of-sample via CV with", k, "folds and", r, "repeats")
     } else {
       ## Leave one out CV
-      loo_est <- get_loo_estimates(x, standardize, method_names, cluster, quiet)
+      loo_est <- get_loo_estimates(x, standardize, method_names, cluster, quiet, args, new_transforms, norm_stat_fn)
       oos_preds <- loo_est$oos_preds
       norm_stats <- loo_est$norm_stats
       best_idx <- names(which.min(norm_stats))
@@ -233,7 +275,6 @@ bestNormalize <- function(x, standardize = TRUE,
     method <- "In-sample"
     oos_preds <- NULL
   }
-
   
   val <- list(
     x.t = x.t[[best_idx]]$x.t,
@@ -243,7 +284,10 @@ bestNormalize <- function(x, standardize = TRUE,
     oos_preds = oos_preds,
     chosen_transform = x.t[[best_idx]],
     other_transforms = x.t[names(x.t) != best_idx],
-    standardize = standardize
+    standardize = standardize, 
+    new_transforms = new_transforms, 
+    norm_stat_fn= norm_stat_fn,
+    custom_norm_stat_fn = custom_norm_stat_fn
   )
   class(val) <- 'bestNormalize'
   val
@@ -261,29 +305,34 @@ predict.bestNormalize <- function(object, newdata = NULL, inverse = FALSE, ...) 
 #' @method print bestNormalize
 #' @export
 print.bestNormalize <- function(x, ...) {
+  
+  prettynames <- c(
+    "arcsinh_x" = "arcsinh(x)",
+    "boxcox" = "Box-Cox" ,
+    "exp_x" = "Exp(x)",
+    "lambert_h" = "Lambert's W (type h)",
+    "lambert_s" = "Lambert's W (type s)",
+    "log_x" = "Log_b(x+a)",
+    "no_transform" = "No transform",
+    "orderNorm" = "orderNorm (ORQ)",
+    "sqrt_x" = "sqrt(x + a)",
+    "yeojohnson" = "Yeo-Johnson"
+  )
+  
+  normnames <- names(x$norm_stats)
+  
+  for(i in 1:length(prettynames))
+    normnames <- gsub(names(prettynames)[i],prettynames[i],normnames)
+  
+  results <- paste0(" - ", normnames, ": ", round(x$norm_stats, 4), collapse="\n")
+  
   prettyD <- paste0(
-    'Estimated Normality Statistics (Pearson P / df, lower => more normal):\n',
-    ifelse("no_transform" %in% names(x$norm_stats), 
-           paste(" - No transform:", round(x$norm_stats['no_transform'], 4), '\n'), ''),
-    ifelse("boxcox" %in% names(x$norm_stats), 
-           paste(" - Box-Cox:", round(x$norm_stats['boxcox'], 4), '\n'), ''),
-    ifelse("lambert_s" %in% names(x$norm_stats), 
-           paste(" - Lambert's W (type s):", round(x$norm_stats['lambert_s'], 4), '\n'), ''),
-    ifelse("lambert_h" %in% names(x$norm_stats), 
-           paste(" - Lambert's W (type h):", round(x$norm_stats['lambert_h'], 4), '\n'), ''),
-    ifelse("log_x" %in% names(x$norm_stats), 
-           paste(" - Log_b(x+a):", round(x$norm_stats['log_x'], 4), '\n'), ''),
-    ifelse("sqrt_x" %in% names(x$norm_stats), 
-           paste(" - sqrt(x+a):", round(x$norm_stats['sqrt_x'], 4), '\n'), ''),
-    ifelse("exp_x" %in% names(x$norm_stats), 
-           paste(" - exp(x):", round(x$norm_stats['exp_x'], 4), '\n'), ''),
-    ifelse("arcsinh_x" %in% names(x$norm_stats), 
-           paste(" - arcsinh(x):", round(x$norm_stats['arcsinh_x'], 4), '\n'), ''),
-    ifelse("yeojohnson" %in% names(x$norm_stats), 
-           paste(" - Yeo-Johnson:", round(x$norm_stats['yeojohnson'], 4), '\n'), ''),
-    ifelse("orderNorm" %in% names(x$norm_stats), 
-           paste(" - orderNorm:", round(x$norm_stats['orderNorm'], 4), '\n'), ''), 
-    "Estimation method: ", x$method, '\n')
+    'Estimated Normality Statistics ',
+    ifelse(x$custom_norm_stat_fn, 
+           "(Pearson P / df, lower => more normal):\n", 
+           "(using custom normalization statistic)\n"),
+    results, 
+    "\nEstimation method: ", x$method, '\n')
   
   cat('Best Normalizing transformation with', x$chosen_transform$n, 'Observations\n',
       prettyD, '\nBased off these, bestNormalize chose:\n')
@@ -293,8 +342,9 @@ print.bestNormalize <- function(x, ...) {
 # Get out-of-sample normality statistics via repeated CV
 #' @importFrom doParallel registerDoParallel
 #' @importFrom doRNG "%dorng%"
+#' @importFrom methods is
 #' @importFrom foreach foreach
-get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet, warn) {
+get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet, warn, args, new_transforms, norm_stat_fn) {
   x <- x[!is.na(x)]
   fold_size <- floor(length(x) / k)
   if(fold_size < 20 & warn) warning("fold_size is ", fold_size, " (< 20), therefore P/df estimates may be off") 
@@ -308,20 +358,18 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
     
     reps <- lapply(1:r, function(rep) {
       resamples <- create_folds(x, k)
-      pstats <- matrix(NA, ncol = length(norm_methods), nrow = k)
+      pstats <- matrix(NA, ncol = length(method_names), nrow = k)
       for(i in 1:k) {
-        for(m in 1:length(norm_methods)) {
-          args <- list(x = x[resamples != i])
-          if(method_names[m] == "lambert_h") 
-            args$type <- "h"
-          trans_m <- suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
-          if(is.character(trans_m)) {
+        for(m in 1:length(method_names)) {
+          args_m <- args[[m]]
+          args_m$x <- x[resamples != i]
+          trans_m <- suppressWarnings(try(do.call(method_calls[m], args_m), silent = TRUE))
+          if(is(trans_m, "try-error")) {
             if(warn) warning(paste(norm_methods[m], ' did not work; ', trans_m))
             pstats[i, m] <- NA
           } else {
             vec <- suppressWarnings(predict(trans_m, newdata = x[resamples == i]))
-            p <- suppressWarnings(nortest::pearson.test(vec))
-            pstats[i, m] <- p$stat / p$df
+            pstats[i, m] <- suppressWarnings(do.call(norm_stat_fn, list(x = vec)))
           }
         }
         if(!quiet & length(x) > 2000) pb$tick()$print()
@@ -333,12 +381,18 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
     reps <- Reduce(rbind, reps)
   } else {
     # Check cluster args
-    if (!("cluster" %in% class(cluster))) 
+    if (!is(cluster, "cluster")) 
       stop("cluster is not of class 'cluster'; see ?makeCluster")
+    
+    # Assign new transforms to functional env.
+    if(length(new_transforms)) {
+      for (m in 1:length(new_transforms)) 
+        assign(names(new_transforms)[m], new_transforms[[m]])
+    }
     
     # Add fns to library
     parallel::clusterCall(cluster, function() library(bestNormalize))
-    parallel::clusterExport(cl = cluster, c("k", "x", "norm_methods"), envir = environment())
+    parallel::clusterExport(cl = cluster, c("k", "x", "norm_methods", "args", names(new_transforms)), envir = environment())
     doParallel::registerDoParallel(cluster)
     
     opts <- list()
@@ -363,17 +417,15 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
      resample <- resamples[,rr]
      ip <- numeric(length(norm_methods))
      for(m in 1:length(norm_methods)) {
-       args <- list(x = x[resample != i])
-       if(method_names[m] == "lambert_h") 
-         args$type <- "h"
-       trans_m <-  suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
-       if(is.character(trans_m)) {
+       args_m <- args[[m]]
+       args_m$x <- x[resamples != i]
+       trans_m <-  suppressWarnings(try(do.call(method_calls[m], args_m), silent = TRUE))
+       if(is(trans_m, "try-error")) {
          if(warn) warning(paste(norm_methods[m], ' did not work; ', trans_m))
          ip[m] <- NA
        } else {
          vec <- suppressWarnings(predict(trans_m, newdata = x[resamples == i]))
-         p <- suppressWarnings(nortest::pearson.test(vec))
-         ip[m] <- p$stat / p$df
+         ip[m] <- suppressWarnings(do.call(norm_stat_fn, list(x = vec)))
        }
      }
      ip
@@ -392,7 +444,8 @@ create_folds <- function(x, k) {
 #' @importFrom doParallel registerDoParallel
 #' @importFrom foreach %dopar%
 #' @importFrom foreach foreach
-get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
+#' @importFrom methods is
+get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet, args, new_transforms, norm_stat_fn) {
   x <- x[!is.na(x)]
   n <- length(x)
   method_names <- norm_methods
@@ -409,11 +462,10 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
     if(!quiet & length(x) > 2000) pb <- dplyr::progress_estimated(n)
     for(i in 1:n) {
       for(m in 1:length(norm_methods)) {
-        args <- list(x = x[-i])
-        if(method_names[m] == "lambert_h") 
-          args$type <- "h"
-        trans_m <- suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
-        if(is.character(trans_m)) {
+        args_m <- args[[m]]
+        args_m$x <- x[-i]
+        trans_m <- suppressWarnings(try(do.call(method_calls[m], args_m), silent = TRUE))
+        if(is(trans_m, "try-error")) {
           stop(paste(norm_methods[m], ' did not work; ', trans_m))
           p[i, m] <- NA
         } else {
@@ -427,12 +479,19 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
   
   } else {
     # Check cluster args
-    if (!("cluster" %in% class(cluster))) 
+    if (!is(cluster, "cluster")) 
       stop("cluster is not of class 'cluster'; see ?makeCluster")
+    
+    # Assign new transforms to functional env.
+    if(length(new_transforms)) {
+      for (m in 1:length(new_transforms)) 
+        assign(names(new_transforms)[m], new_transforms[[m]])
+    }
     
     # Add fns to library
     parallel::clusterCall(cluster, function() library(bestNormalize))
-    parallel::clusterExport(cl = cluster, c("x", "norm_methods"), envir = environment())
+    parallel::clusterExport(cl = cluster, c("x", "norm_methods", "args", names(new_transforms)), envir = environment())
+    
     doParallel::registerDoParallel(cluster)
     
     opts <- list()
@@ -451,11 +510,10 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
       .options.snow = opts) %dopar% {               
       ip <- numeric(length(norm_methods))
       for(m in 1:length(norm_methods)) {
-        args <- list(x = x[-i])
-        if(method_names[m] == "lambert_h") 
-          args$type <- "h"
-        trans_m <- suppressWarnings(try(do.call(method_calls[m], args), silent = TRUE))
-        if(is.character(trans_m)) {
+        args_m <- args[[m]]
+        args_m$x <- x[-i]
+        trans_m <- suppressWarnings(try(do.call(method_calls[m], args_m), silent = TRUE))
+        if(is(trans_m, "try-error")) {
           stop(paste(norm_methods[m], ' did not work; ', trans_m))
           ip[m] <- NA
         } else {
@@ -464,13 +522,9 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet) {
       }
       ip
     }
-    
     colnames(p) <- norm_methods
   }
-  normstats <- apply(p, 2, function(xx) {
-    ptest <- nortest::pearson.test(xx)
-    ptest$statistic / ptest$df
-  })
+  normstats <- apply(p, 2, norm_stat_fn)
   if(!quiet & length(x) > 2000) cat("\n")
   list(norm_stats = normstats, oos_preds = as.data.frame(p))
 }
