@@ -139,8 +139,6 @@ test_that("options work for bestNormalize", {
   expect_equal(b$other_transforms$yeojohnson$eps, .01)
 })
 
-context('bestNormalize parallel functionality')
-
 skip_on_cran()
 skip_on_travis()
 

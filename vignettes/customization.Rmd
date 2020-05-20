@@ -1,5 +1,5 @@
 ---
-title: "Using custom functions and normalization statistics with bestNormalize"
+title: "Customization within bestNormalize"
 author: "Ryan A Peterson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

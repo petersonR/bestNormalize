@@ -270,7 +270,8 @@ bestNormalize <- function(x, standardize = TRUE,
     }
     
   } else {
-    norm_stats <- unlist(lapply(x.t, function(x) x$norm_stat))
+    norm_stats <- unlist(lapply(x.t, function(x) norm_stat_fn(x$x.t)))
+    names(norm_stats) <- names(x.t)
     best_idx <- names(which.min(norm_stats))
     method <- "In-sample"
     oos_preds <- NULL
