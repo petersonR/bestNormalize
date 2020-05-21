@@ -6,7 +6,7 @@
 \alias{print.log_x}
 \title{Log(x + a) Transformation}
 \usage{
-log_x(x, a = NULL, b = 10, standardize = TRUE, eps = 0.001, warn = TRUE)
+log_x(x, a = NULL, b = 10, standardize = TRUE, eps = 0.001, warn = TRUE, ...)
 
 \method{predict}{log_x}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -26,13 +26,13 @@ scaled, such that the transformation attempts a standard normal}
 
 \item{warn}{Should a warning result from infinite values?}
 
+\item{...}{additional arguments}
+
 \item{object}{an object of class 'log_x'}
 
 \item{newdata}{a vector of data to be (potentially reverse) transformed}
 
 \item{inverse}{if TRUE, performs reverse transformation}
-
-\item{...}{additional arguments}
 }
 \value{
 A list of class \code{log_x} with elements 

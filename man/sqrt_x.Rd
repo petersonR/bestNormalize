@@ -6,7 +6,7 @@
 \alias{print.sqrt_x}
 \title{sqrt(x + a) Normalization}
 \usage{
-sqrt_x(x, a = NULL, standardize = TRUE)
+sqrt_x(x, a = NULL, standardize = TRUE, ...)
 
 \method{predict}{sqrt_x}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -20,13 +20,13 @@ sqrt_x(x, a = NULL, standardize = TRUE)
 \item{standardize}{If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal}
 
+\item{...}{additional arguments}
+
 \item{object}{an object of class 'sqrt_x'}
 
 \item{newdata}{a vector of data to be (potentially reverse) transformed}
 
 \item{inverse}{if TRUE, performs reverse transformation}
-
-\item{...}{additional arguments}
 }
 \value{
 A list of class \code{sqrt_x} with elements \item{x.t}{transformed

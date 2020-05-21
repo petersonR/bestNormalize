@@ -43,7 +43,7 @@
 #'
 #' @importFrom stats sd
 #' @export
-sqrt_x <- function(x, a = NULL, standardize = TRUE) {
+sqrt_x <- function(x, a = NULL, standardize = TRUE, ...) {
   stopifnot(is.numeric(x))
   
   min_a <- max(0, -(min(x, na.rm = TRUE)))

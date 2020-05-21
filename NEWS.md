@@ -1,4 +1,8 @@
-# bestNormalize 1.5.0.9000
+# bestNormalize 1.6.1
+
+- Fixed bug that was causing simple transforms to fail in `bestNormalize`
+
+# bestNormalize 1.6.0
 
 - Added ability to supply user-defined transformations and associated vignette
 - Added in ability to supply user-defined normalization statistics and (the same) associated vignette

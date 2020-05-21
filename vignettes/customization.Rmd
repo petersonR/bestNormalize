@@ -2,7 +2,9 @@
 title: "Customization within bestNormalize"
 author: "Ryan A Peterson"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Customization within bestNormalize}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,7 +20,7 @@ library(bestNormalize)
 
 This vignette will go over the steps required to implement a custom user-defined function within the `bestNormalize` framework. 
 
-There are only 2 steps. 
+There are 3 steps. 
 
 1) Create transformation function
 
@@ -30,11 +32,11 @@ There are only 2 steps.
 
 ## S3 methods 
 
-Here, we start by defining a new function that we'll call `cuberoot_x`. 
+Here, we start by defining a new function that we'll call `cuberoot_x`, which will take an argument `a` (as does the `sqrt_x` function) which will try to add a constant if it sees any negative numbers in `x`. It will also take the argument `standardize` which will center and scale the transformed data so that it's centered at 0 with SD = 1. 
 
 ```{r}
 ## Define user-function
-cuberoot_x <- function(x, a = NULL, standardize = TRUE) {
+cuberoot_x <- function(x, a = NULL, standardize = TRUE, ...) {
   stopifnot(is.numeric(x))
   
   min_a <- max(0, -(min(x, na.rm = TRUE)))
@@ -73,8 +75,8 @@ cuberoot_x <- function(x, a = NULL, standardize = TRUE) {
 
 ```
 
-Note that we assigned a class to the object this returns of the same name; this is necessary. We'll also need an associated "predict" method that is used to apply the transformation to newly observed data. 
-
+Note that we assigned a class to the object this returns of the same name; this is necessary for successful implementation within `bestNormalize`. We'll also need an associated `predict` method that is used to apply the transformation to newly observed data. 
+`
 ```{r}
 
 predict.cuberoot_x <- function(object, newdata = NULL, inverse = FALSE, ...) {
@@ -134,10 +136,10 @@ print.cuberoot_x <- function(x, ...) {
 
 Note: if you can find a similar transformation in the source code, it's easy to model your code after it. For instance, for `cuberoot_x` and `predict.cuberoot_x`, I used `sqrt_x.R` as a template file. 
 
-## Implementing witih bestNormalize
+## Implementing with bestNormalize
 
 ```{r}
-
+# Store custom functions into list
 custom_transform <- list(
   cuberoot_x = cuberoot_x,
   predict.cuberoot_x = predict.cuberoot_x,
@@ -146,14 +148,14 @@ custom_transform <- list(
 
 set.seed(123129)
 x <- rgamma(100, 1, 1)
-(b <- bestNormalize(x = x, new_transforms = custom_transform, standardize = FALSE))
+(b <- bestNormalize(x = x, new_transforms = custom_transform))
 ```
 
 Evidently, the cube-rooting was the best normalizing transformation! 
 
 ## Sanity check
 
-Ist this code actually performing the cube-rooting? 
+Is this code actually performing the cube-rooting? 
 
 ```{r}
 all.equal(x^(1/3), b$chosen_transform$x.t)
@@ -164,11 +166,11 @@ It does indeed.
 
 # Using custom normalization statistics
 
-The bestNormalize package can estimate any statistic using its CV framework. A user-defined function can be passed in through the `norm_stat_fn` argument, and this function will then be applied in lieu of the Pearson test statistic divided by its degree of freedom. 
+The bestNormalize package can estimate any univariate statistic using its CV framework. A user-defined function can be passed in through the `norm_stat_fn` argument, and this function will then be applied in lieu of the Pearson test statistic divided by its degree of freedom. 
 
 The user-defined function must take an argument `x`, which indicates the data on which a user wants to evaluate the statistic.
 
-Here is an example using Lillifors (Kolmogorov-Smirnov) normality test statistic: 
+Here is an example using Lilliefors (Kolmogorov-Smirnov) normality test statistic: 
 
 ```{r}
 bestNormalize(x, norm_stat_fn = function(x) nortest::lillie.test(x)$stat)
@@ -185,8 +187,8 @@ Note: `bestNormalize` will attempt to minimize this statistic by default, which 
 In this case, a user is advised to either manually select the best one: 
 
 ```{r}
-best_tranform <- names(which.max(dont_do_this$norm_stats))
-(do_this <- dont_do_this$other_transforms[[best_tranform]])
+best_transform <- names(which.max(dont_do_this$norm_stats))
+(do_this <- dont_do_this$other_transforms[[best_transform]])
 ```
 
 Or, the user can reverse their defined statistic (in this case by subtracting it from 1): 

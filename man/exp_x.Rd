@@ -6,7 +6,7 @@
 \alias{print.exp_x}
 \title{exp(x) Transformation}
 \usage{
-exp_x(x, standardize = TRUE, warn = TRUE)
+exp_x(x, standardize = TRUE, warn = TRUE, ...)
 
 \method{predict}{exp_x}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -20,13 +20,13 @@ scaled, such that the transformation attempts a standard normal}
 
 \item{warn}{Should a warning result from infinite values?}
 
+\item{...}{additional arguments}
+
 \item{object}{an object of class 'exp_x'}
 
 \item{newdata}{a vector of data to be (potentially reverse) transformed}
 
 \item{inverse}{if TRUE, performs reverse transformation}
-
-\item{...}{additional arguments}
 }
 \value{
 A list of class \code{exp_x} with elements 

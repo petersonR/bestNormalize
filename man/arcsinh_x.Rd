@@ -6,7 +6,7 @@
 \alias{print.arcsinh_x}
 \title{arcsinh(x) Transformation}
 \usage{
-arcsinh_x(x, standardize = TRUE)
+arcsinh_x(x, standardize = TRUE, ...)
 
 \method{predict}{arcsinh_x}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -18,13 +18,13 @@ arcsinh_x(x, standardize = TRUE)
 \item{standardize}{If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal}
 
+\item{...}{additional arguments}
+
 \item{object}{an object of class 'arcsinh_x'}
 
 \item{newdata}{a vector of data to be (potentially reverse) transformed}
 
 \item{inverse}{if TRUE, performs reverse transformation}
-
-\item{...}{additional arguments}
 }
 \value{
 A list of class \code{arcsinh_x} with elements 

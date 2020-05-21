@@ -42,7 +42,7 @@
 #' 
 #' @importFrom stats sd
 #' @export
-arcsinh_x <- function(x, standardize = TRUE) {
+arcsinh_x <- function(x, standardize = TRUE, ...) {
   stopifnot(is.numeric(x))
   
   x.t <- asinh(x)

@@ -49,7 +49,7 @@
 #' 
 #' @importFrom stats sd
 #' @export
-log_x <- function(x, a = NULL, b = 10, standardize = TRUE, eps = .001, warn = TRUE) {
+log_x <- function(x, a = NULL, b = 10, standardize = TRUE, eps = .001, warn = TRUE, ...) {
   stopifnot(is.numeric(x))
   
   min_a <- max(0, -(min(x, na.rm = TRUE) - eps))

@@ -41,7 +41,7 @@
 #' 
 #' @importFrom stats sd
 #' @export
-exp_x <- function(x, standardize = TRUE, warn = TRUE) {
+exp_x <- function(x, standardize = TRUE, warn = TRUE, ...) {
   stopifnot(is.numeric(x))
   
   x.t <- exp(x)

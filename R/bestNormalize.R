@@ -182,7 +182,7 @@ bestNormalize <- function(x, standardize = TRUE,
     
     if(any(!found_predict_methods))
       stop("'new_transforms' associated predict methods must be supplied")
-    methods <- c(methods, names(new_transforms))
+    methods <- c(methods, names(new_transforms)[!grepl('predict|print', names(new_transforms))])
     
     # Make sure R can find new method function calls
     for (m in 1:length(new_transforms)) 
