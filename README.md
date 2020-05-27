@@ -78,23 +78,23 @@ BN_obj <- bestNormalize(x, allow_lambert_s = TRUE)
 BN_obj
 #> Best Normalizing transformation with 1000 Observations
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
-#>  - No transform: 6.966 
-#>  - Box-Cox: 1.1176 
-#>  - Lambert's W (type s): 1.1004 
-#>  - Log_b(x+a): 2.0489 
-#>  - sqrt(x+a): 1.6444 
-#>  - exp(x): 50.7939 
-#>  - arcsinh(x): 3.6245 
-#>  - Yeo-Johnson: 1.933 
-#>  - orderNorm: 1.2694 
+#>  - arcsinh(x): 3.6204
+#>  - Box-Cox: 0.96
+#>  - Exp(x): 50.8513
+#>  - Lambert's W (type s): 1.0572
+#>  - Log_b(x+a): 1.908
+#>  - No transform: 6.7851
+#>  - orderNorm (ORQ): 1.0516
+#>  - sqrt(x + a): 1.4556
+#>  - Yeo-Johnson: 1.7385
 #> Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
 #>  
 #> Based off these, bestNormalize chose:
-#> Standardized Lambert WxF Transformation of type s with 1000 nonmissing obs.:
+#> Standardized Box Cox Transformation with 1000 nonmissing obs.:
 #>  Estimated statistics:
-#>  - gamma = 0.4129
-#>  - mean (before standardization) = 0.667563 
-#>  - sd (before standardization) = 0.7488649
+#>  - lambda = 0.2739638 
+#>  - mean (before standardization) = -0.3870903 
+#>  - sd (before standardization) = 1.045498
 
 # Perform transformation
 gx <- predict(BN_obj)
@@ -116,17 +116,16 @@ here).
 
 ``` r
 (BN_loo <- bestNormalize(x, allow_orderNorm = FALSE, allow_lambert_s = TRUE, loo = TRUE))
-#> Note: passing a cluster (?makeCluster) to bestNormalize can speed up CV process
 #> Best Normalizing transformation with 1000 Observations
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
-#>  - No transform: 26.624 
-#>  - Box-Cox: 0.8077 
-#>  - Lambert's W (type s): 1.269 
-#>  - Log_b(x+a): 4.5374 
-#>  - sqrt(x+a): 3.3655 
-#>  - exp(x): 451.435 
-#>  - arcsinh(x): 14.0712 
-#>  - Yeo-Johnson: 5.7997 
+#>  - arcsinh(x): 14.0712
+#>  - Box-Cox: 0.8077
+#>  - Exp(x): 451.435
+#>  - Lambert's W (type s): 1.269
+#>  - Log_b(x+a): 4.5374
+#>  - No transform: 26.624
+#>  - sqrt(x + a): 3.3655
+#>  - Yeo-Johnson: 5.7997
 #> Estimation method: Out-of-sample via leave-one-out CV
 #>  
 #> Based off these, bestNormalize chose:
