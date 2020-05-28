@@ -348,6 +348,7 @@ test_that("bestNormalize works with lambert of type s (with custom fns)", {
 })
 
 test_that("bestNormalize works with lambert of type h (with custom fns)", {
+  skip_on_travis()
   skip_on_cran()
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = T, new_transforms = new_transforms))
   expect_true(is.null(b$other_transforms$lambert_s))
@@ -355,6 +356,7 @@ test_that("bestNormalize works with lambert of type h (with custom fns)", {
 })
 
 test_that("bestNormalize works with lambert of type h (with custom fns)", {
+  skip_on_travis()
   skip_on_cran()
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = T, new_transforms = new_transforms))
   expect_true(is.null(b$other_transforms$lambert_s))

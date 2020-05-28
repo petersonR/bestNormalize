@@ -1,7 +1,5 @@
 context('bestNormalize with non-default norm_stat_fn')
 
-skip_on_travis()
-
 data(iris)
 train <- iris$Petal.Width
 
@@ -92,6 +90,8 @@ test_that('bestNormalize without standardization handles missing new data', {
 ## Test lambert functionality in bestNormalize
 test_that("bestNormalize works with lambert of type s", {
   skip_on_cran()
+  skip_on_travis()
+  
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_s = TRUE, quiet = T, norm_stat_fn = new_norm_stat_fn))
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(is.null(b$other_transforms$lambert_h))
@@ -99,6 +99,8 @@ test_that("bestNormalize works with lambert of type s", {
 
 test_that("bestNormalize works with lambert of type h", {
   skip_on_cran()
+  skip_on_travis()
+  
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = T, norm_stat_fn = new_norm_stat_fn))
   expect_true(is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
@@ -106,6 +108,7 @@ test_that("bestNormalize works with lambert of type h", {
 
 test_that("bestNormalize works with lambert of type h", {
   skip_on_cran()
+  skip_on_travis()
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = T, norm_stat_fn = new_norm_stat_fn))
   expect_true(is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
