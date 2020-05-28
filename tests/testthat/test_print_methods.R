@@ -14,8 +14,11 @@ test_that('orderNorm print method runs without error or warning', {
   expect_output(print(on))
 })
 
-lw <- suppressWarnings(lambert(train))
 test_that('lambert print method runs without error or warning', {
+  skip_on_cran()
+  skip_on_travis()
+  lw <- suppressWarnings(lambert(train))
+  
   expect_output(print(lw))
 })
 

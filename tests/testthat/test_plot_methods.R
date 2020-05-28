@@ -22,8 +22,10 @@ test_that('orderNorm plot method runs without error or warning', {
   expect_silent(plot(on, bounds = c(-2, 10)))
 })
 
-lw <- suppressWarnings(lambert(train))
 test_that('lambert plot method runs without error or warning', {
+  skip_on_cran()
+  skip_on_travis()
+  expect_silent(lw <- suppressWarnings(lambert(train)))
   expect_silent(plot(lw))
 })
 
