@@ -1,3 +1,5 @@
+# bestNormalize 1.6.1.9000
+
 # bestNormalize 1.6.1
 
 - Fixed bug that was causing simple transforms to fail in `bestNormalize`

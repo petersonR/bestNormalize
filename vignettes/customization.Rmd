@@ -148,7 +148,7 @@ custom_transform <- list(
 
 set.seed(123129)
 x <- rgamma(100, 1, 1)
-(b <- bestNormalize(x = x, new_transforms = custom_transform))
+(b <- bestNormalize(x = x, new_transforms = custom_transform, standardize = FALSE))
 ```
 
 Evidently, the cube-rooting was the best normalizing transformation! 
