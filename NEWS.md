@@ -1,6 +1,7 @@
 # bestNormalize 1.6.1.9000
 
-- Fixed error in documentation regarding `LambertW` transformation types
+- Fixed error in documentation regarding `LambertW` transformation types 
+  (thank you to Georg M. Goerg, the author of `LambertW`, for pointing this out). 
 
 # bestNormalize 1.6.1
 
