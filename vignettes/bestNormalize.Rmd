@@ -28,7 +28,7 @@ There are many instances where researchers may want to normalize a variable:
 
 This package is designed to make this normalization transformation as effortless and consistent as possible. This package also introduces Ordered Quantile (ORQ) normalization via `orderNorm`, a normalization technique based off of a rank mapping to the normal distribution, which *guarantees* normally distributed transformed data (if ties are not present). We show in the accompanying paper that ORQ normalization performs very consistently across different distributions. It is able to successfully transform left/right skewed data, multimodal data, and even data generated from a Cauchy distribution (efficacy of transformation was tested on out-of-sample data).
 
-All of the transformations contained in this package and implemented in `bestNormalize` are reversible (i.e., 1-1), which allows for straight-forward interpretation and consistency. In other words, any analysis performed on the normalized data can be interpreted using the original unit (see application). Note though that changing the `type = "s"` argument in the `lambert` function may lead to a transformation that is not 1-1, so this method is not yet included in the various methods estimated by the `bestNormalize` function.
+The transformations contained in this package and implemented in `bestNormalize` are reversible (i.e., 1-1), which allows for straight-forward interpretation and consistency. In other words, any analysis performed on the normalized data can be interpreted using the original unit (see application). 
 
 # Methods
 

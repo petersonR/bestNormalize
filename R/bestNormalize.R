@@ -84,17 +84,8 @@
 #'   \code{cl} argument.
 #'
 #'
-#'   NOTE: Only the Lambert technique of type = "s" (skew) ensures that the
-#'   transformation is consistently 1-1, so it is the only method currently used
-#'   in \code{bestNormalize()}. Use type = "h" or type = 'hh' at risk of not
-#'   having this estimate 1-1 transform. These alternative types are effective
-#'   when the data has exceptionally heavy tails, e.g. the Cauchy distribution.
-#'   Additionally, as of v. 1.2.0, Lambert of type "s" is not used by default in
-#'   \code{bestNormalize()} since it uses multiple threads on some Linux
-#'   systems, which is not allowed on CRAN checks. Set allow_lambert_s = TRUE in
-#'   order to test this transformation as well. Note that the Lambert of type
-#'   "h" can also be done by setting allow_lambert_h = TRUE, however this can
-#'   take significantly longer to run.
+#'   Note that the Lambert transformation of type "h" can be done by setting
+#'   allow_lambert_h = TRUE, however this can take significantly longer to run.
 #'
 #'   Use \code{tr_opts} in order to set options for each transformation. For
 #'   instance, if you want to overide the default a selection for \code{log_x},
