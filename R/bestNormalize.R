@@ -312,7 +312,8 @@ print.bestNormalize <- function(x, ...) {
     "no_transform" = "No transform",
     "orderNorm" = "orderNorm (ORQ)",
     "sqrt_x" = "sqrt(x + a)",
-    "yeojohnson" = "Yeo-Johnson"
+    "yeojohnson" = "Yeo-Johnson",
+    "center_scale" = "Center+scale"
   )
   
   normnames <- names(x$norm_stats)

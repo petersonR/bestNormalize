@@ -16,7 +16,7 @@ test_that('BestNormalize transformations with positive data', {
   expect_equal(BNobject4$x, predict(BNobject4, inverse = T))
 })
 
-# 
+#
 BNobject <- suppressWarnings(bestNormalize(c(-1, train), quiet = T))
 BNobject4 <- suppressWarnings(bestNormalize(c(-1, train), allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T))
 test_that('BestNormalize transformations with mixed data, in-sample', {
@@ -62,7 +62,7 @@ test_that('bestNormalize handles missing new data', {
 # Test standardize = FALSE
 train2 <- c(train, -1, NA)
 BNobject <- suppressWarnings(bestNormalize(train2, standardize = FALSE, out_of_sample = FALSE, quiet = T))
-BNobject4 <- suppressWarnings(bestNormalize(train2, standardize = FALSE, 
+BNobject4 <- suppressWarnings(bestNormalize(train2, standardize = FALSE,
                                             allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T))
 test_that('BestNormalize transformations without standardization', {
   expect_equal(BNobject$x.t, predict(BNobject))
@@ -115,23 +115,23 @@ test_that("options work for bestNormalize", {
   expect_equal(b$other_transforms$log_x$a, 1)
   expect_silent(b <- bestNormalize(train, tr_opts = list(log_x = list(a = 100)), warn = F))
   expect_equal(b$other_transforms$log_x$a, 100)
-  
+
   expect_silent(b <- bestNormalize(train, tr_opts = list(log_x = list(a = 1, b = 5)), warn = F))
   expect_equal(b$other_transforms$log_x$b, 5)
   expect_silent(b <- bestNormalize(train, tr_opts = list(log_x = list(a = 100, b = 10)), warn = F))
   expect_equal(b$other_transforms$log_x$b, 10)
-  
+
   expect_silent(b <- bestNormalize(train, tr_opts = list(log_x = list(eps = 1)), warn = F))
   expect_equal(b$other_transforms$log_x$eps, 1)
   expect_silent(b <- bestNormalize(train, tr_opts = list(log_x = list(eps = 100)), warn = F))
   expect_equal(b$other_transforms$log_x$eps, 100)
-  
+
   ## Sqrt_x
   expect_silent(b <- bestNormalize(train, tr_opts = list(sqrt_x = list(a = 1)), warn = F))
   expect_equal(b$other_transforms$sqrt_x$a, 1)
   expect_silent(b <- bestNormalize(train, tr_opts = list(sqrt_x = list(a = 100)), warn = F))
   expect_equal(b$other_transforms$sqrt_x$a, 100)
-  
+
   ## yeo_johnson
   expect_silent(b <- bestNormalize(train, tr_opts = list(yeojohnson = list(eps = 0.1)), warn = F))
   expect_equal(b$other_transforms$yeojohnson$eps, .1)
