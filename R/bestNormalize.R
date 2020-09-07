@@ -153,6 +153,10 @@ bestNormalize <- function(x, standardize = TRUE,
   methods <- c("no_transform", "arcsinh_x", 'boxcox', 
                "log_x", "sqrt_x", 'yeojohnson')
   
+  # Change no transform to center_scale if standardize = T
+  if(standardize)
+    methods <- gsub("no_transform", "center_scale", methods)
+  
   if(allow_exp) 
     methods <- c(methods, "exp_x")
   if (allow_orderNorm) 
@@ -195,7 +199,7 @@ bestNormalize <- function(x, standardize = TRUE,
   })
   
   method_names <- methods
-  method_calls <- gsub("_s|_h", "", methods)
+  method_calls <- gsub("lambert_s|lambert_h", "lambert", methods)
   names(args) <- methods
   
   ## Set transformation options (if any)
@@ -224,7 +228,7 @@ bestNormalize <- function(x, standardize = TRUE,
 
   # Select methods that worked
   method_names <- names(x.t)
-  method_calls <- gsub("_s|_h", "", method_names)
+  method_calls <- gsub("lambert_s|lambert_h", "lambert", method_names)
   
   # Normality statistic if not specified
   if(!length(norm_stat_fn)) {
@@ -341,7 +345,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet
   fold_size <- floor(length(x) / k)
   if(fold_size < 20 & warn) warning("fold_size is ", fold_size, " (< 20), therefore P/df estimates may be off") 
   method_names <- norm_methods
-  method_calls <- gsub("_s|_h", "", method_names)
+  method_calls <- gsub("lambert_s|lambert_h", "lambert", method_names)
   
   # Perform in this session if cluster unspecified
   if(is.null(cluster)) {
@@ -441,7 +445,7 @@ get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet, args
   x <- x[!is.na(x)]
   n <- length(x)
   method_names <- norm_methods
-  method_calls <- gsub("_s|_h", "", method_names)
+  method_calls <- gsub("lambert_s|lambert_h", "lambert", method_names)
   
   # Perform in this session if cluster unspecified
   if(is.null(cluster)) {

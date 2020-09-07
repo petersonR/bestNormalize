@@ -3,14 +3,23 @@
 \name{no_transform}
 \alias{no_transform}
 \alias{predict.no_transform}
+\alias{center_scale}
 \alias{print.no_transform}
-\title{Identity transformation}
+\alias{predict.center_scale}
+\alias{print.center_scale}
+\title{Identity transformation and center/scale transform}
 \usage{
 no_transform(x, warn = TRUE, ...)
 
 \method{predict}{no_transform}(object, newdata = NULL, inverse = FALSE, ...)
 
 \method{print}{no_transform}(x, ...)
+
+center_scale(x, warn = TRUE, ...)
+
+\method{predict}{center_scale}(object, newdata = NULL, inverse = FALSE, ...)
+
+\method{print}{center_scale}(x, ...)
 }
 \arguments{
 \item{x}{A vector}
@@ -40,7 +49,8 @@ Perform an identity transformation. Admittedly it seems odd to
   have a dedicated function to essentially do I(x), but it makes sense to
   keep the same syntax as the other transformations so it plays nicely
   with them. As a benefit, the bestNormalize function will also show
-  a comparable normalization statistic for the untransformed data.
+  a comparable normalization statistic for the untransformed data. If 
+  \code{standardize == TRUE}, \code{center_scale} passes to bestNormalize instead.
 }
 \details{
 \code{no_transform} creates a identity transformation object 

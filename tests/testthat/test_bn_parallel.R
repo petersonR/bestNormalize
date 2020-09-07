@@ -31,8 +31,8 @@ train <- iris$Petal.Width
 
 test_that("Parallel functionality works for LOO", {
   b <- bestNormalize(train, warn = FALSE, cluster = cl, loo = T, quiet = T)
-  b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, 
-                     allow_lambert_s = TRUE, loo = T, quiet = T)
+  b <- bestNormalize(train, warn = FALSE, allow_lambert_h = TRUE, 
+                     allow_lambert_s = TRUE, loo = T, quiet = F)
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
   

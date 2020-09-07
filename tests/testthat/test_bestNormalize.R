@@ -6,6 +6,7 @@ train <- iris$Petal.Width
 BNobject <- suppressWarnings(bestNormalize(train, out_of_sample = FALSE, quiet = T))
 BNobject4 <- bestNormalize(train, allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T)
 BNobject5 <- suppressWarnings(bestNormalize(train, out_of_sample = TRUE, quiet = T))
+BNobject6 <- suppressWarnings(bestNormalize(train, quiet = T, loo = T, allow_lambert_s = T))
 
 # Test transformations
 test_that('BestNormalize transformations with positive data', {

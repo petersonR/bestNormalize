@@ -1,13 +1,14 @@
-#' Identity transformation
+#' Identity transformation and center/scale transform
 #'
 #' @name no_transform
-#' @aliases predict.no_transform
+#' @aliases predict.no_transform center_scale 
 #'
 #' @description Perform an identity transformation. Admittedly it seems odd to
 #'   have a dedicated function to essentially do I(x), but it makes sense to
 #'   keep the same syntax as the other transformations so it plays nicely
 #'   with them. As a benefit, the bestNormalize function will also show
-#'   a comparable normalization statistic for the untransformed data.
+#'   a comparable normalization statistic for the untransformed data. If 
+#'   \code{standardize == TRUE}, \code{center_scale} passes to bestNormalize instead.
 #' @param x A vector 
 #' @param warn Should a warning result from infinite values?
 #' @param object an object of class 'no_transform'
@@ -91,4 +92,63 @@ print.no_transform <- function(x, ...) {
   cat('I(x) Transformation with', x$n, 'nonmissing obs.\n')
 }
 
+#' @rdname no_transform
+#' @importFrom stats sd
+#' @export
+center_scale <- function(x, warn = TRUE, ...) {
+  stopifnot(is.numeric(x))
+  
+  x.t <- x
+  
+  if (all(infinite_idx <- is.infinite(x.t))) {
+    stop("Transformation infinite for all x")
+  }
+  if(any(infinite_idx) & warn) {
+    warning("Some values (but not all) transformed values are infinite")
+  }
+  
+  mu <- mean(x.t, na.rm = TRUE)
+  sigma <- sd(x.t, na.rm = TRUE)
+  
+  x.t <- (x.t - mu) / sigma
+  
+  ptest <- nortest::pearson.test(x.t)
+  
+  val <- list(
+    x.t = x.t,
+    x = x,
+    mean = mu,
+    sd = sigma,
+    n = length(x.t) - sum(is.na(x)),
+    norm_stat = unname(ptest$statistic / ptest$df)
+  )
+  class(val) <- c('center_scale', class(val))
+  val
+}
 
+#' @rdname no_transform
+#' @method predict center_scale
+#' @export
+predict.center_scale <- function(object, newdata = NULL, inverse = FALSE, ...) {
+  if (is.null(newdata) & !inverse)
+    newdata <- object$x
+  if (is.null(newdata) & inverse)
+    newdata <- object$x.t
+  
+  if (inverse) {
+    newdata <- newdata * object$sd + object$mean
+  } else if (!inverse) {
+    newdata <- (newdata - object$mean) / object$sd
+  }
+  unname(newdata)
+}
+
+#' @rdname no_transform
+#' @method print center_scale
+#' @export
+print.center_scale <- function(x, ...) {
+  cat('center_scale(x) Transformation with', x$n, 'nonmissing obs.\n', 
+      'Estimated statistics:\n',
+      '- mean (before standardization) =', x$mean, '\n',
+      '- sd (before standardization) =', x$sd, '\n')
+}
