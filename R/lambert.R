@@ -15,6 +15,7 @@
 #' @param newdata a vector of data to be (reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
 #' @param object an object of class 'lambert'
+#' @param warn should the function show warnings
 #' 
 #' @details \code{lambert} uses the \code{LambertW} package to estimate a 
 #'   normalizing (or "Gaussianizing") transformation. This transformation can be
@@ -69,7 +70,7 @@
 #' @seealso  \code{\link[LambertW]{Gaussianize}}
 #' @importFrom stats sd
 #' @export
-lambert <- function(x, type = 's', standardize = TRUE, ...) {
+lambert <- function(x, type = 's', standardize = TRUE, warn = FALSE, ...) {
   stopifnot(is.numeric(x))
   na_idx <- is.na(x)
   x_complete <- x[!na_idx]

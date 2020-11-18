@@ -6,7 +6,7 @@
 \alias{print.lambert}
 \title{Lambert W x F Normalization}
 \usage{
-lambert(x, type = "s", standardize = TRUE, ...)
+lambert(x, type = "s", standardize = TRUE, warn = FALSE, ...)
 
 \method{predict}{lambert}(object, newdata = NULL, inverse = FALSE, ...)
 
@@ -20,6 +20,8 @@ are "s", "h", and "hh", see details)}
 
 \item{standardize}{If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal}
+
+\item{warn}{should the function show warnings}
 
 \item{...}{Additional arguments that can be passed to the 
 LambertW::Gaussianize function}

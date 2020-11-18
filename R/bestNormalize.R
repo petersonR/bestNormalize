@@ -135,7 +135,7 @@
 #' @export
 bestNormalize <- function(x, standardize = TRUE, 
                           allow_orderNorm = TRUE,
-                          allow_lambert_s = FALSE,
+                          allow_lambert_s = TRUE,
                           allow_lambert_h = FALSE,
                           allow_exp = TRUE,
                           out_of_sample = TRUE, 
@@ -256,7 +256,7 @@ bestNormalize <- function(x, standardize = TRUE,
       method <- paste("Out-of-sample via CV with", k, "folds and", r, "repeats")
     } else {
       ## Leave one out CV
-      loo_est <- get_loo_estimates(x, standardize, method_names, cluster, quiet, args, new_transforms, norm_stat_fn)
+      loo_est <- get_loo_estimates(x, standardize, method_names, cluster, quiet, warn, args, new_transforms, norm_stat_fn)
       oos_preds <- loo_est$oos_preds
       norm_stats <- loo_est$norm_stats
       best_idx <- names(which.min(norm_stats))
@@ -442,7 +442,7 @@ create_folds <- function(x, k) {
 #' @importFrom foreach %dopar%
 #' @importFrom foreach foreach
 #' @importFrom methods is
-get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet, args, new_transforms, norm_stat_fn) {
+get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet, warn, args, new_transforms, norm_stat_fn) {
   x <- x[!is.na(x)]
   n <- length(x)
   method_names <- norm_methods

@@ -10,7 +10,7 @@ bestNormalize(
   x,
   standardize = TRUE,
   allow_orderNorm = TRUE,
-  allow_lambert_s = FALSE,
+  allow_lambert_s = TRUE,
   allow_lambert_h = FALSE,
   allow_exp = TRUE,
   out_of_sample = TRUE,

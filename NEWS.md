@@ -1,5 +1,6 @@
 # bestNormalize 1.6.1.9000
 
+- Re-added LambertW transformation of type "s" into bestNormalize by default
 - Fixed error in documentation regarding `LambertW` transformation types 
   (thank you to Georg M. Goerg, the author of `LambertW`, for pointing this out). 
 - Add `center_scale` transform as default when `standardize == TRUE`

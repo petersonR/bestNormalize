@@ -101,7 +101,7 @@ test_that('step_* transformations with missing/negative/discrete data', {
   expect_equal(nrow(tidy(bn_trans, number = 1)), 1)
   expect_equal(nrow(tidy(bn_estimates, number = 1)), 4)
   expect_s3_class(tidy(bn_estimates, number = 1)$value[[3]], "bestNormalize")
-  expect_s3_class(tidy(bn_estimates, number = 1)$value[[3]]$chosen_transform, "yeojohnson")
+  expect_s3_class(tidy(bn_estimates, number = 1)$value[[3]]$chosen_transform, "lambert")
 
   ## Faster (use in-sample metrics, does NOT use orderNorm)
   expect_silent(bn_trans <- step_bestNormalize(rec, all_numeric(), transform_options = list(out_of_sample = FALSE, allow_orderNorm = FALSE)))
