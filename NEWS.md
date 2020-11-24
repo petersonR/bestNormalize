@@ -1,9 +1,10 @@
 # bestNormalize 1.6.1.9000
 
-- Re-added LambertW transformation of type "s" into bestNormalize by default
+- Re-added LambertW transformation of type "s" into bestNormalize by default, updated documentation.
 - Fixed error in documentation regarding `LambertW` transformation types 
   (thank you to Georg M. Goerg, the author of `LambertW`, for pointing this out). 
 - Add `center_scale` transform as default when `standardize == TRUE`
+- Added error when trying to use repeated CV with much too small of folds 
 
 # bestNormalize 1.6.1
 

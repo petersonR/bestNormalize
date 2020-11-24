@@ -10,7 +10,7 @@ bestNormalize(
   x,
   standardize = TRUE,
   allow_orderNorm = TRUE,
-  allow_lambert_s = TRUE,
+  allow_lambert_s = FALSE,
   allow_lambert_h = FALSE,
   allow_exp = TRUE,
   out_of_sample = TRUE,
@@ -39,11 +39,11 @@ not change the normality statistic.}
 
 \item{allow_orderNorm}{set to FALSE if orderNorm should not be applied}
 
-\item{allow_lambert_s}{Set to TRUE if the lambertW of type "s"  should be
-applied (see details)}
+\item{allow_lambert_s}{Set to FALSE if the lambertW of type "s"  should not be
+applied (see details). Expect about 2-3x elapsed computing time if TRUE.}
 
 \item{allow_lambert_h}{Set to TRUE if the lambertW of type "h"  should be
-applied (see details)}
+applied (see details). Expect about 2-3x elapsed computing time.}
 
 \item{allow_exp}{Set to TRUE if the exponential transformation should be
 applied (sometimes this will cause errors with heavy right skew)}

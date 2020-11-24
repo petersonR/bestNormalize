@@ -9,10 +9,10 @@
 #'
 #' @param x A vector to normalize
 #' @param allow_orderNorm set to FALSE if orderNorm should not be applied
-#' @param allow_lambert_s Set to TRUE if the lambertW of type "s"  should be
-#'   applied (see details)
+#' @param allow_lambert_s Set to FALSE if the lambertW of type "s"  should not be
+#'   applied (see details). Expect about 2-3x elapsed computing time if TRUE.
 #' @param allow_lambert_h Set to TRUE if the lambertW of type "h"  should be
-#'   applied (see details)
+#'   applied (see details). Expect about 2-3x elapsed computing time. 
 #' @param allow_exp Set to TRUE if the exponential transformation should be
 #'   applied (sometimes this will cause errors with heavy right skew)
 #' @param standardize If TRUE, the transformed values are also centered and
@@ -135,7 +135,7 @@
 #' @export
 bestNormalize <- function(x, standardize = TRUE, 
                           allow_orderNorm = TRUE,
-                          allow_lambert_s = TRUE,
+                          allow_lambert_s = FALSE,
                           allow_lambert_h = FALSE,
                           allow_exp = TRUE,
                           out_of_sample = TRUE, 
@@ -344,7 +344,8 @@ print.bestNormalize <- function(x, ...) {
 get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet, warn, args, new_transforms, norm_stat_fn) {
   x <- x[!is.na(x)]
   fold_size <- floor(length(x) / k)
-  if(fold_size < 20 & warn) warning("fold_size is ", fold_size, " (< 20), therefore P/df estimates may be off") 
+  if(fold_size < 20 & warn) warning("CV fold size is ", fold_size, " (< 20), therefore P/df estimates may be off") 
+  if (fold_size < 3) stop("Cannot do k-fold CV with fold size < 3; decrease k, set loo = TRUE, or out_of_sample = FALSE")
   method_names <- norm_methods
   method_calls <- gsub("lambert_s|lambert_h", "lambert", method_names)
   

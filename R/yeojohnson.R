@@ -125,7 +125,7 @@ print.yeojohnson <- function(x, ...) {
 
 # Helper functions that estimates yj lambda parameter
 #' @importFrom stats var optimize
-estimate_yeojohnson_lambda <- function(x, lower = -5, upper = 5, eps = .001) {
+estimate_yeojohnson_lambda <- function(x, lower = -5, upper = 5, eps = .001, ...) {
   n <- length(x)
   ccID <- !is.na(x)
   x <- x[ccID]
