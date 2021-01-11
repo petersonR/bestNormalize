@@ -249,14 +249,18 @@ bestNormalize <- function(x, standardize = TRUE,
     if(!loo) {
       k <- as.integer(k)
       r <- as.integer(r)
-      oos_est <- get_oos_estimates(x, standardize, method_names, k, r, cluster, quiet, warn, args, new_transforms, norm_stat_fn)
+      oos_est <- get_oos_estimates(x, standardize, method_names, k, r, 
+                                   cluster, quiet, warn, args, new_transforms, 
+                                   norm_stat_fn)
       oos_preds <- oos_est$oos_preds
       norm_stats <- oos_est$norm_stats
       best_idx <- names(which.min(norm_stats))
       method <- paste("Out-of-sample via CV with", k, "folds and", r, "repeats")
     } else {
       ## Leave one out CV
-      loo_est <- get_loo_estimates(x, standardize, method_names, cluster, quiet, warn, args, new_transforms, norm_stat_fn)
+      loo_est <- get_loo_estimates(x, standardize, method_names, 
+                                   cluster, quiet, warn, args, new_transforms, 
+                                   norm_stat_fn)
       oos_preds <- loo_est$oos_preds
       norm_stats <- loo_est$norm_stats
       best_idx <- names(which.min(norm_stats))
@@ -341,11 +345,15 @@ print.bestNormalize <- function(x, ...) {
 #' @importFrom doRNG "%dorng%"
 #' @importFrom methods is
 #' @importFrom foreach foreach
-get_oos_estimates <- function(x, standardize, norm_methods, k, r, cluster, quiet, warn, args, new_transforms, norm_stat_fn) {
+get_oos_estimates <- function(x, standardize, norm_methods, k, r, 
+                              cluster, quiet, warn, args, new_transforms, 
+                              norm_stat_fn) {
   x <- x[!is.na(x)]
   fold_size <- floor(length(x) / k)
-  if(fold_size < 20 & warn) warning("CV fold size is ", fold_size, " (< 20), therefore P/df estimates may be off") 
-  if (fold_size < 3) stop("Cannot do k-fold CV with fold size < 3; decrease k, set loo = TRUE, or out_of_sample = FALSE")
+  if(fold_size < 20 & warn) 
+    warning("CV fold size is ", fold_size, " (< 20), therefore P/df estimates may be off") 
+  if (fold_size < 3) 
+    stop("Cannot do k-fold CV with fold size < 3; decrease k, set loo = TRUE, or out_of_sample = FALSE")
   method_names <- norm_methods
   method_calls <- gsub("lambert_s|lambert_h", "lambert", method_names)
   
@@ -443,7 +451,8 @@ create_folds <- function(x, k) {
 #' @importFrom foreach %dopar%
 #' @importFrom foreach foreach
 #' @importFrom methods is
-get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet, warn, args, new_transforms, norm_stat_fn) {
+get_loo_estimates <- function(x, standardize, norm_methods, cluster, quiet, warn, 
+                              args, new_transforms, norm_stat_fn) {
   x <- x[!is.na(x)]
   n <- length(x)
   method_names <- norm_methods

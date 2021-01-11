@@ -17,8 +17,13 @@ test_that('step_* transformations with iris data', {
   expect_equal(nrow(tidy(bc_trans, number = 1)), 1)
   expect_equal(nrow(tidy(bc_estimates, number = 1)), 4)
   
-  ## Using bestNormalize
-  expect_silent(bn_trans <- step_bestNormalize(rec, all_numeric()))
+  ## Using bestNormalize 
+  
+  # Check deprecation
+  expect_warning(bn_trans <- step_bestNormalize(rec, all_numeric()))
+  
+  # Check step_best_normalize
+  expect_silent(bn_trans <- step_best_normalize(rec, all_numeric()))
   expect_silent(bn_estimates <- prep(bn_trans, training = as.data.frame(iris)))
   expect_silent(bn_data <- bake(bn_estimates, as.data.frame(iris)))
   # plot(density(iris[, "Petal.Length"]), main = "before")
@@ -30,7 +35,7 @@ test_that('step_* transformations with iris data', {
   expect_identical(dt1, bn_data$Petal.Length)
   
   ## LOO 
-  expect_silent(bn_trans <- step_bestNormalize(rec, all_numeric(), transform_options = list(loo = TRUE, allow_orderNorm = FALSE)))
+  expect_silent(bn_trans <- step_best_normalize(rec, all_numeric(), transform_options = list(loo = TRUE, allow_orderNorm = FALSE)))
   expect_silent(bn_estimates <- prep(bn_trans, training = as.data.frame(iris)))
   expect_silent(bn_data <- bake(bn_estimates, as.data.frame(iris)))
   # plot(density(iris[, "Petal.Length"]), main = "before")
@@ -41,7 +46,7 @@ test_that('step_* transformations with iris data', {
   expect_s3_class(tidy(bn_estimates, number = 1)$value[[3]]$chosen_transform, "log_x")
 
   ## Faster (use in-sample metrics, does NOT use orderNorm)
-  expect_silent(bn_trans <- step_bestNormalize(rec, all_numeric(), transform_options = list(out_of_sample = FALSE, allow_orderNorm = FALSE)))
+  expect_silent(bn_trans <- step_best_normalize(rec, all_numeric(), transform_options = list(out_of_sample = FALSE, allow_orderNorm = FALSE)))
   expect_silent(bn_estimates <- prep(bn_trans, training = as.data.frame(iris)))
   expect_silent(bn_data <- bake(bn_estimates, as.data.frame(iris)))
   # plot(density(iris[, "Petal.Length"]), main = "before")
@@ -81,7 +86,7 @@ test_that('step_* transformations with missing/negative/discrete data', {
   expect_equal(nrow(tidy(bc_estimates, number = 1)), 3)
   
   ## Using bestNormalize
-  expect_silent(bn_trans <- step_bestNormalize(rec, all_numeric()))
+  expect_silent(bn_trans <- step_best_normalize(rec, all_numeric()))
   expect_silent(bn_estimates <- prep(bn_trans, training = as.data.frame(iris2)))
   expect_silent(bn_data <- bake(bn_estimates, as.data.frame(iris2)))
   # plot(density(iris2[, "Petal.Length"]), main = "before")
@@ -93,7 +98,7 @@ test_that('step_* transformations with missing/negative/discrete data', {
   expect_identical(dt1, bn_data$Petal.Length)
   
   ## LOO 
-  expect_silent(bn_trans <- step_bestNormalize(rec, all_numeric(), transform_options = list(loo = TRUE, allow_orderNorm = FALSE)))
+  expect_silent(bn_trans <- step_best_normalize(rec, all_numeric(), transform_options = list(loo = TRUE, allow_orderNorm = FALSE)))
   expect_silent(bn_estimates <- prep(bn_trans, training = as.data.frame(iris2)))
   expect_silent(bn_data <- bake(bn_estimates, as.data.frame(iris2)))
   # plot(density(iris2[, "Petal.Length"]), main = "before")
@@ -104,7 +109,7 @@ test_that('step_* transformations with missing/negative/discrete data', {
   # expect_s3_class(tidy(bn_estimates, number = 1)$value[[3]]$chosen_transform, "lambert")
 
   ## Faster (use in-sample metrics, does NOT use orderNorm)
-  expect_silent(bn_trans <- step_bestNormalize(rec, all_numeric(), transform_options = list(out_of_sample = FALSE, allow_orderNorm = FALSE)))
+  expect_silent(bn_trans <- step_best_normalize(rec, all_numeric(), transform_options = list(out_of_sample = FALSE, allow_orderNorm = FALSE)))
   expect_silent(bn_estimates <- prep(bn_trans, training = as.data.frame(iris2)))
   expect_silent(bn_data <- bake(bn_estimates, as.data.frame(iris2)))
   # plot(density(iris2[, "Petal.Length"]), main = "before")
