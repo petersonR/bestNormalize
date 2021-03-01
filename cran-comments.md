@@ -1,10 +1,12 @@
 ## Test environments 
 - win-builder (release)
-- local macOS (Catalina 10.15.4)
+- local macOS (Catalina 11.2.2)
 - travis-ci.org Ubuntu (R-release, R-devel)
 
 ## R CMD check results
 There were no ERRORs, WARNINGs, or NOTEs.
 
 ## Downstream dependencies
-There are currently no downstream dependencies for this package
+mlr3pipelines suggests bestNormalize but only uses its 
+documentation and a minor transformation in a unit test. 
+Therefore it will not be affected. 
