@@ -34,7 +34,8 @@ Imports:
     recipes,
     tibble,
     methods,
-    butcher
+    butcher, 
+    purrr
 Suggests: 
     knitr,
     rmarkdown,
@@ -43,7 +44,8 @@ Suggests:
     mgcv,
     parallel, 
     ggplot2,
-    scales
+    scales,
+    rlang
 VignetteBuilder: knitr 
 LazyData: true
 RoxygenNote: 7.1.1

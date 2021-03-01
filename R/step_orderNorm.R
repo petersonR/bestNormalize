@@ -188,8 +188,9 @@ tidy.step_orderNorm <- function(x, ...) {
 #' @rdname step_orderNorm
 #' @param x A `step_orderNorm` object.
 #' @importFrom butcher axe_env
+#' @importFrom purrr map
 #' @export
 axe_env.step_orderNorm <- function(x, ...) {
-  x$terms <- purrr::map(x$terms, function(z) axe_env(z, ...))
+  x$terms <- purrr::map(x$terms, function(z) butcher::axe_env(z, ...))
   x
 }

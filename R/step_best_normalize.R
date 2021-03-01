@@ -204,8 +204,9 @@ step_bestNormalize_new <- function(...) {
 #' @rdname step_best_normalize
 #' @param x A `step_best_normalize` object.
 #' @importFrom butcher axe_env
+#' @importFrom purrr map
 #' @export
 axe_env.step_best_normalize <- function(x, ...) {
-  x$terms <- purrr::map(x$terms, function(z) axe_env(z, ...))
+  x$terms <- purrr::map(x$terms, function(z) butcher::axe_env(z, ...))
   x
 }
