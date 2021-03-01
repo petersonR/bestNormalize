@@ -6,7 +6,7 @@ sqrt_x_obj <- sqrt_x(train)
 
 test_that('sqrt_x Transforms original data consistently', {
   expect_equal(sqrt_x_obj$x.t, predict(sqrt_x_obj))
-  expect_equal(sqrt_x_obj$x, predict(sqrt_x_obj, inverse = T))
+  expect_equal(sqrt_x_obj$x, predict(sqrt_x_obj, inverse = TRUE))
 })
 
 test_that('sqrt_x Transforms new data consistently', {
@@ -36,7 +36,7 @@ sqrt_x_obj <- sqrt_x(train, standardize = FALSE)
 
 test_that('sqrt_x Transforms original data consistently', {
   expect_equal(sqrt_x_obj$x.t, predict(sqrt_x_obj))
-  expect_equal(sqrt_x_obj$x, predict(sqrt_x_obj, inverse = T))
+  expect_equal(sqrt_x_obj$x, predict(sqrt_x_obj, inverse = TRUE))
 })
 
 test_that('sqrt_x Transforms new data consistently', {

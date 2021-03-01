@@ -13,7 +13,7 @@ lambert_obj <- lambert(train)
 
 test_that('lambert Transforms original data consistently' , {
   expect_equal(lambert_obj$x.t, predict(lambert_obj))
-  expect_equal(lambert_obj$x, predict(lambert_obj, inverse = T))
+  expect_equal(lambert_obj$x, predict(lambert_obj, inverse = TRUE))
 })
 
 test_that('lambert Transforms new data consistently', {
@@ -29,7 +29,7 @@ lambert_obj <- lambert(train, standardize = FALSE)
 
 test_that('lambert without standardization Transforms original data consistently' , {
   expect_equal(lambert_obj$x.t, predict(lambert_obj))
-  expect_equal(lambert_obj$x, predict(lambert_obj, inverse = T))
+  expect_equal(lambert_obj$x, predict(lambert_obj, inverse = TRUE))
 })
 
 test_that('lambert without standardization Transforms new data consistently', {
@@ -49,7 +49,7 @@ lambert_obj <- lambert(train, type = 'hh')
 test_that('lambert Transforms original data consistently' , {
   expect_equal(lambert_obj$x.t, predict(lambert_obj))
   expect_equal(lambert_obj$x, 
-               predict(lambert_obj, inverse = T), 
+               predict(lambert_obj, inverse = TRUE), 
                tolerance = .001)
 })
 
@@ -69,7 +69,7 @@ lambert_obj <- lambert(train, type = 'h')
 
 test_that('lambert Transforms original data consistently' , {
   expect_equal(lambert_obj$x.t, predict(lambert_obj))
-  expect_equal(lambert_obj$x, predict(lambert_obj, inverse = T))
+  expect_equal(lambert_obj$x, predict(lambert_obj, inverse = TRUE))
 })
 
 test_that('lambert Transforms new data consistently', {

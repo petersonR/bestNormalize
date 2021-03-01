@@ -34,7 +34,10 @@
 #' @details The bestnormalize transformation can be used to rescale a variable
 #'   to be more similar to a normal distribution. See `?bestNormalize` for more
 #'   information; `step_best_normalize` is the implementation of `bestNormalize`
-#'   in the `recipes` context.
+#'   in the `recipes` context. 
+#'   
+#'   As of version 1.7, the `butcher` package can be used to (hopefully) improve 
+#'   scalability of this function on bigger data sets. 
 #'
 #' @examples
 #'
@@ -177,7 +180,7 @@ estimate_bn <- function(dat,
 tidy.step_best_normalize <- function(x, ...) {
   if (is_trained(x)) {
     res <- tibble(terms = names(x$transform_info),
-                  value = x$transform_info)
+                  value = lapply(x$transform_info, tidy))
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(terms = term_names, value = as.double(NA))
@@ -196,4 +199,13 @@ step_bestNormalize <- function(...) {
 step_bestNormalize_new <- function(...) {
   .Deprecated("step_best_normalize_new", package = "bestNormalize", old = "step_bestNormalize_new") 
   step_best_normalize_new(...)
+}
+
+#' @rdname step_best_normalize
+#' @param x A `step_best_normalize` object.
+#' @importFrom butcher axe_env
+#' @export
+axe_env.step_best_normalize <- function(x, ...) {
+  x$terms <- purrr::map(x$terms, function(z) axe_env(z, ...))
+  x
 }

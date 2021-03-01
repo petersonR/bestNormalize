@@ -340,6 +340,29 @@ print.bestNormalize <- function(x, ...) {
   print(x$chosen_transform)
 }
 
+#' @rdname bestNormalize
+#' @param x A `bestNormalize` object.
+#' @importFrom tibble tibble
+#' @export
+tidy.bestNormalize <- function(x) {
+  
+  chosen_name <- class(x$chosen_transform)[1]
+  chosen_tr <- x$chosen_transform
+  chosen <- list(chosen_tr)
+  names(chosen)[1] <- chosen_name
+  
+  method_names <- names(x$norm_stats)
+  other_method_names <- method_names[method_names!= chosen_name]
+  
+  value <- tibble(
+    "transform" = c(chosen_name, other_method_names),
+    "tr_object" = c(chosen, x$other_transforms),
+    "norm_stat" = x$norm_stats[c(chosen_name, other_method_names)],
+    "chosen" = c(1, rep(0, length(other_method_names)))
+  )
+}
+
+
 # Get out-of-sample normality statistics via repeated CV
 #' @importFrom doParallel registerDoParallel
 #' @importFrom doRNG "%dorng%"

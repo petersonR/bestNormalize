@@ -5,6 +5,10 @@
   (thank you to Georg M. Goerg, the author of `LambertW`, for pointing this out). 
 - Add `center_scale` transform as default when `standardize == TRUE`
 - Added error when trying to use repeated CV with much too small of folds 
+- Changed a few `T` and `F` to `TRUE` and `FALSE` 
+- Added documentation of how one can use `scales` and `ggplot2` to visualize all transformations.
+- Added `butcher` and `axe` functionality in order to improve scalability of `step_*` functions
+- Improved `tidy` functionality with bestNormalize and `step_best_normalize`
 
 # bestNormalize 1.6.1
 

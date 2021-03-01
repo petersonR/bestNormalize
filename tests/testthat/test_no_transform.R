@@ -6,7 +6,7 @@ no_transform_obj <- no_transform(train)
 
 test_that('no_transform Transforms original data consistently', {
   expect_equal(no_transform_obj$x.t, predict(no_transform_obj))
-  expect_equal(no_transform_obj$x, predict(no_transform_obj, inverse = T))
+  expect_equal(no_transform_obj$x, predict(no_transform_obj, inverse = TRUE))
 })
 
 test_that('no_transform Transforms new data consistently', {
@@ -37,7 +37,7 @@ center_scale_obj <- center_scale(train)
 
 test_that('center_scale Transforms original data consistently', {
   expect_equal(center_scale_obj$x.t, predict(center_scale_obj))
-  expect_equal(center_scale_obj$x, predict(center_scale_obj, inverse = T))
+  expect_equal(center_scale_obj$x, predict(center_scale_obj, inverse = TRUE))
 })
 
 test_that('center_scale Transforms new data consistently', {

@@ -74,7 +74,7 @@ lambert <- function(x, type = 's', standardize = TRUE, warn = FALSE, ...) {
   stopifnot(is.numeric(x))
   na_idx <- is.na(x)
   x_complete <- x[!na_idx]
-  obj <- unname(LambertW::Gaussianize(x_complete, type = type, return.tau.mat = T, ...))
+  obj <- unname(LambertW::Gaussianize(x_complete, type = type, return.tau.mat = TRUE, ...))
   
   x.t <- x
   x.t[!na_idx] <- obj[[1]]

@@ -32,6 +32,9 @@
 #'   more similar to a normal distribution. See `?orderNorm` for more
 #'   information; `step_orderNorm` is the implementation of `orderNorm` in the
 #'   `recipes` context.
+#'   
+#'   As of version 1.7, the `butcher` package can be used to (hopefully) improve 
+#'   scalability of this function on bigger data sets. 
 #'
 #' @examples
 #' library(recipes)
@@ -180,4 +183,13 @@ tidy.step_orderNorm <- function(x, ...) {
   }
   res$id <- x$id
   res
+}
+
+#' @rdname step_orderNorm
+#' @param x A `step_orderNorm` object.
+#' @importFrom butcher axe_env
+#' @export
+axe_env.step_orderNorm <- function(x, ...) {
+  x$terms <- purrr::map(x$terms, function(z) axe_env(z, ...))
+  x
 }

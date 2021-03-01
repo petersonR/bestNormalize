@@ -249,6 +249,41 @@ This speed-up is dependent on the number of repeats, the length of the vector to
 
 As of version 1.3, `bestNormalize` has the `loo` argument, which if set to `TRUE` will compute the leave-one-out cross-validation transformations for each observation and method. Instead of the out-of-sample estimates for normality being the mean of the values over repeated folds, now the estimate for normality is simply calculated for the distribution of leave-one-out transformed values. This is computationally difficult, so it also works with the `cluster` argument if desired. 
 
+## Visualizing transformations in `ggplot2` with `scales` package
+
+As of version 1.7, users can use the `scales` package in conjunction with `ggplot2` to facilitate plotting variables that have undergone a transformation with `bestNormalize` (or any other method). 
+
+```{r scales_ex}
+library(ggplot2)
+
+x <- rgamma(1000, 1, .1)
+bn <- bestNormalize(x)
+
+bn
+
+# say y is related linearly to the transformed x
+y <- bn$x.t * 1 + rnorm(1000)
+
+# A log transformation does OK...
+ggplot(data.frame(x=x,y=y), aes(x, y)) +
+  geom_point() + 
+  scale_x_continuous(trans = "log", breaks = scales::log_breaks())
+
+# Create bestNormalize scale for use in ggplot (using bestNormalize object)
+bn_trans <- scales::trans_new(
+  name = "bn_trans",
+  trans = function(x) predict(bn, newdata = x),
+  inverse = function(x) predict(bn, newdata = x, inverse = TRUE)
+)
+
+
+ggplot(data.frame(x=x,y=y), aes(x, y)) +
+  geom_point() + 
+  scale_x_continuous(trans = bn_trans)
+
+```
+
+
 # Application to `autotrader` data
 
 The `autotrader` data set was scraped from the [autotrader website](https://www.autotrader.com/) as part of this package (and because at the time of writing, I needed to buy a car). I apply the `bestNormalize` functionality to de-skew mileage, age, and price in my pricing model. See `?autotrader` for more information on this data set.
@@ -397,3 +432,5 @@ legend(
   bty = "n"
   )
 ```
+
+ 

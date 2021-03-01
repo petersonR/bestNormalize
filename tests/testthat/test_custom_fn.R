@@ -93,7 +93,7 @@ cuberoot_x_obj <- cuberoot_x(train)
 
 test_that('cuberoot_x Transforms original data consistently', {
   expect_equal(cuberoot_x_obj$x.t, predict(cuberoot_x_obj))
-  expect_equal(cuberoot_x_obj$x, predict(cuberoot_x_obj, inverse = T))
+  expect_equal(cuberoot_x_obj$x, predict(cuberoot_x_obj, inverse = TRUE))
 })
 
 test_that('cuberoot_x Transforms new data consistently', {
@@ -123,7 +123,7 @@ cuberoot_x_obj <- cuberoot_x(train, standardize = FALSE)
 
 test_that('cuberoot_x Transforms original data consistently', {
   expect_equal(cuberoot_x_obj$x.t, predict(cuberoot_x_obj))
-  expect_equal(cuberoot_x_obj$x, predict(cuberoot_x_obj, inverse = T))
+  expect_equal(cuberoot_x_obj$x, predict(cuberoot_x_obj, inverse = TRUE))
 })
 
 test_that('cuberoot_x Transforms new data consistently', {
@@ -259,82 +259,82 @@ new_transforms <- list(
 
 train <- iris$Petal.Width
 
-BNobject <- (bestNormalize(train, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
-BNobject4 <- bestNormalize(train, allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms)
-BNobject5 <- (bestNormalize(train, out_of_sample = TRUE, quiet = T, new_transforms = new_transforms))
+BNobject <- (bestNormalize(train, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
+BNobject4 <- bestNormalize(train, allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms)
+BNobject5 <- (bestNormalize(train, out_of_sample = TRUE, quiet = TRUE, new_transforms = new_transforms))
 
 # Test transformations
 test_that('BestNormalize transformations with positive data (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
-  expect_equal(BNobject$x, predict(BNobject, inverse = T))
+  expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
   expect_equal(BNobject4$x.t, predict(BNobject4))
-  expect_equal(BNobject4$x, predict(BNobject4, inverse = T))
+  expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
 # 
-BNobject <- suppressWarnings(bestNormalize(c(-1, train), quiet = T, new_transforms = new_transforms))
-BNobject4 <- suppressWarnings(bestNormalize(c(-1, train), allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+BNobject <- suppressWarnings(bestNormalize(c(-1, train), quiet = TRUE, new_transforms = new_transforms))
+BNobject4 <- suppressWarnings(bestNormalize(c(-1, train), allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
 test_that('BestNormalize transformations with mixed data, in-sample (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
-  expect_equal(BNobject$x, predict(BNobject, inverse = T))
+  expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
   expect_equal(BNobject4$x.t, predict(BNobject4))
-  expect_equal(BNobject4$x, predict(BNobject4, inverse = T))
+  expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
 
-BNobject <- suppressWarnings(bestNormalize(c(-train), out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
-BNobject4 <- suppressWarnings(bestNormalize(c(-train), allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+BNobject <- suppressWarnings(bestNormalize(c(-train), out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
+BNobject4 <- suppressWarnings(bestNormalize(c(-train), allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
 test_that('BestNormalize transformations with negative data (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
-  expect_equal(BNobject$x, predict(BNobject, inverse = T))
+  expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
   expect_equal(BNobject4$x.t, predict(BNobject4))
-  expect_equal(BNobject4$x, predict(BNobject4, inverse = T))
+  expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
 train2 <- c(train, -1, NA)
-BNobject <- suppressWarnings(bestNormalize(train2, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
-BNobject4 <- suppressWarnings(bestNormalize(train2, allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+BNobject <- suppressWarnings(bestNormalize(train2, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
+BNobject4 <- suppressWarnings(bestNormalize(train2, allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
 test_that('bestNormalize transformations with mixed data and missing values (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
-  expect_equal(BNobject$x, predict(BNobject, inverse = T))
+  expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
   expect_equal(BNobject4$x.t, predict(BNobject4))
-  expect_equal(BNobject4$x, predict(BNobject4, inverse = T))
+  expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
 test_that('bestNormalize handles missing original data  (with custom fns)', {
-  suppressWarnings(b <- bestNormalize(c(NA, train), out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+  suppressWarnings(b <- bestNormalize(c(NA, train), out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
   expect_equal(as.numeric(NA), b$x.t[1])
   expect_equal(as.numeric(NA), predict(b)[1])
   expect_equal(as.numeric(NA), predict(b, inverse = TRUE)[1])
 })
 
 test_that('bestNormalize handles missing new data  (with custom fns)', {
-  suppressWarnings(b <- bestNormalize(train, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+  suppressWarnings(b <- bestNormalize(train, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA))[2])
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
 })
 
 # Test standardize = FALSE
 train2 <- c(train, -1, NA)
-BNobject <- suppressWarnings(bestNormalize(train2, standardize = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+BNobject <- suppressWarnings(bestNormalize(train2, standardize = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
 BNobject4 <- suppressWarnings(bestNormalize(train2, standardize = FALSE, 
-                                            allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+                                            allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
 test_that('BestNormalize transformations without standardization  (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
-  expect_equal(BNobject$x, predict(BNobject, inverse = T))
+  expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
   expect_equal(BNobject4$x.t, predict(BNobject4))
-  expect_equal(BNobject4$x, predict(BNobject4, inverse = T))
+  expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
 test_that('bestNormalize without standardization handles missing original data  (with custom fns)', {
-  suppressWarnings(b <- bestNormalize(c(NA, train), standardize = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+  suppressWarnings(b <- bestNormalize(c(NA, train), standardize = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
   expect_equal(as.numeric(NA), b$x.t[1])
   expect_equal(as.numeric(NA), predict(b)[1])
   expect_equal(as.numeric(NA), predict(b, inverse = TRUE)[1])
 })
 
 test_that('bestNormalize without standardization handles missing new data  (with custom fns)', {
-  suppressWarnings(b <- bestNormalize(train, standardize = FALSE, out_of_sample = FALSE, quiet = T, new_transforms = new_transforms))
+  suppressWarnings(b <- bestNormalize(train, standardize = FALSE, out_of_sample = FALSE, quiet = TRUE, new_transforms = new_transforms))
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA))[2])
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
 })
@@ -343,7 +343,7 @@ test_that('bestNormalize without standardization handles missing new data  (with
 test_that("bestNormalize works with lambert of type s (with custom fns)", {
   skip_on_travis()
   skip_on_cran()
-  b <-  suppressWarnings(bestNormalize(train, allow_lambert_s = TRUE, quiet = T, new_transforms = new_transforms))
+  b <-  suppressWarnings(bestNormalize(train, allow_lambert_s = TRUE, quiet = TRUE, new_transforms = new_transforms))
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(is.null(b$other_transforms$lambert_h))
 })
@@ -351,22 +351,22 @@ test_that("bestNormalize works with lambert of type s (with custom fns)", {
 test_that("bestNormalize works with lambert of type h (with custom fns)", {
   skip_on_travis()
   skip_on_cran()
-  b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = T, new_transforms = new_transforms))
+  b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = TRUE, new_transforms = new_transforms))
   expect_true(!is.null(b$other_transforms$lambert_h))
 })
 
 test_that("bestNormalize works with lambert of type h (with custom fns)", {
   skip_on_travis()
   skip_on_cran()
-  b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = T, new_transforms = new_transforms))
+  b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, quiet = TRUE, new_transforms = new_transforms))
   expect_true(!is.null(b$other_transforms$lambert_h))
 })
 
 test_that("options work for bestNormalize and with new transforms", {
   ## 
-  expect_silent(b <- bestNormalize(train, tr_opts = list(cuberoot_x = list(a = 1)), warn = F, new_transforms = new_transforms))
+  expect_silent(b <- bestNormalize(train, tr_opts = list(cuberoot_x = list(a = 1)), warn = FALSE, new_transforms = new_transforms))
   expect_equal(b$other_transforms$cuberoot_x$a, 1)
-  expect_silent(b <- bestNormalize(train, tr_opts = list(cuberoot_x = list(a = 100)), warn = F, new_transforms = new_transforms))
+  expect_silent(b <- bestNormalize(train, tr_opts = list(cuberoot_x = list(a = 100)), warn = FALSE, new_transforms = new_transforms))
   expect_equal(b$other_transforms$cuberoot_x$a, 100)
   
 })
@@ -374,10 +374,10 @@ test_that("options work for bestNormalize and with new transforms", {
 
 # Error checking for custom functions
 test_that("errors work for new transforms when improperly specified", {
-  expect_error(b <- bestNormalize(train, warn = F, new_transforms = "not_a_transform"))
+  expect_error(b <- bestNormalize(train, warn = FALSE, new_transforms = "not_a_transform"))
   
   # No predict method
-  expect_error(b <- bestNormalize(train, warn = F, new_transforms = list(I)))
+  expect_error(b <- bestNormalize(train, warn = FALSE, new_transforms = list(I)))
 })
 
 

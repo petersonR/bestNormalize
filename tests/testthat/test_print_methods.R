@@ -4,7 +4,7 @@ data(iris)
 
 train <- c(NA, -1, iris$Petal.Width)
 
-bn <- suppressWarnings(bestNormalize(train, quiet = T))
+bn <- suppressWarnings(bestNormalize(train, quiet = TRUE))
 test_that('bestNormalize print method runs without error or warning', {
   expect_output(print(bn))
 })

@@ -40,7 +40,7 @@ boxcox_obj <- boxcox(train, standardize = FALSE)
 
 test_that('boxcox Transforms original data consistently', {
   expect_equal(boxcox_obj$x.t, predict(boxcox_obj))
-  expect_equal(boxcox_obj$x, predict(boxcox_obj, inverse = T))
+  expect_equal(boxcox_obj$x, predict(boxcox_obj, inverse = TRUE))
 })
 
 test_that('boxcox Transforms new data consistently', {

@@ -4,6 +4,7 @@
 \alias{bestNormalize}
 \alias{predict.bestNormalize}
 \alias{print.bestNormalize}
+\alias{tidy.bestNormalize}
 \title{Calculate and perform best normalizing transformation}
 \usage{
 bestNormalize(
@@ -29,9 +30,11 @@ bestNormalize(
 \method{predict}{bestNormalize}(object, newdata = NULL, inverse = FALSE, ...)
 
 \method{print}{bestNormalize}(x, ...)
+
+\method{tidy}{bestNormalize}(x)
 }
 \arguments{
-\item{x}{A vector to normalize}
+\item{x}{A `bestNormalize` object.}
 
 \item{standardize}{If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal. This will

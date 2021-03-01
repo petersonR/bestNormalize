@@ -33,14 +33,17 @@ Imports:
     doRNG,
     recipes,
     tibble,
-    methods
+    methods,
+    butcher
 Suggests: 
     knitr,
     rmarkdown,
     MASS,
     testthat,
     mgcv,
-    parallel
+    parallel, 
+    ggplot2,
+    scales
 VignetteBuilder: knitr 
 LazyData: true
 RoxygenNote: 7.1.1

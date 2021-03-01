@@ -5,6 +5,7 @@
 \alias{step_bestNormalize}
 \alias{step_bestNormalize_new}
 \alias{tidy.step_best_normalize}
+\alias{axe_env.step_best_normalize}
 \title{Run bestNormalize transformation for \code{recipes} implementation}
 \usage{
 step_best_normalize(
@@ -20,6 +21,8 @@ step_best_normalize(
 )
 
 \method{tidy}{step_best_normalize}(x, ...)
+
+\method{axe_env}{step_best_normalize}(x, ...)
 }
 \arguments{
 \item{recipe}{A formula or recipe}
@@ -62,7 +65,10 @@ An updated version of `recipe` with the new step added to the
 The bestnormalize transformation can be used to rescale a variable
   to be more similar to a normal distribution. See `?bestNormalize` for more
   information; `step_best_normalize` is the implementation of `bestNormalize`
-  in the `recipes` context.
+  in the `recipes` context. 
+  
+  As of version 1.7, the `butcher` package can be used to (hopefully) improve 
+  scalability of this function on bigger data sets.
 }
 \examples{
 

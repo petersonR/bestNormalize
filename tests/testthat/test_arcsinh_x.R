@@ -6,7 +6,7 @@ arcsinh_x_obj <- arcsinh_x(train)
 
 test_that('arcsinh_x Transforms original data consistently', {
   expect_equal(arcsinh_x_obj$x.t, predict(arcsinh_x_obj))
-  expect_equal(arcsinh_x_obj$x, predict(arcsinh_x_obj, inverse = T))
+  expect_equal(arcsinh_x_obj$x, predict(arcsinh_x_obj, inverse = TRUE))
 })
 
 test_that('arcsinh_x Transforms new data consistently', {
@@ -36,7 +36,7 @@ arcsinh_x_obj <- arcsinh_x(train, standardize = FALSE)
 
 test_that('arcsinh_x Transforms original data consistently', {
   expect_equal(arcsinh_x_obj$x.t, predict(arcsinh_x_obj))
-  expect_equal(arcsinh_x_obj$x, predict(arcsinh_x_obj, inverse = T))
+  expect_equal(arcsinh_x_obj$x, predict(arcsinh_x_obj, inverse = TRUE))
 })
 
 test_that('arcsinh_x Transforms new data consistently', {

@@ -7,7 +7,7 @@ orderNorm_obj <- suppressWarnings(orderNorm(train))
 
 test_that('orderNorm transforms original data consistently', {
   expect_equal(orderNorm_obj$x.t, predict(orderNorm_obj))
-  expect_equal(orderNorm_obj$x, predict(orderNorm_obj, inverse = T))
+  expect_equal(orderNorm_obj$x, predict(orderNorm_obj, inverse = TRUE))
 })
 
 test_that('orderNorm Transforms new data consistently', {

@@ -6,7 +6,7 @@ log_x_obj <- log_x(train)
 
 test_that('log_x Transforms original data consistently', {
   expect_equal(log_x_obj$x.t, predict(log_x_obj))
-  expect_equal(log_x_obj$x, predict(log_x_obj, inverse = T))
+  expect_equal(log_x_obj$x, predict(log_x_obj, inverse = TRUE))
 })
 
 test_that('log_x Transforms new data consistently', {
@@ -36,7 +36,7 @@ log_x_obj <- log_x(train, standardize = FALSE)
 
 test_that('log_x Transforms original data consistently', {
   expect_equal(log_x_obj$x.t, predict(log_x_obj))
-  expect_equal(log_x_obj$x, predict(log_x_obj, inverse = T))
+  expect_equal(log_x_obj$x, predict(log_x_obj, inverse = TRUE))
 })
 
 test_that('log_x Transforms new data consistently', {

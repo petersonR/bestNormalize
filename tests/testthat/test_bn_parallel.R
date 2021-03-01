@@ -9,18 +9,18 @@ train <- iris$Petal.Width[rep(1:nrow(iris), each = 3)]
 cl <- parallel::makeCluster(2, setup_strategy = "sequential")
 
 test_that("Parallel functionality works for RCV", {
-  b <- bestNormalize(train, warn = FALSE, cluster = cl, r = 2, quiet = T)
+  b <- bestNormalize(train, warn = FALSE, cluster = cl, r = 2, quiet = TRUE)
   expect_true(is.null(b$other_transforms$lambert_h))
   
-  b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_s = TRUE, r = 2, quiet = T)
+  b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_s = TRUE, r = 2, quiet = TRUE)
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(is.null(b$other_transforms$lambert_h))
   
-  b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, allow_lambert_s = F, r = 2, quiet = T)
+  b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, allow_lambert_s = FALSE, r = 2, quiet = TRUE)
   expect_true(is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
   
-  b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, allow_lambert_s = TRUE, r = 2, quiet = T)
+  b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, allow_lambert_s = TRUE, r = 2, quiet = TRUE)
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
   
@@ -29,9 +29,9 @@ test_that("Parallel functionality works for RCV", {
 train <- iris$Petal.Width
 
 test_that("Parallel functionality works for LOO", {
-  b <- bestNormalize(train, warn = FALSE, cluster = cl, loo = T, quiet = T)
+  b <- bestNormalize(train, warn = FALSE, cluster = cl, loo = TRUE, quiet = TRUE)
   b <- bestNormalize(train, warn = FALSE, allow_lambert_h = TRUE, 
-                     allow_lambert_s = TRUE, loo = T, quiet = F)
+                     allow_lambert_s = TRUE, loo = TRUE, quiet = FALSE)
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
   
@@ -198,20 +198,20 @@ new_transforms <- list(
 )
 
 test_that("Parallel functionality works for RCV", {
-  expect_silent(b <- bestNormalize(train, warn = FALSE, cluster = cl, r = 2, quiet = T, new_transforms = new_transforms))
+  expect_silent(b <- bestNormalize(train, warn = FALSE, cluster = cl, r = 2, quiet = TRUE, new_transforms = new_transforms))
   expect_true(is.null(b$other_transforms$lambert_h))
   
   expect_silent(b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_s = TRUE, 
-                                   r = 2, quiet = T, new_transforms = new_transforms))
+                                   r = 2, quiet = TRUE, new_transforms = new_transforms))
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(is.null(b$other_transforms$lambert_h))
   
   expect_silent(b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, 
-                                   r = 2, quiet = T, new_transforms = new_transforms))
+                                   r = 2, quiet = TRUE, new_transforms = new_transforms))
   expect_true(!is.null(b$other_transforms$lambert_h))
   
   expect_silent(b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, 
-                                   allow_lambert_s = TRUE, r = 2, quiet = T, new_transforms = new_transforms))
+                                   allow_lambert_s = TRUE, r = 2, quiet = TRUE, new_transforms = new_transforms))
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
   
@@ -220,9 +220,9 @@ test_that("Parallel functionality works for RCV", {
 train <- iris$Petal.Width
 
 test_that("Parallel functionality works for LOO", {
-  b <- bestNormalize(train, warn = FALSE, cluster = cl, loo = T, quiet = T, new_transforms = new_transforms)
+  b <- bestNormalize(train, warn = FALSE, cluster = cl, loo = TRUE, quiet = TRUE, new_transforms = new_transforms)
   b <- bestNormalize(train, warn = FALSE, cluster = cl, allow_lambert_h = TRUE, 
-                     allow_lambert_s = TRUE, loo = T, quiet = T, new_transforms = new_transforms)
+                     allow_lambert_s = TRUE, loo = TRUE, quiet = TRUE, new_transforms = new_transforms)
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
   

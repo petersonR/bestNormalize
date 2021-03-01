@@ -3,6 +3,7 @@
 \name{step_orderNorm}
 \alias{step_orderNorm}
 \alias{tidy.step_orderNorm}
+\alias{axe_env.step_orderNorm}
 \title{ORQ normalization (orderNorm) for \code{recipes} implementation}
 \usage{
 step_orderNorm(
@@ -18,6 +19,8 @@ step_orderNorm(
 )
 
 \method{tidy}{step_orderNorm}(x, ...)
+
+\method{axe_env}{step_orderNorm}(x, ...)
 }
 \arguments{
 \item{recipe}{A formula or recipe}
@@ -61,6 +64,9 @@ The orderNorm transformation can be used to rescale a variable to be
   more similar to a normal distribution. See `?orderNorm` for more
   information; `step_orderNorm` is the implementation of `orderNorm` in the
   `recipes` context.
+  
+  As of version 1.7, the `butcher` package can be used to (hopefully) improve 
+  scalability of this function on bigger data sets.
 }
 \examples{
 library(recipes)

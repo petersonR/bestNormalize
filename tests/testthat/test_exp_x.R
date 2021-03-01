@@ -36,7 +36,7 @@ exp_x_obj <- exp_x(train, standardize = FALSE)
 
 test_that('exp_x Transforms original data consistently', {
   expect_equal(exp_x_obj$x.t, predict(exp_x_obj))
-  expect_equal(exp_x_obj$x, predict(exp_x_obj, inverse = T))
+  expect_equal(exp_x_obj$x, predict(exp_x_obj, inverse = TRUE))
 })
 
 test_that('exp_x Transforms new data consistently', {

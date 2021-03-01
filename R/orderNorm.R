@@ -157,7 +157,7 @@ print.orderNorm <- function(x, ...) {
         paste0('ties\n - ', length(unique(x$x)), ' unique values'),
         'no ties'), '\n',
       '- Original quantiles:\n')
-  print(round(quantile(x$x, na.rm = T), 3))
+  print(round(quantile(x$x, na.rm = TRUE), 3))
 }
 
 #' @importFrom stats approx fitted predict.glm qnorm
@@ -173,20 +173,20 @@ orderNorm_trans <- function(orderNorm_obj, new_points, warn) {
     if (warn) warning('Transformations requested outside observed domain; logit approx. on ranks applied')
     fit <- orderNorm_obj$fit
     p <- qnorm(fitted(fit, type = "response"))
-    l_idx <- vals$x < min(old_points, na.rm = T)
-    h_idx <- vals$x > max(old_points, na.rm = T)
+    l_idx <- vals$x < min(old_points, na.rm = TRUE)
+    h_idx <- vals$x > max(old_points, na.rm = TRUE)
     
     # Check 
     if (any(l_idx)) {
       xx <- data.frame(x = vals$x[l_idx])
       vals$y[l_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - 
-        (min(p, na.rm = T) - min(x_t, na.rm = T))
+        (min(p, na.rm = TRUE) - min(x_t, na.rm = TRUE))
       
     }
     if (any(h_idx)) {
       xx <- data.frame(x = vals$x[h_idx])
       vals$y[h_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - 
-        (max(p, na.rm = T) - max(x_t, na.rm = T))
+        (max(p, na.rm = TRUE) - max(x_t, na.rm = TRUE))
     }
   }
   
@@ -207,20 +207,20 @@ inv_orderNorm_trans <- function(orderNorm_obj, new_points_x_t, warn) {
     
     fit <- orderNorm_obj$fit
     p <- qnorm(fitted(fit, type = "response"))
-    l_idx <- vals$x < min(x_t, na.rm = T)
-    h_idx <- vals$x > max(x_t, na.rm = T)
+    l_idx <- vals$x < min(x_t, na.rm = TRUE)
+    h_idx <- vals$x > max(x_t, na.rm = TRUE)
     
     # Check 
     if (any(l_idx)) {
       # Solve algebraically from original transformation
-      logits <- log(pnorm(vals$x[l_idx] + min(p, na.rm = T) - min(x_t, na.rm = T)) / 
-                      (1 - pnorm(vals$x[l_idx] + min(p, na.rm = T) - min(x_t, na.rm = T))))
+      logits <- log(pnorm(vals$x[l_idx] + min(p, na.rm = TRUE) - min(x_t, na.rm = TRUE)) / 
+                      (1 - pnorm(vals$x[l_idx] + min(p, na.rm = TRUE) - min(x_t, na.rm = TRUE))))
       vals$y[l_idx] <- 
         unname((logits - fit$coef[1]) / fit$coef[2])
     }
     if (any(h_idx)) {
-      logits <- log(pnorm(vals$x[h_idx] + max(p, na.rm = T) - max(x_t, na.rm = T)) / 
-                      (1 - pnorm(vals$x[h_idx] + max(p, na.rm = T) - max(x_t, na.rm = T))))
+      logits <- log(pnorm(vals$x[h_idx] + max(p, na.rm = TRUE) - max(x_t, na.rm = TRUE)) / 
+                      (1 - pnorm(vals$x[h_idx] + max(p, na.rm = TRUE) - max(x_t, na.rm = TRUE))))
       vals$y[h_idx] <- 
         unname((logits - fit$coef[1]) / fit$coef[2])
     }
