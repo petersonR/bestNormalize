@@ -19,9 +19,8 @@ Description: Estimate a suite of normalizing transformations, including
     of Lambert WxF transformations, and the ordered quantile normalization 
     transformation. It estimates the normalization efficacy of other
     commonly used transformations, and it allows users to specify 
-    custom transformations or normalization statistics. Finally, bestNormalize
-    and ORQ normalization can be integrated into machine learning workflows 
-    via recipes. 
+    custom transformations or normalization statistics. Finally, functionality
+    can be integrated into a machine learning workflow via recipes. 
 URL: https://github.com/petersonR/bestNormalize
 License: GPL-3
 Depends: 
