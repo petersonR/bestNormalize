@@ -1,4 +1,6 @@
-# bestNormalize 1.6.7
+# bestNormalize 1.7.0.9999
+
+# bestNormalize 1.7.0
 
 - changed `step_bestNormalize` to `step_best_normalize`, responding to [8](https://github.com/petersonR/bestNormalize/issues/8)
 - Fixed error in documentation regarding `LambertW` transformation types 
