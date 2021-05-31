@@ -1,7 +1,7 @@
 context('bestNormalize parallel functionality')
 
 skip_on_cran()
-skip_on_travis()
+skip_on_ci()
 
 data(iris)
 train <- iris$Petal.Width[rep(1:nrow(iris), each = 3)]
