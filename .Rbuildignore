@@ -8,3 +8,4 @@
 ^Meta$
 ^CRAN-RELEASE$
 ^\.github$
+^codecov\.yml$

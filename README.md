@@ -7,7 +7,10 @@
 Status](https://travis-ci.org/petersonR/bestNormalize.svg?branch=master)](https://travis-ci.org/petersonR/bestNormalize)
 [![CRAN
 version](https://www.r-pkg.org/badges/version/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
+[![R-CMD-check](https://github.com/petersonR/bestNormalize/workflows/R-CMD-check/badge.svg)](https://github.com/petersonR/bestNormalize/actions)
 [![downloads](https://cranlogs.r-pkg.org/badges/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
+[![Codecov test
+coverage](https://codecov.io/gh/petersonR/bestNormalize/branch/master/graph/badge.svg)](https://codecov.io/gh/petersonR/bestNormalize?branch=master)
 
 The `bestNormalize` R package was designed to help find a normalizing
 transformation for a vector. There are many techniques that have been
@@ -47,7 +50,7 @@ is generally not the main goal of these procedures).
 ## Installation
 
 You can install the most recent (devel) version of bestNormalize from
-github with:
+GitHub with:
 
 ``` r
 # install.packages("devtools")
@@ -80,10 +83,10 @@ BN_obj
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
 #>  - arcsinh(x): 3.6204
 #>  - Box-Cox: 0.96
+#>  - Center+scale: 6.7851
 #>  - Exp(x): 50.8513
 #>  - Lambert's W (type s): 1.0572
 #>  - Log_b(x+a): 1.908
-#>  - No transform: 6.7851
 #>  - orderNorm (ORQ): 1.0516
 #>  - sqrt(x + a): 1.4556
 #>  - Yeo-Johnson: 1.7385
@@ -111,8 +114,7 @@ As of version 1.3, the package supports leave-one-out cross-validation
 as well. ORQ normalization works very well when the size of the test
 dataset is low relative to the training data set, so it will often be
 selected via leave-one-out cross-validation (which is why we set
-`allow_orderNorm = FALSE`
-here).
+`allow_orderNorm = FALSE` here).
 
 ``` r
 (BN_loo <- bestNormalize(x, allow_orderNorm = FALSE, allow_lambert_s = TRUE, loo = TRUE))
@@ -120,10 +122,10 @@ here).
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):
 #>  - arcsinh(x): 14.0712
 #>  - Box-Cox: 0.8077
+#>  - Center+scale: 26.5181
 #>  - Exp(x): 451.435
 #>  - Lambert's W (type s): 1.269
 #>  - Log_b(x+a): 4.5374
-#>  - No transform: 26.624
 #>  - sqrt(x + a): 3.3655
 #>  - Yeo-Johnson: 5.7997
 #> Estimation method: Out-of-sample via leave-one-out CV

@@ -43,10 +43,11 @@ Suggests:
     MASS,
     testthat,
     mgcv,
-    parallel, 
+    parallel,
     ggplot2,
     scales,
-    rlang
+    rlang,
+    covr
 VignetteBuilder: knitr 
 LazyData: true
 RoxygenNote: 7.1.1
