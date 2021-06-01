@@ -3,8 +3,6 @@
 
 # bestNormalize: Flexibly calculate the best normalizing transformation for a vector
 
-[![Travis-CI Build
-Status](https://travis-ci.org/petersonR/bestNormalize.svg?branch=master)](https://travis-ci.org/petersonR/bestNormalize)
 [![CRAN
 version](https://www.r-pkg.org/badges/version/bestNormalize)](https://cran.r-project.org/package=bestNormalize)
 [![R-CMD-check](https://github.com/petersonR/bestNormalize/workflows/R-CMD-check/badge.svg)](https://github.com/petersonR/bestNormalize/actions)
@@ -145,4 +143,5 @@ plot(BN_obj, leg_loc = "bottomright")
 ```
 
 For a more in depth tutorial, please consult [the package
-vignette](https://CRAN.R-project.org/package=bestNormalize/vignettes/bestNormalize.html).
+vignette](https://CRAN.R-project.org/package=bestNormalize/vignettes/bestNormalize.html),
+or the [package website](https://petersonr.github.io/bestNormalize).

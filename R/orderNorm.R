@@ -35,10 +35,17 @@
 #'   able to perform very well even on data as heavy-tailed as a Cauchy
 #'   distribution (paper to be published).
 #'
+#'   The fit used to perform the extrapolation uses a default of 10000
+#'   observations (or length(x) if that is less). This added approximation
+#'   improves the scalability, both computationally and in terms of memory used.
+#'   Do not set this value to be too low (e.g. <100), as there is no benefit to
+#'   doing so.
+#'
 #'   This transformation can be performed on new data and inverted via the
 #'   \code{predict} function.
 #'
 #' @param x A vector to normalize
+#' @param n_logit_fit Number of points used to fit logit approximation
 #' @param newdata a vector of data to be (reverse) transformed
 #' @param inverse if TRUE, performs reverse transformation
 #' @param object an object of class 'orderNorm'
@@ -82,7 +89,7 @@
 #'   \code{\link{bestNormalize}}, \code{\link{yeojohnson}}
 #' @importFrom stats qnorm glm
 #' @export
-orderNorm <- function(x, ..., warn = TRUE) {
+orderNorm <- function(x, n_logit_fit = min(length(x), 10000), ..., warn = TRUE) {
   stopifnot(is.numeric(x))
   ties_status <- 0
   nunique <- length(unique(x))
@@ -97,9 +104,16 @@ orderNorm <- function(x, ..., warn = TRUE) {
   x.t <- qnorm(q.x)
   
   # fit model for future extrapolation
+  # create "reduced" x with n_logit_fit equally spaced observations
+  keep_idx <- round(seq(1, length(x), length.out = min(length(x), n_logit_fit)))
+  x_red <- x[order(x[!na_idx])[keep_idx]]
+  n_red = length(x_red)
+  q_red <- (rank(x_red, na.last = 'keep') - .5) / n_red
+  
+  # fit model for future extrapolation
   fit <- suppressWarnings(
-    glm(q.x ~ x, family = 'binomial', 
-        weights = rep(length(x) - sum(is.na(x)), length(x)))
+    glm(q_red ~ x_red, family = 'binomial', 
+        weights = rep(n_red, n_red))
   )
   
   ptest <- nortest::pearson.test(x.t)
@@ -108,6 +122,7 @@ orderNorm <- function(x, ..., warn = TRUE) {
     x.t = x.t,
     x = x,
     n = length(x) - sum(is.na(x)),
+    n_logit_fit =  n_logit_fit,
     ties_status = ties_status,
     fit = fit,
     norm_stat =  unname(ptest$statistic / ptest$df)
@@ -178,13 +193,13 @@ orderNorm_trans <- function(orderNorm_obj, new_points, warn) {
     
     # Check 
     if (any(l_idx)) {
-      xx <- data.frame(x = vals$x[l_idx])
+      xx <- data.frame(x_red = vals$x[l_idx])
       vals$y[l_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - 
         (min(p, na.rm = TRUE) - min(x_t, na.rm = TRUE))
       
     }
     if (any(h_idx)) {
-      xx <- data.frame(x = vals$x[h_idx])
+      xx <- data.frame(x_red = vals$x[h_idx])
       vals$y[h_idx] <- qnorm(predict(fit, newdata = xx, type = 'response')) - 
         (max(p, na.rm = TRUE) - max(x_t, na.rm = TRUE))
     }

@@ -30,3 +30,14 @@ test_that('orderNorm correctly handles missing new data', {
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA))[2])
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
 })
+
+test_that('orderNorm Transforms new data consistently using n_logit_fit < n', {
+  orderNorm_obj <- suppressWarnings(orderNorm(train, n_logit_fit = 50))
+  nd <- seq(0, 4, length = 100)
+  expect_warning(pred <- predict(orderNorm_obj, newdata = nd))
+  expect_true(!any(is.na(pred)))
+  expect_warning(nd2 <- predict(orderNorm_obj, newdata = pred, inverse = TRUE))
+  expect_equal(nd, nd2)
+  
+  expect_equal(nrow(orderNorm_obj$fit$model), 50)
+})
