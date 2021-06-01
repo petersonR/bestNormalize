@@ -2,7 +2,7 @@
 
 - added packagedown website here: https://petersonr.github.io/bestNormalize
 - Implemented GH actions (code coverage and R CMD check) via `usethis` in response to [issue 7](https://github.com/petersonR/bestNormalize/issues/7)
-- Began implementation of improved scalability of ORQ transformation via `n_logit_fit` argument, with default of 5000. 
+- Began implementation of improved scalability of ORQ transformation via `n_logit_fit` argument, with default of 10000. 
 
 # bestNormalize 1.7.0
 
