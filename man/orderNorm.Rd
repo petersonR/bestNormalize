@@ -6,7 +6,7 @@
 \alias{print.orderNorm}
 \title{Calculate and perform Ordered Quantile normalizing transformation}
 \usage{
-orderNorm(x, ..., warn = TRUE)
+orderNorm(x, n_logit_fit = min(length(x), 10000), ..., warn = TRUE)
 
 \method{predict}{orderNorm}(object, newdata = NULL, inverse = FALSE, warn = TRUE, ...)
 
@@ -14,6 +14,8 @@ orderNorm(x, ..., warn = TRUE)
 }
 \arguments{
 \item{x}{A vector to normalize}
+
+\item{n_logit_fit}{Number of points used to fit logit approximation}
 
 \item{...}{additional arguments}
 
@@ -68,6 +70,12 @@ The Ordered Quantile (ORQ) normalization transformation,
   warning unless warn = FALSE.) However, we found that the extrapolation was
   able to perform very well even on data as heavy-tailed as a Cauchy
   distribution (paper to be published).
+
+  The fit used to perform the extrapolation uses a default of 10000
+  observations (or length(x) if that is less). This added approximation
+  improves the scalability, both computationally and in terms of memory used.
+  Do not set this value to be too low (e.g. <100), as there is no benefit to
+  doing so.
 
   This transformation can be performed on new data and inverted via the
   \code{predict} function.
