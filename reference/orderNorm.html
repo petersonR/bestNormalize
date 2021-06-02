@@ -67,6 +67,11 @@ Using linear interpolation between these percentiles, the ORQ normalization
   warning unless warn = FALSE.) However, we found that the extrapolation was
   able to perform very well even on data as heavy-tailed as a Cauchy
   distribution (paper to be published).
+The fit used to perform the extrapolation uses a default of 10000
+  observations (or length(x) if that is less). This added approximation
+  improves the scalability, both computationally and in terms of memory used.
+  Do not set this value to be too low (e.g. &amp;lt;100), as there is no benefit to
+  doing so.
 This transformation can be performed on new data and inverted via the
   predict function." />
 
@@ -187,11 +192,16 @@ This transformation can be performed on new data and inverted via the
   warning unless warn = FALSE.) However, we found that the extrapolation was
   able to perform very well even on data as heavy-tailed as a Cauchy
   distribution (paper to be published).</p>
+<p>The fit used to perform the extrapolation uses a default of 10000
+  observations (or length(x) if that is less). This added approximation
+  improves the scalability, both computationally and in terms of memory used.
+  Do not set this value to be too low (e.g. &lt;100), as there is no benefit to
+  doing so.</p>
 <p>This transformation can be performed on new data and inverted via the
   <code>predict</code> function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>orderNorm</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, warn <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>orderNorm</span><span class='op'>(</span><span class='va'>x</span>, n_logit_fit <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fl'>10000</span><span class='op'>)</span>, <span class='va'>...</span>, warn <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># S3 method for orderNorm</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>object</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, inverse <span class='op'>=</span> <span class='cn'>FALSE</span>, warn <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -205,6 +215,10 @@ This transformation can be performed on new data and inverted via the
     <tr>
       <th>x</th>
       <td><p>A vector to normalize</p></td>
+    </tr>
+    <tr>
+      <th>n_logit_fit</th>
+      <td><p>Number of points used to fit logit approximation</p></td>
     </tr>
     <tr>
       <th>...</th>
