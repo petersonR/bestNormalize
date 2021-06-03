@@ -144,4 +144,4 @@ plot(BN_obj, leg_loc = "bottomright")
 
 For a more in depth tutorial, please consult [the package
 vignette](https://CRAN.R-project.org/package=bestNormalize/vignettes/bestNormalize.html),
-or the [package website](https://petersonr.github.io/bestNormalize).
+or the [package website](https://petersonr.github.io/bestNormalize/).
