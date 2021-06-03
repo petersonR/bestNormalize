@@ -16,6 +16,7 @@ fit statistic.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://petersonr.github.io/bestNormalize/}
   \item \url{https://github.com/petersonR/bestNormalize}
 }
 

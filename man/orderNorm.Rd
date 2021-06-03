@@ -75,7 +75,8 @@ The Ordered Quantile (ORQ) normalization transformation,
   observations (or length(x) if that is less). This added approximation
   improves the scalability, both computationally and in terms of memory used.
   Do not set this value to be too low (e.g. <100), as there is no benefit to
-  doing so.
+  doing so. Increase if your test data set is large relative to 10000 and/or 
+  if you are worried about losing signal in the extremes of the range.
 
   This transformation can be performed on new data and inverted via the
   \code{predict} function.

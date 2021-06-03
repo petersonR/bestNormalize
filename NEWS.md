@@ -1,8 +1,8 @@
-# bestNormalize 1.7.0.9999
+# bestNormalize 1.8.0
 
 - added packagedown website here: https://petersonr.github.io/bestNormalize
 - Implemented GH actions (code coverage and R CMD check) via `usethis` in response to [issue 7](https://github.com/petersonR/bestNormalize/issues/7)
-- Attempting implementation of improved scalability of ORQ transformation via `n_logit_fit` argument, with default of 10000. This is fairly experimental, but should substantially decrease memory use of `orderNorm` while only minimally affecting the out-of-domain approximations. More documentation is forthcoming. 
+- Improved scalability of ORQ transformation via `n_logit_fit` argument, with default of 10000. This should substantially decrease memory use of `orderNorm` while only minimally affecting the out-of-domain approximations. 
 - Updated documentation
 
 # bestNormalize 1.7.0

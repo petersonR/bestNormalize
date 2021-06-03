@@ -1,12 +1,15 @@
 ## Test environments 
-- win-builder (release)
-- local macOS (Catalina 11.2.2)
-- travis-ci.org Ubuntu (R-release, R-devel)
+- GitHub Actions (ubuntu-18.04): 3.3, 3.4, 3.5, oldrel, release, devel
+- GitHub Actions (windows): release
+- Github Actions (macOS): release, devel
 
 ## R CMD check results
 There were no ERRORs, WARNINGs, or NOTEs.
 
 ## Downstream dependencies
-mlr3pipelines suggests bestNormalize but only uses its 
-documentation and a minor transformation in a unit test. 
-Therefore it will not be affected. 
+
+R CMD CHECK was run on two CRAN downstream dependencies/reverse suggests:
+- lambdaTS
+- mlr3pipelines 
+
+There were no ERRORs, WARNINGs, or NOTEs in either.

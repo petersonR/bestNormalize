@@ -1,8 +1,8 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 1.7.0.9999
-Date: 2021-05-31
+Version: 1.8.0
+Date: 2021-06-02
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan.a.peterson@cuanschutz.edu", 
                   role = c("aut", "cre"))
@@ -21,7 +21,9 @@ Description: Estimate a suite of normalizing transformations, including
     commonly used transformations, and it allows users to specify 
     custom transformations or normalization statistics. Finally, functionality
     can be integrated into a machine learning workflow via recipes. 
-URL: https://github.com/petersonR/bestNormalize
+URL: 
+    https://petersonr.github.io/bestNormalize/, 
+    https://github.com/petersonR/bestNormalize
 License: GPL-3
 Depends: 
     R (>= 3.1.0)
