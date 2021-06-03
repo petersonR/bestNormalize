@@ -72,7 +72,7 @@
 #'   of this cluster to \code{bestNormalize} via the cl argument. For best
 #'   performance, we recommend the number of clusters to be set to the number of
 #'   repeats r. Care should be taken to account for the number of observations
-#'   per fold; to small a number and the estimated normality statistic could be
+#'   per fold; too small a number and the estimated normality statistic could be
 #'   inaccurate, or at least suffer from high variability.
 #'
 #'
