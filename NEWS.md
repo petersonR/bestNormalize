@@ -1,4 +1,5 @@
 # bestNormalize 1.8.0.9000
+- update citation
 
 # bestNormalize 1.8.0
 
