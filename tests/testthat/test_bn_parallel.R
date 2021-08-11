@@ -4,7 +4,7 @@ skip_on_cran()
 skip_on_ci()
 
 data(iris)
-train <- iris$Petal.Width[rep(1:nrow(iris), each = 3)]
+train <- iris$Petal.Width
 
 cl <- parallel::makeCluster(2, setup_strategy = "sequential")
 
