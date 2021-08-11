@@ -179,11 +179,14 @@ estimate_bn <- function(dat,
 #' 
 tidy.step_best_normalize <- function(x, ...) {
   if (is_trained(x)) {
+    val <- lapply(x$transform_info, tidy)
+    chosen <- sapply(val, function(xx) xx$transform[xx$chosen == 1])
     res <- tibble(terms = names(x$transform_info),
-                  value = lapply(x$transform_info, tidy))
+                  chosen_transform = chosen,
+                  cv_info = val)
   } else {
     term_names <- sel2char(x$terms)
-    res <- tibble(terms = term_names, value = as.double(NA))
+    res <- tibble(terms = term_names, chosen = as.double(NA), cv_info = as.double(NA))
   }
   res$id <- x$id
   res

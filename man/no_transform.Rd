@@ -7,6 +7,7 @@
 \alias{print.no_transform}
 \alias{predict.center_scale}
 \alias{print.center_scale}
+\alias{tidy.no_transform}
 \title{Identity transformation and center/scale transform}
 \usage{
 no_transform(x, warn = TRUE, ...)
@@ -20,9 +21,11 @@ center_scale(x, warn = TRUE, ...)
 \method{predict}{center_scale}(object, newdata = NULL, inverse = FALSE, ...)
 
 \method{print}{center_scale}(x, ...)
+
+\method{tidy}{no_transform}(x)
 }
 \arguments{
-\item{x}{A vector}
+\item{x}{A `no_transform` object.}
 
 \item{warn}{Should a warning result from infinite values?}
 

@@ -152,3 +152,15 @@ print.center_scale <- function(x, ...) {
       '- mean (before standardization) =', x$mean, '\n',
       '- sd (before standardization) =', x$sd, '\n')
 }
+
+#' @rdname no_transform
+#' @param x A `no_transform` object.
+#' @importFrom tibble tibble
+#' @export
+tidy.no_transform <- function(x) {
+  value <- tibble(
+    "transform" = c("no_transform"),
+    "norm_stat" = x$norm_stat, 
+    "chosen" = 1
+  )
+}
