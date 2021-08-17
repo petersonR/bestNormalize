@@ -1,5 +1,5 @@
 # bestNormalize 1.8.0.9000
-- update citation
+- update citation (new R Journal publication!)
 - fix/add features to `tidy` method to work more generally, provide easy access to 
   chosen transformations (responding to [issue 9](https://github.com/petersonR/bestNormalize/issues/9))
 

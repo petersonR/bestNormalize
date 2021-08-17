@@ -7,8 +7,11 @@ citEntry(entry = "article",
          year = "2021",
 	       journal = "{The R Journal}",
          doi = "10.32614/RJ-2021-041", 
+         pages = "310--329",
+         volume = "13",
+         number = "1",
 	       textVersion = 
-        "(1) Peterson, R. A. (2021). Finding Optimal Normalizing Transformations via bestNormalize. The R Journal. DOI:10.32614/RJ-2021-041"
+        "(1) Peterson, R. A. (2021). Finding Optimal Normalizing Transformations via bestNormalize. The R Journal, 13:1, 310-329, DOI:10.32614/RJ-2021-041"
 )
 
 citEntry(entry = "article",
