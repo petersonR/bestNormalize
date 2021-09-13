@@ -118,17 +118,14 @@ estimate_boxcox_lambda <- function(x, lower = -1, upper = 2, eps = .001) {
   log_x <- log(x)
   xbar <- exp(mean(log_x))
   
-  fit <- lm(x ~ 1, data = data.frame(x = x))
-  xqr <- fit$qr
-  
   boxcox_loglik <- function(lambda) {
-    if (abs(lambda) > eps)
-      xt <- (x ^ lambda - 1) / lambda
-    else 
-      xt <- log_x * (1 + (lambda * log_x) / 2 * 
-                       (1 + (lambda * log_x) / 3 * 
-                          (1 + (lambda * log_x) / 4)))
-    - n / 2 * log(sum(qr.resid(xqr, xt / xbar ^ (lambda - 1)) ^ 2))
+    gm0 <- xbar ^ (lambda - 1)
+    z <- if (abs(lambda) <= eps)
+      log_x / gm0
+    else
+      (x ^ lambda - 1) / (lambda * gm0)
+    var_z <- var(z) * (n - 1) / n
+    - .5 * n * log(var_z)
   }
   
   results <- optimize(boxcox_loglik, lower = lower, 

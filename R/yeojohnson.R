@@ -129,14 +129,16 @@ estimate_yeojohnson_lambda <- function(x, lower = -5, upper = 5, eps = .001, ...
   n <- length(x)
   ccID <- !is.na(x)
   x <- x[ccID]
+  pos_idx = which(x >= 0)
+  neg_idx = which(x < 0)
   
+  constant <- sum(sign(x) * log(abs(x) + 1))
 
   # See references, Yeo & Johnson Biometrika (2000)
   yj_loglik <- function(lambda) {
-    x_t <- yeojohnson_trans(x, lambda, eps)
+    x_t <- yeojohnson_trans(x, lambda, eps, pos_idx = pos_idx, neg_idx = neg_idx)
     x_t_bar <- mean(x_t)
     x_t_var <- var(x_t) * (n - 1) / n
-    constant <- sum(sign(x) * log(abs(x) + 1))
     -0.5 * n * log(x_t_var) + (lambda - 1) * constant
   }
   
@@ -147,12 +149,14 @@ estimate_yeojohnson_lambda <- function(x, lower = -5, upper = 5, eps = .001, ...
   results$maximum
 }
 
-yeojohnson_trans <- function(x, lambda, eps = .001) {
-  pos_idx <- x >= 0
-  neg_idx <- x < 0
+yeojohnson_trans <- function(x, lambda, eps = .001, pos_idx, neg_idx) {
+  if(missing(pos_idx)) 
+    pos_idx <- which(x >= 0)
+  if(missing(neg_idx)) 
+    neg_idx <- which(x < 0)
   
   # Transform negative values
-  if (any(pos_idx)) {
+  if (length(pos_idx)>0) {
     if (abs(lambda) < eps) {
       x[pos_idx] <- log(x[pos_idx] + 1)
     } else {
@@ -161,7 +165,7 @@ yeojohnson_trans <- function(x, lambda, eps = .001) {
   } 
   
   # Transform nonnegative values
-  if (any(neg_idx)){
+  if (length(neg_idx)>0){
     if (abs(lambda - 2) < eps) {
       x[neg_idx] <- - log(-x[neg_idx] + 1)
     } else {
