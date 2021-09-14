@@ -74,9 +74,11 @@ iris2$group <- rep(1:2, nrow(iris)/2)
 test_that('step_* transformations with missing/negative/discrete data', {
   dt1 <- orderNorm(iris2$Petal.Length, warn = FALSE)$x.t
   
-  ## Using BoxCox
+  ## Using BoxCox (should have warning due to negative data)
   expect_silent(bc_trans <- step_BoxCox(rec, all_numeric()))
-  expect_silent(bc_estimates <- prep(bc_trans, training = as.data.frame(iris2)))
+  if(packageVersion("recipes") > "0.1.16")
+    expect_warning(bc_estimates <- prep(bc_trans, training = as.data.frame(iris2))) else 
+      expect_silent(bc_estimates <- prep(bc_trans, training = as.data.frame(iris2)))
   expect_silent(bc_data <- bake(bc_estimates, as.data.frame(iris2)))
   # plot(density(iris2[, "Petal.Length"]), main = "before")
   # plot(density(bc_data$Petal.Length), main = "after")
