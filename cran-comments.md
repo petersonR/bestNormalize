@@ -1,7 +1,7 @@
 ## Test environments 
-- GitHub Actions (ubuntu-18.04): 3.3, 3.4, 3.5, oldrel, release, devel
+- GitHub Actions (ubuntu-18.04): 3.5, 3.6, oldrel, release, devel
 - GitHub Actions (windows): release
-- Github Actions (macOS): release, devel
+- Github Actions (macOS): release
 
 ## R CMD check results
 There were no ERRORs, WARNINGs, or NOTEs.

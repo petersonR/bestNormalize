@@ -1,4 +1,4 @@
-# bestNormalize 1.8.1.9000
+# bestNormalize 1.8.2
 
 - improving scalability of `boxcox` in response to [issue 10](https://github.com/petersonR/bestNormalize/issues/10); thank you to Krzysztof Dyba ([kadyb](https://github.com/kadyb)) for the suggestions. 
 - improved scalability of `yeojohnson`, thanks to Emil Hvitfeldt ([EmilHvitfeldt](https://github.com/EmilHvitfeldt)) for his work on this problem for the `recipes` package [here](https://github.com/tidymodels/recipes/issues/782). 
