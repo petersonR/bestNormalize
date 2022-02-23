@@ -144,8 +144,8 @@ bake.step_orderNorm <- function(object, new_data, ...) {
 #' @importFrom recipes printer
 print.step_orderNorm <-
   function(x, width = max(20, options()$width - 35), ...) {
-    cat("orderNorm transformation on ", sep = "")
-    printer(names(x$transform_info), x$terms, x$trained, width = width)
+    title <- "orderNorm transformation on "
+    print_step(names(x$transform_info), x$terms, x$trained, width = width, title = title)
     invisible(x)
   }
 
