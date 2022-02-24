@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bestNormalize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.8.2.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/bestNormalize.html">Get started</a>
 </li>
@@ -67,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/petersonR/bestNormalize/">
+  <a href="https://github.com/petersonR/bestNormalize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -86,20 +82,20 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Customization within bestNormalize</h1>
-                        <h4 class="author">Ryan A Peterson</h4>
+                        <h4 data-toc-skip class="author">Ryan A Peterson</h4>
             
-            <h4 class="date">2021-09-20</h4>
+            <h4 data-toc-skip class="date">2022-02-24</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/petersonR/bestNormalize/blob/master/vignettes/customization.Rmd"><code>vignettes/customization.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/petersonR/bestNormalize/blob/HEAD/vignettes/customization.Rmd" class="external-link"><code>vignettes/customization.Rmd</code></a></small>
       <div class="hidden name"><code>customization.Rmd</code></div>
 
     </div>
 
     
     
-<div id="custom-functions-with-bestnormalize" class="section level1">
-<h1 class="hasAnchor">
-<a href="#custom-functions-with-bestnormalize" class="anchor"></a>Custom functions with bestNormalize</h1>
+<div class="section level2">
+<h2 id="custom-functions-with-bestnormalize">Custom functions with bestNormalize<a class="anchor" aria-label="anchor" href="#custom-functions-with-bestnormalize"></a>
+</h2>
 <p>This vignette will go over the steps required to implement a custom user-defined function within the <code>bestNormalize</code> framework.</p>
 <p>There are 3 steps.</p>
 <ol style="list-style-type: decimal">
@@ -107,50 +103,50 @@
 <li><p>Create predict method for transformation function (that can be applied to new data)</p></li>
 <li><p>Pass through new function and predict method to bestNormalize</p></li>
 </ol>
-<div id="example-cube-root" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-cube-root" class="anchor"></a>Example: cube-root</h2>
+<div class="section level3">
+<h3 id="example-cube-root">Example: cube-root<a class="anchor" aria-label="anchor" href="#example-cube-root"></a>
+</h3>
 </div>
-<div id="s3-methods" class="section level2">
-<h2 class="hasAnchor">
-<a href="#s3-methods" class="anchor"></a>S3 methods</h2>
+<div class="section level3">
+<h3 id="s3-methods">S3 methods<a class="anchor" aria-label="anchor" href="#s3-methods"></a>
+</h3>
 <p>Here, we start by defining a new function that we’ll call <code>cuberoot_x</code>, which will take an argument <code>a</code> (as does the <code>sqrt_x</code> function) which will try to add a constant if it sees any negative numbers in <code>x</code>. It will also take the argument <code>standardize</code> which will center and scale the transformed data so that it’s centered at 0 with SD = 1.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Define user-function</span>
 <span class="va">cuberoot_x</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">a</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">standardize</span> <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>
   
-  <span class="va">min_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fl">0</span>, <span class="op">-</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span> 
+  <span class="va">min_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">0</span>, <span class="op">-</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span> 
     <span class="va">a</span> <span class="op">&lt;-</span> <span class="va">min_a</span>
   <span class="kw">if</span><span class="op">(</span><span class="va">a</span> <span class="op">&lt;</span> <span class="va">min_a</span><span class="op">)</span> <span class="op">{</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/warning.html">warning</a></span><span class="op">(</span><span class="st">"Setting a &lt;  max(0, -(min(x))) can lead to transformation issues"</span>,
+    <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="st">"Setting a &lt;  max(0, -(min(x))) can lead to transformation issues"</span>,
             <span class="st">"Standardize set to FALSE"</span><span class="op">)</span>
     <span class="va">standardize</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span>
   <span class="op">}</span>
   
   
   <span class="va">x.t</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="va">a</span><span class="op">)</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>
-  <span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x.t</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-  <span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">x.t</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+  <span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x.t</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+  <span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x.t</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">standardize</span><span class="op">)</span> <span class="va">x.t</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">x.t</span> <span class="op">-</span> <span class="va">mu</span><span class="op">)</span> <span class="op">/</span> <span class="va">sigma</span>
   
   <span class="co"># Get in-sample normality statistic results</span>
-  <span class="va">ptest</span> <span class="op">&lt;-</span> <span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/pearson.test.html">pearson.test</a></span><span class="op">(</span><span class="va">x.t</span><span class="op">)</span>
+  <span class="va">ptest</span> <span class="op">&lt;-</span> <span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/pearson.test.html" class="external-link">pearson.test</a></span><span class="op">(</span><span class="va">x.t</span><span class="op">)</span>
   
-  <span class="va">val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="va">val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     x.t <span class="op">=</span> <span class="va">x.t</span>,
     x <span class="op">=</span> <span class="va">x</span>,
     mean <span class="op">=</span> <span class="va">mu</span>,
     sd <span class="op">=</span> <span class="va">sigma</span>,
     a <span class="op">=</span> <span class="va">a</span>,
-    n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x.t</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,
-    norm_stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="va">ptest</span><span class="op">$</span><span class="va">statistic</span> <span class="op">/</span> <span class="va">ptest</span><span class="op">$</span><span class="va">df</span><span class="op">)</span>,
+    n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x.t</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,
+    norm_stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">ptest</span><span class="op">$</span><span class="va">statistic</span> <span class="op">/</span> <span class="va">ptest</span><span class="op">$</span><span class="va">df</span><span class="op">)</span>,
     standardize <span class="op">=</span> <span class="va">standardize</span>
   <span class="op">)</span>
   
   <span class="co"># Assign class</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">val</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'cuberoot_x'</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">val</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">val</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'cuberoot_x'</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">val</span><span class="op">)</span><span class="op">)</span>
   <span class="va">val</span>
 <span class="op">}</span></code></pre></div>
 <p>Note that we assigned a class to the object this returns of the same name; this is necessary for successful implementation within <code>bestNormalize</code>. We’ll also need an associated <code>predict</code> method that is used to apply the transformation to newly observed data. `</p>
@@ -158,11 +154,11 @@
 <code class="sourceCode R"><span class="va">predict.cuberoot_x</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">inverse</span> <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="co"># If no data supplied and not inverse</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="va">inverse</span><span class="op">)</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="va">inverse</span><span class="op">)</span>
     <span class="va">newdata</span> <span class="op">&lt;-</span> <span class="va">object</span><span class="op">$</span><span class="va">x</span>
   
   <span class="co"># If no data supplied and inverse</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">inverse</span><span class="op">)</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">inverse</span><span class="op">)</span>
     <span class="va">newdata</span> <span class="op">&lt;-</span> <span class="va">object</span><span class="op">$</span><span class="va">x.t</span>
   
   <span class="co"># Actually performing transformations</span>
@@ -189,16 +185,16 @@
   <span class="op">}</span>
   
   <span class="co"># Return transformed data</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
-<div id="optional-print-method" class="section level2">
-<h2 class="hasAnchor">
-<a href="#optional-print-method" class="anchor"></a>Optional: print method</h2>
+<div class="section level3">
+<h3 id="optional-print-method">Optional: print method<a class="anchor" aria-label="anchor" href="#optional-print-method"></a>
+</h3>
 <p>This will be printed when bestNormalize selects your custom method or when you print an object returned by your new custom function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">print.cuberoot_x</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">standardize</span>, <span class="st">"Standardized"</span>, <span class="st">"Non-Standardized"</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">standardize</span>, <span class="st">"Standardized"</span>, <span class="st">"Non-Standardized"</span><span class="op">)</span>,
       <span class="st">'cuberoot(x + a) Transformation with'</span>, <span class="va">x</span><span class="op">$</span><span class="va">n</span>, <span class="st">'nonmissing obs.:\n'</span>, 
       <span class="st">'Relevant statistics:\n'</span>,
       <span class="st">'- a ='</span>, <span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="st">'\n'</span>,
@@ -207,131 +203,131 @@
 <span class="op">}</span></code></pre></div>
 <p>Note: if you can find a similar transformation in the source code, it’s easy to model your code after it. For instance, for <code>cuberoot_x</code> and <code>predict.cuberoot_x</code>, I used <code>sqrt_x.R</code> as a template file.</p>
 </div>
-<div id="implementing-with-bestnormalize" class="section level2">
-<h2 class="hasAnchor">
-<a href="#implementing-with-bestnormalize" class="anchor"></a>Implementing with bestNormalize</h2>
+<div class="section level3">
+<h3 id="implementing-with-bestnormalize">Implementing with bestNormalize<a class="anchor" aria-label="anchor" href="#implementing-with-bestnormalize"></a>
+</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Store custom functions into list</span>
-<span class="va">custom_transform</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+<span class="va">custom_transform</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   cuberoot_x <span class="op">=</span> <span class="va">cuberoot_x</span>,
   predict.cuberoot_x <span class="op">=</span> <span class="va">predict.cuberoot_x</span>,
   print.cuberoot_x <span class="op">=</span> <span class="va">print.cuberoot_x</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123129</span><span class="op">)</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">rgamma</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123129</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
 <span class="op">(</span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, new_transforms <span class="op">=</span> <span class="va">custom_transform</span>, standardize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Best Normalizing transformation with 100 Observations
-##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):
-##  - arcsinh(x): 1.2347
-##  - Box-Cox: 1.0267
-##  - cuberoot_x: 0.9787
-##  - Exp(x): 4.7947
-##  - Log_b(x+a): 1.3547
-##  - No transform: 2.0027
-##  - orderNorm (ORQ): 1.1627
-##  - sqrt(x + a): 1.0907
-##  - Yeo-Johnson: 1.0987
-## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
-##  
-## Based off these, bestNormalize chose:
-## Non-Standardized cuberoot(x + a) Transformation with 100 nonmissing obs.:
-##  Relevant statistics:
-##  - a = 0 
-##  - mean (before standardization) = 0.9588261 
-##  - sd (before standardization) = 0.3298665</code></pre>
+<pre><code><span class="co">## Best Normalizing transformation with 100 Observations</span>
+<span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
+<span class="co">##  - arcsinh(x): 1.2347</span>
+<span class="co">##  - Box-Cox: 1.0267</span>
+<span class="co">##  - cuberoot_x: 0.9787</span>
+<span class="co">##  - Exp(x): 4.7947</span>
+<span class="co">##  - Log_b(x+a): 1.3547</span>
+<span class="co">##  - No transform: 2.0027</span>
+<span class="co">##  - orderNorm (ORQ): 1.1627</span>
+<span class="co">##  - sqrt(x + a): 1.0907</span>
+<span class="co">##  - Yeo-Johnson: 1.0987</span>
+<span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span>
+<span class="co">##  </span>
+<span class="co">## Based off these, bestNormalize chose:</span>
+<span class="co">## Non-Standardized cuberoot(x + a) Transformation with 100 nonmissing obs.:</span>
+<span class="co">##  Relevant statistics:</span>
+<span class="co">##  - a = 0 </span>
+<span class="co">##  - mean (before standardization) = 0.9588261 </span>
+<span class="co">##  - sd (before standardization) = 0.3298665</span></code></pre>
 <p>Evidently, the cube-rooting was the best normalizing transformation!</p>
 </div>
-<div id="sanity-check" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sanity-check" class="anchor"></a>Sanity check</h2>
+<div class="section level3">
+<h3 id="sanity-check">Sanity check<a class="anchor" aria-label="anchor" href="#sanity-check"></a>
+</h3>
 <p>Is this code actually performing the cube-rooting?</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>, <span class="va">b</span><span class="op">$</span><span class="va">chosen_transform</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>, <span class="va">b</span><span class="op">$</span><span class="va">chosen_transform</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] TRUE</span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] TRUE</span></code></pre>
 <p>It does indeed.</p>
 </div>
 </div>
-<div id="using-custom-normalization-statistics" class="section level1">
-<h1 class="hasAnchor">
-<a href="#using-custom-normalization-statistics" class="anchor"></a>Using custom normalization statistics</h1>
+<div class="section level2">
+<h2 id="using-custom-normalization-statistics">Using custom normalization statistics<a class="anchor" aria-label="anchor" href="#using-custom-normalization-statistics"></a>
+</h2>
 <p>The bestNormalize package can estimate any univariate statistic using its CV framework. A user-defined function can be passed in through the <code>norm_stat_fn</code> argument, and this function will then be applied in lieu of the Pearson test statistic divided by its degree of freedom.</p>
 <p>The user-defined function must take an argument <code>x</code>, which indicates the data on which a user wants to evaluate the statistic.</p>
 <p>Here is an example using Lilliefors (Kolmogorov-Smirnov) normality test statistic:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, norm_stat_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/lillie.test.html">lillie.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">stat</span><span class="op">)</span></code></pre></div>
-<pre><code>## Best Normalizing transformation with 100 Observations
-##  Estimated Normality Statistics (using custom normalization statistic)
-##  - arcsinh(x): 0.1958
-##  - Box-Cox: 0.1785
-##  - Center+scale: 0.2219
-##  - Exp(x): 0.3299
-##  - Log_b(x+a): 0.1959
-##  - orderNorm (ORQ): 0.186
-##  - sqrt(x + a): 0.1829
-##  - Yeo-Johnson: 0.1872
-## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
-##  
-## Based off these, bestNormalize chose:
-## Standardized Box Cox Transformation with 100 nonmissing obs.:
-##  Estimated statistics:
-##  - lambda = 0.3281193 
-##  - mean (before standardization) = -0.1263882 
-##  - sd (before standardization) = 0.9913552</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, norm_stat_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/lillie.test.html" class="external-link">lillie.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">stat</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Best Normalizing transformation with 100 Observations</span>
+<span class="co">##  Estimated Normality Statistics (using custom normalization statistic)</span>
+<span class="co">##  - arcsinh(x): 0.1958</span>
+<span class="co">##  - Box-Cox: 0.1785</span>
+<span class="co">##  - Center+scale: 0.2219</span>
+<span class="co">##  - Exp(x): 0.3299</span>
+<span class="co">##  - Log_b(x+a): 0.1959</span>
+<span class="co">##  - orderNorm (ORQ): 0.186</span>
+<span class="co">##  - sqrt(x + a): 0.1829</span>
+<span class="co">##  - Yeo-Johnson: 0.1872</span>
+<span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span>
+<span class="co">##  </span>
+<span class="co">## Based off these, bestNormalize chose:</span>
+<span class="co">## Standardized Box Cox Transformation with 100 nonmissing obs.:</span>
+<span class="co">##  Estimated statistics:</span>
+<span class="co">##  - lambda = 0.3281193 </span>
+<span class="co">##  - mean (before standardization) = -0.1263882 </span>
+<span class="co">##  - sd (before standardization) = 0.9913552</span></code></pre>
 <p>Here is an example using Lillifors (Kolmogorov-Smirnov) normality test’s p-value:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">dont_do_this</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, norm_stat_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/lillie.test.html">lillie.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Best Normalizing transformation with 100 Observations
-##  Estimated Normality Statistics (using custom normalization statistic)
-##  - arcsinh(x): 0.4327
-##  - Box-Cox: 0.4831
-##  - Center+scale: 0.2958
-##  - Exp(x): 0.0675
-##  - Log_b(x+a): 0.3589
-##  - orderNorm (ORQ): 0.4492
-##  - sqrt(x + a): 0.4899
-##  - Yeo-Johnson: 0.4531
-## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
-##  
-## Based off these, bestNormalize chose:
-## Standardized exp(x) Transformation with 100 nonmissing obs.:
-##  Relevant statistics:
-##  - mean (before standardization) = 6.885396 
-##  - sd (before standardization) = 13.66084</code></pre>
+<code class="sourceCode R"><span class="op">(</span><span class="va">dont_do_this</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, norm_stat_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/lillie.test.html" class="external-link">lillie.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Best Normalizing transformation with 100 Observations</span>
+<span class="co">##  Estimated Normality Statistics (using custom normalization statistic)</span>
+<span class="co">##  - arcsinh(x): 0.4327</span>
+<span class="co">##  - Box-Cox: 0.4831</span>
+<span class="co">##  - Center+scale: 0.2958</span>
+<span class="co">##  - Exp(x): 0.0675</span>
+<span class="co">##  - Log_b(x+a): 0.3589</span>
+<span class="co">##  - orderNorm (ORQ): 0.4492</span>
+<span class="co">##  - sqrt(x + a): 0.4899</span>
+<span class="co">##  - Yeo-Johnson: 0.4531</span>
+<span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span>
+<span class="co">##  </span>
+<span class="co">## Based off these, bestNormalize chose:</span>
+<span class="co">## Standardized exp(x) Transformation with 100 nonmissing obs.:</span>
+<span class="co">##  Relevant statistics:</span>
+<span class="co">##  - mean (before standardization) = 6.885396 </span>
+<span class="co">##  - sd (before standardization) = 13.66084</span></code></pre>
 <p>Note: <code>bestNormalize</code> will attempt to minimize this statistic by default, which is definitely not what you want to do when calculating the p-value. This is seen in the example above, as the WORST normalization transformation is chosen.</p>
 <p>In this case, a user is advised to either manually select the best one:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">best_transform</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">dont_do_this</span><span class="op">$</span><span class="va">norm_stats</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">best_transform</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">dont_do_this</span><span class="op">$</span><span class="va">norm_stats</span><span class="op">)</span><span class="op">)</span>
 <span class="op">(</span><span class="va">do_this</span> <span class="op">&lt;-</span> <span class="va">dont_do_this</span><span class="op">$</span><span class="va">other_transforms</span><span class="op">[[</span><span class="va">best_transform</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>## Standardized sqrt(x + a) Transformation with 100 nonmissing obs.:
-##  Relevant statistics:
-##  - a = 0 
-##  - mean (before standardization) = 0.9811849 
-##  - sd (before standardization) = 0.4779252</code></pre>
+<pre><code><span class="co">## Standardized sqrt(x + a) Transformation with 100 nonmissing obs.:</span>
+<span class="co">##  Relevant statistics:</span>
+<span class="co">##  - a = 0 </span>
+<span class="co">##  - mean (before standardization) = 0.9811849 </span>
+<span class="co">##  - sd (before standardization) = 0.4779252</span></code></pre>
 <p>Or, the user can reverse their defined statistic (in this case by subtracting it from 1):</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">do_this</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, norm_stat_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span><span class="op">-</span><span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/lillie.test.html">lillie.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Best Normalizing transformation with 100 Observations
-##  Estimated Normality Statistics (using custom normalization statistic)
-##  - arcsinh(x): 0.5166
-##  - Box-Cox: 0.4191
-##  - Center+scale: 0.6521
-##  - Exp(x): 0.9601
-##  - Log_b(x+a): 0.5338
-##  - orderNorm (ORQ): 0.4646
-##  - sqrt(x + a): 0.4475
-##  - Yeo-Johnson: 0.4773
-## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats
-##  
-## Based off these, bestNormalize chose:
-## Standardized Box Cox Transformation with 100 nonmissing obs.:
-##  Estimated statistics:
-##  - lambda = 0.3281193 
-##  - mean (before standardization) = -0.1263882 
-##  - sd (before standardization) = 0.9913552</code></pre>
+<code class="sourceCode R"><span class="op">(</span><span class="va">do_this</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, norm_stat_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span><span class="op">-</span><span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/lillie.test.html" class="external-link">lillie.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Best Normalizing transformation with 100 Observations</span>
+<span class="co">##  Estimated Normality Statistics (using custom normalization statistic)</span>
+<span class="co">##  - arcsinh(x): 0.5166</span>
+<span class="co">##  - Box-Cox: 0.4191</span>
+<span class="co">##  - Center+scale: 0.6521</span>
+<span class="co">##  - Exp(x): 0.9601</span>
+<span class="co">##  - Log_b(x+a): 0.5338</span>
+<span class="co">##  - orderNorm (ORQ): 0.4646</span>
+<span class="co">##  - sqrt(x + a): 0.4475</span>
+<span class="co">##  - Yeo-Johnson: 0.4773</span>
+<span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span>
+<span class="co">##  </span>
+<span class="co">## Based off these, bestNormalize chose:</span>
+<span class="co">## Standardized Box Cox Transformation with 100 nonmissing obs.:</span>
+<span class="co">##  Estimated statistics:</span>
+<span class="co">##  - lambda = 0.3281193 </span>
+<span class="co">##  - mean (before standardization) = -0.1263882 </span>
+<span class="co">##  - sd (before standardization) = 0.9913552</span></code></pre>
 </div>
   </div>
 
@@ -346,11 +342,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Ryan Andrew Peterson.</p>
+  <p></p>
+<p>Developed by Ryan Andrew Peterson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -358,6 +356,8 @@
 
   
 
+
+  
 
   </body>
 </html>
