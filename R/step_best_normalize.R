@@ -95,6 +95,7 @@ step_best_normalize_new <-
       trained = trained,
       transform_info = transform_info,
       transform_options = transform_options,
+      transform_options = transform_options,
       num_unique = num_unique,
       skip = skip,
       id = id
@@ -102,9 +103,9 @@ step_best_normalize_new <-
   }
 
 #' @export
-#' @importFrom recipes prep terms_select check_type
+#' @importFrom recipes prep recipes_eval_select check_type
 prep.step_best_normalize <- function(x, training, info = NULL, ...) {
-  col_names <- terms_select(x$terms, info = info)
+  col_names <- recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names])
   
   values <- apply(

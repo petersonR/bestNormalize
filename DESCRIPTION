@@ -52,5 +52,5 @@ Suggests:
     covr
 VignetteBuilder: knitr 
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0.9000
 Encoding: UTF-8
