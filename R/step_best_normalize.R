@@ -95,7 +95,6 @@ step_best_normalize_new <-
       trained = trained,
       transform_info = transform_info,
       transform_options = transform_options,
-      transform_options = transform_options,
       num_unique = num_unique,
       skip = skip,
       id = id
