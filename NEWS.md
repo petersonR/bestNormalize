@@ -2,6 +2,9 @@
 
 - updating print functionality to remain compatible with recipes. 
 
+- updated term selection machinery to remain compatible with recipes.
+
+
 # bestNormalize 1.8.2
 
 - improving scalability of `boxcox` in response to [issue 10](https://github.com/petersonR/bestNormalize/issues/10); thank you to Krzysztof Dyba ([kadyb](https://github.com/kadyb)) for the suggestions. 
