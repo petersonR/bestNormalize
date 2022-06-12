@@ -32,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -106,73 +106,121 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A `bestNormalize` object.</p></dd>
+
+
 <dt>standardize</dt>
 <dd><p>If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal. This will
 not change the normality statistic.</p></dd>
+
+
 <dt>allow_orderNorm</dt>
 <dd><p>set to FALSE if orderNorm should not be applied</p></dd>
+
+
 <dt>allow_lambert_s</dt>
 <dd><p>Set to FALSE if the lambertW of type "s"  should not be
 applied (see details). Expect about 2-3x elapsed computing time if TRUE.</p></dd>
+
+
 <dt>allow_lambert_h</dt>
 <dd><p>Set to TRUE if the lambertW of type "h"  should be
 applied (see details). Expect about 2-3x elapsed computing time.</p></dd>
+
+
 <dt>allow_exp</dt>
 <dd><p>Set to TRUE if the exponential transformation should be
 applied (sometimes this will cause errors with heavy right skew)</p></dd>
+
+
 <dt>out_of_sample</dt>
 <dd><p>if FALSE, estimates quickly in-sample performance</p></dd>
+
+
 <dt>cluster</dt>
 <dd><p>name of cluster set using <code>makeCluster</code></p></dd>
+
+
 <dt>k</dt>
 <dd><p>number of folds</p></dd>
+
+
 <dt>r</dt>
 <dd><p>number of repeats</p></dd>
+
+
 <dt>loo</dt>
 <dd><p>should leave-one-out CV be used instead of repeated CV? (see
 details)</p></dd>
+
+
 <dt>warn</dt>
 <dd><p>Should bestNormalize warn when a method doesn't work?</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Should a progress-bar not be displayed for cross-validation
 progress?</p></dd>
+
+
 <dt>tr_opts</dt>
 <dd><p>a list (of lists), specifying options to be passed to each
 transformation (see details)</p></dd>
+
+
 <dt>new_transforms</dt>
 <dd><p>a named list of new transformation functions and their
 predict methods (see details)</p></dd>
+
+
 <dt>norm_stat_fn</dt>
 <dd><p>if specified, a function to calculate to assess normality
 (default is the pearson chi-squared statistic divided by its d.f.)</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments.</p></dd>
+
+
 <dt>object</dt>
 <dd><p>an object of class 'bestNormalize'</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>a vector of data to be (reverse) transformed</p></dd>
+
+
 <dt>inverse</dt>
 <dd><p>if TRUE, performs reverse transformation</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of class <code>bestNormalize</code> with elements</p>
+    
+
+<p>A list of class <code>bestNormalize</code> with elements</p>
 <dl><dt>x.t</dt>
 <dd><p>transformed original data</p></dd>
-<dt>x</dt>
+ <dt>x</dt>
 <dd><p>original data</p></dd>
-<dt>norm_stats</dt>
+
+  <dt>norm_stats</dt>
 <dd><p>Pearson's Pearson's P / degrees of freedom</p></dd>
-<dt>method</dt>
+
+  <dt>method</dt>
 <dd><p>out-of-sample or in-sample, number of folds + repeats</p></dd>
-<dt>chosen_transform</dt>
+
+  <dt>chosen_transform</dt>
 <dd><p>the chosen transformation (of appropriate class)</p></dd>
-<dt>other_transforms</dt>
+
+  <dt>other_transforms</dt>
 <dd><p>the other transformations (of appropriate class)</p></dd>
-<dt>oos_preds</dt>
+
+  <dt>oos_preds</dt>
 <dd><p>Out-of-sample predictions (if loo == TRUE) or
   normalization stats</p></dd>
+
+
 </dl><p>The <code>predict</code> function returns the numeric value of the transformation
   performed on new data, and allows for the inverse transformation as well.</p>
     </div>
@@ -256,21 +304,21 @@ predict methods (see details)</p></dd>
 <span class="r-in"><span class="va">BN_obj</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Best Normalizing transformation with 100 Observations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - arcsinh(x): 3.286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Box-Cox: 0.868</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Center+scale: 8.486</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Exp(x): 34.356</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Log_b(x+a): 2.012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - sqrt(x + a): 1.414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Yeo-Johnson: 1.128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - arcsinh(x): 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Box-Cox: 0.686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Center+scale: 7.264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Exp(x): 71.983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Log_b(x+a): 0.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sqrt(x + a): 1.622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Yeo-Johnson: 0.868</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimation method: In-sample</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Based off these, bestNormalize chose:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Box Cox Transformation with 100 nonmissing obs.:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated statistics:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.2289191 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = -0.3701994 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 1.03024 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.1677654 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = -0.2586188 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 0.9450496 </span>
 <span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -291,7 +339,7 @@ predict methods (see details)</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

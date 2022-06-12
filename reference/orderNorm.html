@@ -63,7 +63,7 @@ This transformation can be performed on new data and inverted via the
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -147,35 +147,54 @@ This transformation can be performed on new data and inverted via the
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A vector to normalize</p></dd>
+
+
 <dt>n_logit_fit</dt>
 <dd><p>Number of points used to fit logit approximation</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments</p></dd>
+
+
 <dt>warn</dt>
 <dd><p>transforms outside observed range or ties will yield warning</p></dd>
+
+
 <dt>object</dt>
 <dd><p>an object of class 'orderNorm'</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>a vector of data to be (reverse) transformed</p></dd>
+
+
 <dt>inverse</dt>
 <dd><p>if TRUE, performs reverse transformation</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of class <code>orderNorm</code> with elements</p>
+    
+
+<p>A list of class <code>orderNorm</code> with elements</p>
 <dl><dt>x.t</dt>
 <dd><p>transformed original data</p></dd>
-<dt>x</dt>
+ <dt>x</dt>
 <dd><p>original data</p></dd>
-<dt>n</dt>
+
+  <dt>n</dt>
 <dd><p>number of nonmissing observations</p></dd>
-<dt>ties_status</dt>
+ <dt>ties_status</dt>
 <dd><p>indicator if
   ties are present</p></dd>
-<dt>fit</dt>
+ <dt>fit</dt>
 <dd><p>fit to be used for extrapolation, if needed</p></dd>
-<dt>norm_stat</dt>
+
+  <dt>norm_stat</dt>
 <dd><p>Pearson's P / degrees of freedom</p></dd>
+
+
 </dl><p>The <code>predict</code> function returns the numeric value of the transformation
   performed on new data, and allows for the inverse transformation as well.</p>
     </div>
@@ -205,7 +224,7 @@ are increasingly used, but are they merited? Behav. Genet. 2009;39(5):
 <span class="r-out co"><span class="r-pr">#&gt;</span> orderNorm Transformation with 100 nonmissing obs and no ties </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Original quantiles:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   25%   50%   75%  100% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.004 0.313 0.762 1.434 4.440 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.009 0.215 0.516 1.197 6.195 </span>
 <span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orderNorm_obj</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orderNorm_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -225,7 +244,7 @@ are increasingly used, but are they merited? Behav. Genet. 2009;39(5):
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

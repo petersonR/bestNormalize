@@ -32,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -95,32 +95,53 @@
     <h2>Arguments</h2>
     <dl><dt>recipe</dt>
 <dd><p>A formula or recipe</p></dd>
+
+
 <dt>...</dt>
 <dd><p>One or more selector functions to choose which variables are
 affected by the step. See [selections()] for more details. For the `tidy`
 method, these are not currently used.</p></dd>
+
+
 <dt>role</dt>
 <dd><p>Not used by this step since no new variables are created.</p></dd>
+
+
 <dt>trained</dt>
 <dd><p>For recipes functionality</p></dd>
+
+
 <dt>transform_info</dt>
 <dd><p>A numeric vector of transformation values. This (was
 transform_info) is `NULL` until computed by [prep.recipe()].</p></dd>
+
+
 <dt>transform_options</dt>
 <dd><p>options to be passed to orderNorm</p></dd>
+
+
 <dt>num_unique</dt>
 <dd><p>An integer where data that have less possible values will
 not be evaluate for a transformation.</p></dd>
+
+
 <dt>skip</dt>
 <dd><p>For recipes functionality</p></dd>
+
+
 <dt>id</dt>
 <dd><p>For recipes functionality</p></dd>
+
+
 <dt>x</dt>
 <dd><p>A `step_orderNorm` object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An updated version of `recipe` with the new step added to the
+    
+
+<p>An updated version of `recipe` with the new step added to the
   sequence of existing steps (if any). For the `tidy` method, a tibble with
   columns `terms` (the selectors or variables selected) and `value` (the
   lambda estimate).</p>
@@ -166,15 +187,15 @@ not be evaluate for a transformation.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   terms         value id             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> all_numeric()    <span style="color: #BB0000;">NA</span> orderNorm_QD7sL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> all_numeric()    <span style="color: #BB0000;">NA</span> orderNorm_6oCZs</span>
 <span class="r-in"><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">orq_estimates</span>, number <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   terms        value        id             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;named list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Sepal.Length <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_QD7sL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Sepal.Width  <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_QD7sL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Petal.Length <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_QD7sL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Petal.Width  <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_QD7sL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Sepal.Length <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_6oCZs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Sepal.Width  <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_6oCZs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Petal.Length <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_6oCZs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Petal.Width  <span style="color: #949494;">&lt;orderNrm&gt;</span>   orderNorm_6oCZs</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 </code></pre></div>
@@ -191,7 +212,7 @@ not be evaluate for a transformation.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

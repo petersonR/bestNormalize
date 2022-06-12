@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.2
+pkgdown: 2.0.4
 pkgdown_sha: ~
 articles:
   bestNormalize: bestNormalize.html
   customization: customization.html
-last_built: 2022-02-24T00:04Z
+last_built: 2022-06-12T22:00Z
 

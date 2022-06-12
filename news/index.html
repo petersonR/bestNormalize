@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -62,7 +62,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.2.9000" id="bestnormalize-1829000">bestNormalize 1.8.2.9000<a class="anchor" aria-label="anchor" href="#bestnormalize-1829000"></a></h2>
-<ul><li>updating print functionality to remain compatible with recipes.</li>
+<ul><li><p>updating print functionality to remain compatible with recipes.</p></li>
+<li><p>updated term selection machinery to remain compatible with recipes.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.2" id="bestnormalize-182">bestNormalize 1.8.2<small>2021-09-16</small><a class="anchor" aria-label="anchor" href="#bestnormalize-182"></a></h2>
@@ -150,9 +151,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.0" id="bestnormalize-120">bestNormalize 1.2.0<small>2018-05-30</small><a class="anchor" aria-label="anchor" href="#bestnormalize-120"></a></h2>
-<ul><li>Added other transformations commonly used to normalize a vector
-<ul><li>exponential, log, square root, arcsinh</li>
-</ul></li>
+<ul><li>Added other transformations commonly used to normalize a vector<ul><li>exponential, log, square root, arcsinh</li></ul></li>
 <li>Lambert WxF is no longer done by default by bestNormalize since it is unstable on certain OS (Linux, Solaris), and does not abide by the CRAN policy.</li>
 </ul></div>
     <div class="section level2">
@@ -169,8 +168,7 @@
 <h2 class="page-header" data-toc-text="1.0.0" id="bestnormalize-100">bestNormalize 1.0.0<small>2018-01-04</small><a class="anchor" aria-label="anchor" href="#bestnormalize-100"></a></h2>
 <ul><li>
 <p>Added feature to estimate out-of-sample normality statistics in bestNormalize instead of in-sample ones via repeated cross-validation</p>
-<ul><li>Note: set <code>out_of_sample = FALSE</code> to maintain backward-compatibility with prior versions and set <code>allow_orderNorm = FALSE</code> as well so that it isn’t automatically selected</li>
-</ul></li>
+<ul><li>Note: set <code>out_of_sample = FALSE</code> to maintain backward-compatibility with prior versions and set <code>allow_orderNorm = FALSE</code> as well so that it isn’t automatically selected</li></ul></li>
 <li>
 <p>Improved extrapolation of the ORQ (orderNorm) method</p>
 <ul><li>Instead of linear extrapolation, it uses binomial (logit-link) model on ranks</li>
@@ -181,17 +179,13 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.2" id="bestnormalize-022">bestNormalize 0.2.2<small>2017-11-14</small><a class="anchor" aria-label="anchor" href="#bestnormalize-022"></a></h2>
-<ul><li>Changed the name of the orderNorm technique to “Ordered Quantile normalization”.</li>
-</ul></div>
+<ul><li>Changed the name of the orderNorm technique to “Ordered Quantile normalization”.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="bestnormalize-021">bestNormalize 0.2.1<a class="anchor" aria-label="anchor" href="#bestnormalize-021"></a></h2>
-<ul><li>Made description more clear in response to comments from CRAN</li>
-</ul></div>
+<ul><li>Made description more clear in response to comments from CRAN</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="bestnormalize-020">bestNormalize 0.2.0<a class="anchor" aria-label="anchor" href="#bestnormalize-020"></a></h2>
-<div class="section level3">
-<h3 id="first-submission-to-cran-0-2-0">First submission to CRAN<a class="anchor" aria-label="anchor" href="#first-submission-to-cran-0-2-0"></a></h3>
-</div>
+<div class="section level3"><h3 id="first-submission-to-cran-0-2-0">First submission to CRAN<a class="anchor" aria-label="anchor" href="#first-submission-to-cran-0-2-0"></a></h3></div>
 </div>
   </div>
 
@@ -207,7 +201,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

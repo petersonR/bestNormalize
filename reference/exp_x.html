@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -79,38 +79,61 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A vector to normalize with with x</p></dd>
+
+
 <dt>standardize</dt>
 <dd><p>If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal</p></dd>
+
+
 <dt>warn</dt>
 <dd><p>Should a warning result from infinite values?</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments</p></dd>
+
+
 <dt>object</dt>
 <dd><p>an object of class 'exp_x'</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>a vector of data to be (potentially reverse) transformed</p></dd>
+
+
 <dt>inverse</dt>
 <dd><p>if TRUE, performs reverse transformation</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of class <code>exp_x</code> with elements</p>
+    
+
+<p>A list of class <code>exp_x</code> with elements</p>
 <dl><dt>x.t</dt>
 <dd><p>transformed 
   original data</p></dd>
-<dt>x</dt>
+ 
+  <dt>x</dt>
 <dd><p>original data</p></dd>
-<dt>mean</dt>
+ 
+  <dt>mean</dt>
 <dd><p>mean after transformation but prior to standardization</p></dd>
-<dt>sd</dt>
+ 
+  <dt>sd</dt>
 <dd><p>sd after transformation but prior to standardization</p></dd>
-<dt>n</dt>
+ 
+  <dt>n</dt>
 <dd><p>number of nonmissing observations</p></dd>
-<dt>norm_stat</dt>
+
+  <dt>norm_stat</dt>
 <dd><p>Pearson's P / degrees of freedom</p></dd>
-<dt>standardize</dt>
+
+  <dt>standardize</dt>
 <dd><p>was the transformation standardized</p></dd>
+
+  
 </dl><p>The <code>predict</code> function returns the numeric value of the transformation
   performed on new data, and allows for the inverse transformation as well.</p>
     </div>
@@ -129,8 +152,8 @@ and applied to new data via the <code>predict</code> function.</p>
 <span class="r-in"><span class="va">exp_x_obj</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Standardized exp(x) Transformation with 100 nonmissing obs.:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Relevant statistics:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = 5.199506 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 8.77337 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = 5.082875 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 7.859104 </span>
 <span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">exp_x_obj</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">exp_x_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -151,7 +174,7 @@ and applied to new data via the <code>predict</code> function.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
