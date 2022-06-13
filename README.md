@@ -14,7 +14,7 @@ The `bestNormalize` R package was designed to help find a normalizing
 transformation for a vector. There are many techniques that have been
 developed in this aim, however each has been subject to their own
 strengths/weaknesses, and it is unclear on how to decide which will work
-best until the data is oberved. This package will look at a range of
+best until the data is observed. This package will look at a range of
 possible transformations and return the best one, i.e. the one that
 makes it look the *most* normal.
 
@@ -76,6 +76,7 @@ x <- rgamma(1000, 1, 1)
 
 # Estimate best transformation with repeated cross-validation
 BN_obj <- bestNormalize(x, allow_lambert_s = TRUE)
+#> Warning: package 'lamW' was built under R version 4.0.5
 BN_obj
 #> Best Normalizing transformation with 1000 Observations
 #>  Estimated Normality Statistics (Pearson P / df, lower => more normal):

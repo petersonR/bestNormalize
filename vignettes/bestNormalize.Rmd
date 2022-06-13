@@ -42,7 +42,7 @@ One of the package's main functions is `Gaussianize`, which is similar in spirit
 
 This transformations can handle three types of transformations: skewed, heavy-tailed, and skewed heavy-tailed. For more details on this transformation, consult the documentation for the `Lambert W` package.
 
-## The Box Cox tranformation
+## The Box Cox transformation
 
 The Box Cox transformation, proposed by Box and Cox in their famous 1964 paper and implemented with differing syntax and methods in many packages in R (see `caret`, `MASS`, `forecast`), is a straightforward transformation that typically only involves one parameter, $\lambda$:
 

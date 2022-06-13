@@ -22,7 +22,7 @@ library(bestNormalize)
 [![Codecov test coverage](https://codecov.io/gh/petersonR/bestNormalize/branch/master/graph/badge.svg)](https://codecov.io/gh/petersonR/bestNormalize?branch=master)
 
 
-The `bestNormalize` R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is oberved. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the *most* normal. 
+The `bestNormalize` R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is observed. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the *most* normal. 
 
 Note that some authors use the term "normalize" differently than in this package. We define "normalize": to transform a vector of data in such a way that the transformed values follow a Gaussian distribution (or equivalently, a bell curve). This is in contrast to other such techniques designed to transform values to the 0-1 range, or to the -1 to 1 range. 
 

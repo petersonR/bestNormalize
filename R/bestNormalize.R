@@ -35,7 +35,7 @@
 #' @param new_transforms a named list of new transformation functions and their
 #'   predict methods (see details)
 #' @param norm_stat_fn if specified, a function to calculate to assess normality
-#'   (default is the pearson chi-squared statistic divided by its d.f.)
+#'   (default is the Pearson chi-squared statistic divided by its d.f.)
 #' @param ... additional arguments.
 #' @details \code{bestNormalize} estimates the optimal normalizing
 #'   transformation. This transformation can be performed on new data, and

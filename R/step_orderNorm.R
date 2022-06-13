@@ -2,9 +2,9 @@
 #'
 #' @description `step_orderNorm` creates a specification of a recipe step (see
 #'   `recipes` package) that will transform data using the ORQ (orderNorm)
-#'   transformation, which approximates the "true" normalizing tranformation if
+#'   transformation, which approximates the "true" normalizing transformation if
 #'   one exists. This is considerably faster than `step_bestNormalize`.
-#'
+#'   
 #' @param recipe A formula or recipe
 #' @param ... One or more selector functions to choose which variables are
 #'   affected by the step. See [selections()] for more details. For the `tidy`

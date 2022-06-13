@@ -176,7 +176,7 @@ Here is an example using Lilliefors (Kolmogorov-Smirnov) normality test statisti
 bestNormalize(x, norm_stat_fn = function(x) nortest::lillie.test(x)$stat)
 ```
 
-Here is an example using Lillifors (Kolmogorov-Smirnov) normality test's p-value: 
+Here is an example using Lilliefors (Kolmogorov-Smirnov) normality test's p-value: 
 
 ```{r}
 (dont_do_this <- bestNormalize(x, norm_stat_fn = function(x) nortest::lillie.test(x)$p))

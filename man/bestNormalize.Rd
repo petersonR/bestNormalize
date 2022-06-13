@@ -74,7 +74,7 @@ transformation (see details)}
 predict methods (see details)}
 
 \item{norm_stat_fn}{if specified, a function to calculate to assess normality
-(default is the pearson chi-squared statistic divided by its d.f.)}
+(default is the Pearson chi-squared statistic divided by its d.f.)}
 
 \item{...}{additional arguments.}
 

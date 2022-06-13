@@ -56,7 +56,7 @@ An updated version of `recipe` with the new step added to the
 \description{
 `step_orderNorm` creates a specification of a recipe step (see
   `recipes` package) that will transform data using the ORQ (orderNorm)
-  transformation, which approximates the "true" normalizing tranformation if
+  transformation, which approximates the "true" normalizing transformation if
   one exists. This is considerably faster than `step_bestNormalize`.
 }
 \details{
