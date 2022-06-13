@@ -2,10 +2,10 @@ context('bestNormalize parallel functionality')
 
 skip_on_cran()
 Sys.unsetenv("R_TESTS")
+set.seed(1)
 
 data(iris)
 
-iris <- iris[1:30,]
 train <- iris$Petal.Width
 
 cl <- parallel::makeCluster(2, setup_strategy = "sequential")
