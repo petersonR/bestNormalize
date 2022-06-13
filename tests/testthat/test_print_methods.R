@@ -40,6 +40,12 @@ test_that('log_x print method runs without error or warning', {
 nt <- suppressWarnings(no_transform(train))
 test_that('no_transform print method runs without error or warning', {
   expect_output(print(nt))
+  expect_silent(val <- tidy(nt))
+})
+
+cs <- suppressWarnings(center_scale(train))
+test_that('center_scale print method runs without error or warning', {
+  expect_output(print(cs))
 })
 
 sx <- suppressWarnings(sqrt_x(train))
@@ -56,3 +62,10 @@ bn <- suppressWarnings(binarize(train))
 test_that('binarize print method runs without error or warning', {
   expect_output(print(bn))
 })
+
+as <- suppressWarnings(arcsinh_x(train))
+test_that('arcsinh_x print method runs without error or warning', {
+  expect_output(print(as))
+})
+
+
