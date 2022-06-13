@@ -6,7 +6,7 @@ Date: 2022-06-13
 Authors@R: person("Ryan Andrew", "Peterson", 
                   email = "ryan.a.peterson@cuanschutz.edu", 
                   role = c("aut", "cre"), 
-                  comment = c(ORCID = "0000-0002-4650-5798")))
+                  comment = c(ORCID = "0000-0002-4650-5798"))
 Description: Estimate a suite of normalizing transformations, including 
     a new adaptation of a technique based on ranks which can guarantee 
     normally distributed transformed data if there are no ties: ordered 
@@ -53,5 +53,5 @@ Suggests:
     covr
 VignetteBuilder: knitr 
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Encoding: UTF-8
