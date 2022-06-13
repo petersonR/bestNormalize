@@ -140,7 +140,7 @@ bake.step_best_normalize <- function(object, new_data, ...) {
   as_tibble(new_data)
 }
 #' @export
-#' @importFrom recipes printer
+#' @importFrom recipes print_step
 print.step_best_normalize <-
   function(x, width = max(20, options()$width - 35), ...) {
     title <- "bestNormalize transformation on "

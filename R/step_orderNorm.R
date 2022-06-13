@@ -141,7 +141,7 @@ bake.step_orderNorm <- function(object, new_data, ...) {
 }
 
 #' @export
-#' @importFrom recipes printer
+#' @importFrom recipes print_step
 print.step_orderNorm <-
   function(x, width = max(20, options()$width - 35), ...) {
     title <- "orderNorm transformation on "
