@@ -1,6 +1,7 @@
 context('bestNormalize parallel functionality')
 
 skip_on_cran()
+Sys.unsetenv("R_TESTS")
 
 data(iris)
 
