@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">bestNormalize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.8.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.8.3</span>
       </span>
     </div>
 
@@ -98,7 +98,7 @@
 <div class="page-header"><h1 id="bestnormalize-flexibly-calculate-the-best-normalizing-transformation-for-a-vector">bestNormalize: Flexibly calculate the best normalizing transformation for a vector<a class="anchor" aria-label="anchor" href="#bestnormalize-flexibly-calculate-the-best-normalizing-transformation-for-a-vector"></a>
 </h1></div>
 
-<p>The <code>bestNormalize</code> R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is oberved. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the <em>most</em> normal.</p>
+<p>The <code>bestNormalize</code> R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is observed. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the <em>most</em> normal.</p>
 <p>Note that some authors use the term “normalize” differently than in this package. We define “normalize”: to transform a vector of data in such a way that the transformed values follow a Gaussian distribution (or equivalently, a bell curve). This is in contrast to other such techniques designed to transform values to the 0-1 range, or to the -1 to 1 range.</p>
 <p>This package also introduces a new adaptation of a normalization technique, which we call Ordered Quantile normalization (<code><a href="reference/orderNorm.html">orderNorm()</a></code>, or ORQ). ORQ transforms the data based off of a rank mapping to the normal distribution. This allows us to <em>guarantee</em> normally distributed transformed data (if ties are not present). The adaptation uses a shifted logit approximation on the ranks transformation to perform the transformation on newly observed data outside of the original domain. On new data within the original domain, the transformation uses linear interpolation of the fitted transformation.</p>
 <p>To evaluate the efficacy of the normalization technique, the <code><a href="reference/bestNormalize.html">bestNormalize()</a></code> function implements repeated cross-validation to estimate the Pearson’s P statistic divided by its degrees of freedom. This is called the “Normality statistic”, and if it is close to 1 (or less), then the transformation can be thought of as working well. The function is designed to select the transformation that produces the lowest P / df value, when estimated on out-of-sample data (estimating this on in-sample data will always choose the orderNorm technique, and is generally not the main goal of these procedures).</p>
@@ -125,6 +125,7 @@
 
 <span class="co"># Estimate best transformation with repeated cross-validation</span>
 <span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, allow_lambert_s <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; Warning: package 'lamW' was built under R version 4.0.5</span>
 <span class="va">BN_obj</span>
 <span class="co">#&gt; Best Normalizing transformation with 1000 Observations</span>
 <span class="co">#&gt;  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>

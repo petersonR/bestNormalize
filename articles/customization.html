@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bestNormalize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.8.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.8.3</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Customization within bestNormalize</h1>
                         <h4 data-toc-skip class="author">Ryan A Peterson</h4>
             
-            <h4 data-toc-skip class="date">2022-06-12</h4>
+            <h4 data-toc-skip class="date">2022-06-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/petersonR/bestNormalize/blob/HEAD/vignettes/customization.Rmd" class="external-link"><code>vignettes/customization.Rmd</code></a></small>
       <div class="hidden name"><code>customization.Rmd</code></div>
@@ -277,7 +277,7 @@
 <span class="co">##  - lambda = 0.3281193 </span>
 <span class="co">##  - mean (before standardization) = -0.1263882 </span>
 <span class="co">##  - sd (before standardization) = 0.9913552</span></code></pre>
-<p>Here is an example using Lillifors (Kolmogorov-Smirnov) normality test’s p-value:</p>
+<p>Here is an example using Lilliefors (Kolmogorov-Smirnov) normality test’s p-value:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">dont_do_this</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, norm_stat_fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">nortest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nortest/man/lillie.test.html" class="external-link">lillie.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## Best Normalizing transformation with 100 Observations</span>
