@@ -1,9 +1,7 @@
-# bestNormalize 1.8.2.9000
+# bestNormalize 1.8.3
 
 - updating print functionality to remain compatible with recipes. 
-
 - updated term selection machinery to remain compatible with recipes.
-
 
 # bestNormalize 1.8.2
 
