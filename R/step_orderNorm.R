@@ -194,3 +194,13 @@ axe_env.step_orderNorm <- function(x, ...) {
   x$terms <- purrr::map(x$terms, function(z) butcher::axe_env(z, ...))
   x
 }
+
+
+#' @importFrom generics required_pkgs
+#' @export
+generics::required_pkgs
+
+#' @export
+required_pkgs.step_orderNorm <- function(x, ...) {
+  c("bestNormalize")
+}

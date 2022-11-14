@@ -1,5 +1,7 @@
 # bestNormalize 1.8.3.9000
 
+- Add an S3 methods that helps `step_orderNorm()` to work with parallel processing. 
+
 # bestNormalize 1.8.3
 
 - updating print functionality to remain compatible with recipes. 
