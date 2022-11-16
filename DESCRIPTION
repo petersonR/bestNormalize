@@ -39,7 +39,8 @@ Imports:
     tibble,
     methods,
     butcher, 
-    purrr
+    purrr,
+    generics
 Suggests: 
     knitr,
     rmarkdown,
