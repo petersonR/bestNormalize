@@ -107,79 +107,79 @@
 </h2>
 <p>You can install the most recent (devel) version of bestNormalize from GitHub with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"petersonR/bestNormalize"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"petersonR/bestNormalize"</span><span class="op">)</span></span></code></pre></div>
 <p>Or, you can download it from CRAN with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"bestNormalize"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"bestNormalize"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>In this example, we generate 1000 draws from a gamma distribution, and normalize them:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://petersonr.github.io/bestNormalize/" class="external-link">bestNormalize</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://petersonr.github.io/bestNormalize/" class="external-link">bestNormalize</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
-
-<span class="co"># Estimate best transformation with repeated cross-validation</span>
-<span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, allow_lambert_s <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Warning: package 'lamW' was built under R version 4.0.5</span>
-<span class="va">BN_obj</span>
-<span class="co">#&gt; Best Normalizing transformation with 1000 Observations</span>
-<span class="co">#&gt;  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">#&gt;  - arcsinh(x): 3.6204</span>
-<span class="co">#&gt;  - Box-Cox: 0.96</span>
-<span class="co">#&gt;  - Center+scale: 6.7851</span>
-<span class="co">#&gt;  - Exp(x): 50.8513</span>
-<span class="co">#&gt;  - Lambert's W (type s): 1.0572</span>
-<span class="co">#&gt;  - Log_b(x+a): 1.908</span>
-<span class="co">#&gt;  - orderNorm (ORQ): 1.0516</span>
-<span class="co">#&gt;  - sqrt(x + a): 1.4556</span>
-<span class="co">#&gt;  - Yeo-Johnson: 1.7385</span>
-<span class="co">#&gt; Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; Based off these, bestNormalize chose:</span>
-<span class="co">#&gt; Standardized Box Cox Transformation with 1000 nonmissing obs.:</span>
-<span class="co">#&gt;  Estimated statistics:</span>
-<span class="co">#&gt;  - lambda = 0.2739638 </span>
-<span class="co">#&gt;  - mean (before standardization) = -0.3870903 </span>
-<span class="co">#&gt;  - sd (before standardization) = 1.045498</span>
-
-<span class="co"># Perform transformation</span>
-<span class="va">gx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span>
-
-<span class="co"># Perform reverse transformation</span>
-<span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">gx</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># Prove the transformation is 1:1</span>
-<span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span>
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Estimate best transformation with repeated cross-validation</span></span>
+<span><span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, allow_lambert_s <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'lamW' was built under R version 4.0.5</span></span>
+<span><span class="va">BN_obj</span></span>
+<span><span class="co">#&gt; Best Normalizing transformation with 1000 Observations</span></span>
+<span><span class="co">#&gt;  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">#&gt;  - arcsinh(x): 3.6204</span></span>
+<span><span class="co">#&gt;  - Box-Cox: 0.96</span></span>
+<span><span class="co">#&gt;  - Center+scale: 6.7851</span></span>
+<span><span class="co">#&gt;  - Exp(x): 50.8513</span></span>
+<span><span class="co">#&gt;  - Lambert's W (type s): 1.0572</span></span>
+<span><span class="co">#&gt;  - Log_b(x+a): 1.908</span></span>
+<span><span class="co">#&gt;  - orderNorm (ORQ): 1.0516</span></span>
+<span><span class="co">#&gt;  - sqrt(x + a): 1.4556</span></span>
+<span><span class="co">#&gt;  - Yeo-Johnson: 1.7385</span></span>
+<span><span class="co">#&gt; Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt; Based off these, bestNormalize chose:</span></span>
+<span><span class="co">#&gt; Standardized Box Cox Transformation with 1000 nonmissing obs.:</span></span>
+<span><span class="co">#&gt;  Estimated statistics:</span></span>
+<span><span class="co">#&gt;  - lambda = 0.2739638 </span></span>
+<span><span class="co">#&gt;  - mean (before standardization) = -0.3870903 </span></span>
+<span><span class="co">#&gt;  - sd (before standardization) = 1.045498</span></span>
+<span></span>
+<span><span class="co"># Perform transformation</span></span>
+<span><span class="va">gx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Perform reverse transformation</span></span>
+<span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">gx</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Prove the transformation is 1:1</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>As of version 1.3, the package supports leave-one-out cross-validation as well. ORQ normalization works very well when the size of the test dataset is low relative to the training data set, so it will often be selected via leave-one-out cross-validation (which is why we set <code>allow_orderNorm = FALSE</code> here).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">BN_loo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, allow_orderNorm <span class="op">=</span> <span class="cn">FALSE</span>, allow_lambert_s <span class="op">=</span> <span class="cn">TRUE</span>, loo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Best Normalizing transformation with 1000 Observations</span>
-<span class="co">#&gt;  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">#&gt;  - arcsinh(x): 14.0712</span>
-<span class="co">#&gt;  - Box-Cox: 0.8077</span>
-<span class="co">#&gt;  - Center+scale: 26.5181</span>
-<span class="co">#&gt;  - Exp(x): 451.435</span>
-<span class="co">#&gt;  - Lambert's W (type s): 1.269</span>
-<span class="co">#&gt;  - Log_b(x+a): 4.5374</span>
-<span class="co">#&gt;  - sqrt(x + a): 3.3655</span>
-<span class="co">#&gt;  - Yeo-Johnson: 5.7997</span>
-<span class="co">#&gt; Estimation method: Out-of-sample via leave-one-out CV</span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; Based off these, bestNormalize chose:</span>
-<span class="co">#&gt; Standardized Box Cox Transformation with 1000 nonmissing obs.:</span>
-<span class="co">#&gt;  Estimated statistics:</span>
-<span class="co">#&gt;  - lambda = 0.2739638 </span>
-<span class="co">#&gt;  - mean (before standardization) = -0.3870903 </span>
-<span class="co">#&gt;  - sd (before standardization) = 1.045498</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">BN_loo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, allow_orderNorm <span class="op">=</span> <span class="cn">FALSE</span>, allow_lambert_s <span class="op">=</span> <span class="cn">TRUE</span>, loo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Best Normalizing transformation with 1000 Observations</span></span>
+<span><span class="co">#&gt;  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">#&gt;  - arcsinh(x): 14.0712</span></span>
+<span><span class="co">#&gt;  - Box-Cox: 0.8077</span></span>
+<span><span class="co">#&gt;  - Center+scale: 26.5181</span></span>
+<span><span class="co">#&gt;  - Exp(x): 451.435</span></span>
+<span><span class="co">#&gt;  - Lambert's W (type s): 1.269</span></span>
+<span><span class="co">#&gt;  - Log_b(x+a): 4.5374</span></span>
+<span><span class="co">#&gt;  - sqrt(x + a): 3.3655</span></span>
+<span><span class="co">#&gt;  - Yeo-Johnson: 5.7997</span></span>
+<span><span class="co">#&gt; Estimation method: Out-of-sample via leave-one-out CV</span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt; Based off these, bestNormalize chose:</span></span>
+<span><span class="co">#&gt; Standardized Box Cox Transformation with 1000 nonmissing obs.:</span></span>
+<span><span class="co">#&gt;  Estimated statistics:</span></span>
+<span><span class="co">#&gt;  - lambda = 0.2739638 </span></span>
+<span><span class="co">#&gt;  - mean (before standardization) = -0.3870903 </span></span>
+<span><span class="co">#&gt;  - sd (before standardization) = 1.045498</span></span></code></pre></div>
 <p>It is also possible to visualize these transformations:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">BN_obj</span>, leg_loc <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">BN_obj</span>, leg_loc <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
 <p>For a more in depth tutorial, please consult <a href="https://CRAN.R-project.org/package=bestNormalize/vignettes/bestNormalize.html" class="external-link">the package vignette</a>, or the <a href="https://petersonr.github.io/bestNormalize/" class="external-link">package website</a>.</p>
 </div>
 </div>
@@ -237,7 +237,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

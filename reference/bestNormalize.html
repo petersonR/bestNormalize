@@ -72,34 +72,34 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">bestNormalize</span><span class="op">(</span>
-  <span class="va">x</span>,
-  standardize <span class="op">=</span> <span class="cn">TRUE</span>,
-  allow_orderNorm <span class="op">=</span> <span class="cn">TRUE</span>,
-  allow_lambert_s <span class="op">=</span> <span class="cn">FALSE</span>,
-  allow_lambert_h <span class="op">=</span> <span class="cn">FALSE</span>,
-  allow_exp <span class="op">=</span> <span class="cn">TRUE</span>,
-  out_of_sample <span class="op">=</span> <span class="cn">TRUE</span>,
-  cluster <span class="op">=</span> <span class="cn">NULL</span>,
-  k <span class="op">=</span> <span class="fl">10</span>,
-  r <span class="op">=</span> <span class="fl">5</span>,
-  loo <span class="op">=</span> <span class="cn">FALSE</span>,
-  warn <span class="op">=</span> <span class="cn">FALSE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>,
-  tr_opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  new_transforms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  norm_stat_fn <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for bestNormalize</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, inverse <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for bestNormalize</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for bestNormalize</span>
-<span class="fu">tidy</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bestNormalize</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  standardize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_orderNorm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_lambert_s <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_lambert_h <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_exp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  out_of_sample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  r <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  loo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  warn <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tr_opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  new_transforms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  norm_stat_fn <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for bestNormalize</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, inverse <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for bestNormalize</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for bestNormalize</span></span>
+<span><span class="fu">tidy</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -275,56 +275,56 @@ predict methods (see details)</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># With Repeated CV</span></span>
-<span class="r-in"><span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu">bestNormalize</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">BN_obj</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># With leave-one-out CV</span></span>
-<span class="r-in"><span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu">bestNormalize</span><span class="op">(</span><span class="va">x</span>, loo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">BN_obj</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Without CV</span></span>
-<span class="r-in"><span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu">bestNormalize</span><span class="op">(</span><span class="va">x</span>, allow_orderNorm <span class="op">=</span> <span class="cn">FALSE</span>, out_of_sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">BN_obj</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># With Repeated CV</span></span></span>
+<span class="r-in"><span><span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu">bestNormalize</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">BN_obj</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># With leave-one-out CV</span></span></span>
+<span class="r-in"><span><span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu">bestNormalize</span><span class="op">(</span><span class="va">x</span>, loo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">BN_obj</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Without CV</span></span></span>
+<span class="r-in"><span><span class="va">BN_obj</span> <span class="op">&lt;-</span> <span class="fu">bestNormalize</span><span class="op">(</span><span class="va">x</span>, allow_orderNorm <span class="op">=</span> <span class="cn">FALSE</span>, out_of_sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">BN_obj</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Best Normalizing transformation with 100 Observations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - arcsinh(x): 2.948</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Box-Cox: 0.686</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Center+scale: 7.082</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Exp(x): 34.824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Log_b(x+a): 1.128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - sqrt(x + a): 1.388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Yeo-Johnson: 1.05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - arcsinh(x): 1.44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Box-Cox: 0.582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Center+scale: 2.818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Exp(x): 25.022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Log_b(x+a): 1.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sqrt(x + a): 0.738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Yeo-Johnson: 0.244</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimation method: In-sample</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Based off these, bestNormalize chose:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Box Cox Transformation with 100 nonmissing obs.:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Yeo-Johnson Transformation with 100 nonmissing obs.:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated statistics:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.2134164 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = -0.3829415 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 1.041016 </span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = -0.7121774 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = 0.4399715 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 0.2162991 </span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -339,7 +339,7 @@ predict methods (see details)</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

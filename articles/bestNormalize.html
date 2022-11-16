@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Using the bestNormalize Package</h1>
                         <h4 data-toc-skip class="author">Ryan A Peterson</h4>
             
-            <h4 data-toc-skip class="date">2022-06-14</h4>
+            <h4 data-toc-skip class="date">2022-11-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/petersonR/bestNormalize/blob/HEAD/vignettes/bestNormalize.Rmd" class="external-link"><code>vignettes/bestNormalize.Rmd</code></a></small>
       <div class="hidden name"><code>bestNormalize.Rmd</code></div>
@@ -200,99 +200,99 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <h3 id="basic-implementation">Basic Implementation<a class="anchor" aria-label="anchor" href="#basic-implementation"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Generate some data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">250</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">x</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Generate some data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">250</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">x</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/gen_data-1.png" width="672"></p>
 <p>This data is clearly not normal. Let’s use the <code>bestNormalize</code> functionality to perform a suite of potential transformations, and see how each method performs.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Perform some tranformations individually</span>
-
-<span class="co"># arcsinh transformation</span>
-<span class="op">(</span><span class="va">arcsinh_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/arcsinh_x.html">arcsinh_x</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Standardized asinh(x) Transformation with 250 nonmissing obs.:</span>
-<span class="co">##  Relevant statistics:</span>
-<span class="co">##  - mean (before standardization) = 0.7383146 </span>
-<span class="co">##  - sd (before standardization) = 0.5458515</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Perform some tranformations individually</span></span>
+<span></span>
+<span><span class="co"># arcsinh transformation</span></span>
+<span><span class="op">(</span><span class="va">arcsinh_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/arcsinh_x.html">arcsinh_x</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Standardized asinh(x) Transformation with 250 nonmissing obs.:</span></span>
+<span><span class="co">##  Relevant statistics:</span></span>
+<span><span class="co">##  - mean (before standardization) = 0.7383146 </span></span>
+<span><span class="co">##  - sd (before standardization) = 0.5458515</span></span></code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Box Cox's Transformation</span>
-<span class="op">(</span><span class="va">boxcox_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boxcox.html">boxcox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Standardized Box Cox Transformation with 250 nonmissing obs.:</span>
-<span class="co">##  Estimated statistics:</span>
-<span class="co">##  - lambda = 0.3254863 </span>
-<span class="co">##  - mean (before standardization) = -0.3659267 </span>
-<span class="co">##  - sd (before standardization) = 0.9807881</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Box Cox's Transformation</span></span>
+<span><span class="op">(</span><span class="va">boxcox_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boxcox.html">boxcox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Standardized Box Cox Transformation with 250 nonmissing obs.:</span></span>
+<span><span class="co">##  Estimated statistics:</span></span>
+<span><span class="co">##  - lambda = 0.3254863 </span></span>
+<span><span class="co">##  - mean (before standardization) = -0.3659267 </span></span>
+<span><span class="co">##  - sd (before standardization) = 0.9807881</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Yeo-Johnson's Transformation</span>
-<span class="op">(</span><span class="va">yeojohnson_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yeojohnson.html">yeojohnson</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Standardized Yeo-Johnson Transformation with 250 nonmissing obs.:</span>
-<span class="co">##  Estimated statistics:</span>
-<span class="co">##  - lambda = -0.7080476 </span>
-<span class="co">##  - mean (before standardization) = 0.4405464 </span>
-<span class="co">##  - sd (before standardization) = 0.2592004</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Yeo-Johnson's Transformation</span></span>
+<span><span class="op">(</span><span class="va">yeojohnson_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yeojohnson.html">yeojohnson</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Standardized Yeo-Johnson Transformation with 250 nonmissing obs.:</span></span>
+<span><span class="co">##  Estimated statistics:</span></span>
+<span><span class="co">##  - lambda = -0.7080476 </span></span>
+<span><span class="co">##  - mean (before standardization) = 0.4405464 </span></span>
+<span><span class="co">##  - sd (before standardization) = 0.2592004</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># orderNorm Transformation</span>
-<span class="op">(</span><span class="va">orderNorm_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/orderNorm.html">orderNorm</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## orderNorm Transformation with 250 nonmissing obs and no ties </span>
-<span class="co">##  - Original quantiles:</span>
-<span class="co">##    0%   25%   50%   75%  100% </span>
-<span class="co">## 0.001 0.268 0.721 1.299 4.161</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># orderNorm Transformation</span></span>
+<span><span class="op">(</span><span class="va">orderNorm_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/orderNorm.html">orderNorm</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## orderNorm Transformation with 250 nonmissing obs and no ties </span></span>
+<span><span class="co">##  - Original quantiles:</span></span>
+<span><span class="co">##    0%   25%   50%   75%  100% </span></span>
+<span><span class="co">## 0.001 0.268 0.721 1.299 4.161</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Pick the best one automatically</span>
-<span class="op">(</span><span class="va">BNobject</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Best Normalizing transformation with 250 Observations</span>
-<span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">##  - arcsinh(x): 1.7917</span>
-<span class="co">##  - Box-Cox: 1.0442</span>
-<span class="co">##  - Center+scale: 3.0102</span>
-<span class="co">##  - Exp(x): 9.5306</span>
-<span class="co">##  - Log_b(x+a): 1.7072</span>
-<span class="co">##  - orderNorm (ORQ): 1.1773</span>
-<span class="co">##  - sqrt(x + a): 1.144</span>
-<span class="co">##  - Yeo-Johnson: 1.1875</span>
-<span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span>
-<span class="co">##  </span>
-<span class="co">## Based off these, bestNormalize chose:</span>
-<span class="co">## Standardized Box Cox Transformation with 250 nonmissing obs.:</span>
-<span class="co">##  Estimated statistics:</span>
-<span class="co">##  - lambda = 0.3254863 </span>
-<span class="co">##  - mean (before standardization) = -0.3659267 </span>
-<span class="co">##  - sd (before standardization) = 0.9807881</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Pick the best one automatically</span></span>
+<span><span class="op">(</span><span class="va">BNobject</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Best Normalizing transformation with 250 Observations</span></span>
+<span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">##  - arcsinh(x): 1.7917</span></span>
+<span><span class="co">##  - Box-Cox: 1.0442</span></span>
+<span><span class="co">##  - Center+scale: 3.0102</span></span>
+<span><span class="co">##  - Exp(x): 9.5306</span></span>
+<span><span class="co">##  - Log_b(x+a): 1.7072</span></span>
+<span><span class="co">##  - orderNorm (ORQ): 1.1773</span></span>
+<span><span class="co">##  - sqrt(x + a): 1.144</span></span>
+<span><span class="co">##  - Yeo-Johnson: 1.1875</span></span>
+<span><span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">## Based off these, bestNormalize chose:</span></span>
+<span><span class="co">## Standardized Box Cox Transformation with 250 nonmissing obs.:</span></span>
+<span><span class="co">##  Estimated statistics:</span></span>
+<span><span class="co">##  - lambda = 0.3254863 </span></span>
+<span><span class="co">##  - mean (before standardization) = -0.3659267 </span></span>
+<span><span class="co">##  - sd (before standardization) = 0.9807881</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Last resort - binarize</span>
-<span class="op">(</span><span class="va">binarize_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binarize.html">binarize</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Binarize Transformation with 250 nonmissing obs.</span>
-<span class="co">## Estimated Statistic:</span>
-<span class="co">##  - median = 0.7211385</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Last resort - binarize</span></span>
+<span><span class="op">(</span><span class="va">binarize_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binarize.html">binarize</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Binarize Transformation with 250 nonmissing obs.</span></span>
+<span><span class="co">## Estimated Statistic:</span></span>
+<span><span class="co">##  - median = 0.7211385</span></span></code></pre>
 <p>These objects can then be fed into the <code>predict</code> function to perform the transformation on new values. The reverse transformation is also possible with this function. Below we plot the transformation for a range of new x values</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">arcsinh_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="fl">1</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>,
-     xlab <span class="op">=</span> <span class="st">'x'</span>, ylab <span class="op">=</span> <span class="st">"g(x)"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">boxcox_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">yeojohnson_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orderNorm_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"bottomright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arcsinh"</span>, <span class="st">"Box Cox"</span>, <span class="st">"Yeo-Johnson"</span>, <span class="st">"OrderNorm"</span><span class="op">)</span>, 
-       col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, lty <span class="op">=</span> <span class="fl">1</span>, bty <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">arcsinh_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="fl">1</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">'x'</span>, ylab <span class="op">=</span> <span class="st">"g(x)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">boxcox_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">yeojohnson_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orderNorm_obj</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"bottomright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arcsinh"</span>, <span class="st">"Box Cox"</span>, <span class="st">"Yeo-Johnson"</span>, <span class="st">"OrderNorm"</span><span class="op">)</span>, </span>
+<span>       col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, lty <span class="op">=</span> <span class="fl">1</span>, bty <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/vis_data-1.png" width="672"></p>
 <p>To examine how each of them performed (In-Sample), we can visualize the transformed values in a histogram.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">arcsinh_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"Arcsinh transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">boxcox_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"Box Cox transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">yeojohnson_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"Yeo-Johnson transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">orderNorm_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"orderNorm transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">arcsinh_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"Arcsinh transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">boxcox_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"Box Cox transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">yeojohnson_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"Yeo-Johnson transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">orderNorm_obj</span><span class="op">$</span><span class="va">x.t</span>, main <span class="op">=</span> <span class="st">"orderNorm transformation"</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/hist_trans-1.png" width="672"></p>
 <p>The best transformation in this case is plotted below.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">BNobject</span><span class="op">$</span><span class="va">x.t</span>, 
-               main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Best Transformation:"</span>, 
-                            <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">BNobject</span><span class="op">$</span><span class="va">chosen_transform</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BNobject</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="fl">1</span>, 
-     main <span class="op">=</span> <span class="st">"Best Normalizing transformation"</span>, ylab <span class="op">=</span> <span class="st">"g(x)"</span>, xlab <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">BNobject</span><span class="op">$</span><span class="va">x.t</span>, </span>
+<span>               main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Best Transformation:"</span>, </span>
+<span>                            <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">BNobject</span><span class="op">$</span><span class="va">chosen_transform</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, nbins <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BNobject</span>, newdata <span class="op">=</span> <span class="va">xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"Best Normalizing transformation"</span>, ylab <span class="op">=</span> <span class="st">"g(x)"</span>, xlab <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/hist_best-1.png" width="672"></p>
 </div>
 <div class="section level3">
@@ -300,8 +300,8 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 </h3>
 <p>The <code>bestNormalize</code> function will save the estimated normality statistics that it obtained for each fold and repeat of cross-validation. Users can visualize these relatively easily via a boxplot (see below), which may give some insight into how much the transformation is truly preferred by the normality statistic, or if it doesn’t matter so much as much which transformation is chosen. In this example, Box-Cox, Arcsin h, and ORQ seem to be doing similarly to each other, whereas the Yeo-Johnson is under-performing.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">BNobject</span><span class="op">$</span><span class="va">oos_preds</span><span class="op">)</span>, yaxt <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>,<span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>,<span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">BNobject</span><span class="op">$</span><span class="va">oos_preds</span><span class="op">)</span>, yaxt <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>,<span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>,<span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/boxplot-1.png" width="100%"></p>
 </div>
 <div class="section level3">
@@ -309,24 +309,24 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 </h3>
 <p>The <code>bestNormalize</code> function can be quite slow, since it’s using cross validation to estimate the out-of-sample efficacy. If the user specifies <code>out_of_sample = FALSE"</code>, this will highly speed up the process, however the ORQ normalization will virtually always be chosen. If this method is chosen, we recommend setting <code>allow_orderNorm = FALSE</code> in order to pick the best of the other transformations.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, allow_orderNorm <span class="op">=</span> <span class="cn">FALSE</span>, out_of_sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Best Normalizing transformation with 250 Observations</span>
-<span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">##  - arcsinh(x): 4.401</span>
-<span class="co">##  - Box-Cox: 0.7435</span>
-<span class="co">##  - Center+scale: 8.087</span>
-<span class="co">##  - Exp(x): 64.6975</span>
-<span class="co">##  - Log_b(x+a): 3.47</span>
-<span class="co">##  - sqrt(x + a): 0.9145</span>
-<span class="co">##  - Yeo-Johnson: 1.7125</span>
-<span class="co">## Estimation method: In-sample</span>
-<span class="co">##  </span>
-<span class="co">## Based off these, bestNormalize chose:</span>
-<span class="co">## Standardized Box Cox Transformation with 250 nonmissing obs.:</span>
-<span class="co">##  Estimated statistics:</span>
-<span class="co">##  - lambda = 0.3254863 </span>
-<span class="co">##  - mean (before standardization) = -0.3659267 </span>
-<span class="co">##  - sd (before standardization) = 0.9807881</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span>, allow_orderNorm <span class="op">=</span> <span class="cn">FALSE</span>, out_of_sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Best Normalizing transformation with 250 Observations</span></span>
+<span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">##  - arcsinh(x): 4.401</span></span>
+<span><span class="co">##  - Box-Cox: 0.7435</span></span>
+<span><span class="co">##  - Center+scale: 8.087</span></span>
+<span><span class="co">##  - Exp(x): 64.6975</span></span>
+<span><span class="co">##  - Log_b(x+a): 3.47</span></span>
+<span><span class="co">##  - sqrt(x + a): 0.9145</span></span>
+<span><span class="co">##  - Yeo-Johnson: 1.7125</span></span>
+<span><span class="co">## Estimation method: In-sample</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">## Based off these, bestNormalize chose:</span></span>
+<span><span class="co">## Standardized Box Cox Transformation with 250 nonmissing obs.:</span></span>
+<span><span class="co">##  Estimated statistics:</span></span>
+<span><span class="co">##  - lambda = 0.3254863 </span></span>
+<span><span class="co">##  - mean (before standardization) = -0.3659267 </span></span>
+<span><span class="co">##  - sd (before standardization) = 0.9807881</span></span></code></pre>
 <p>We also make it easy for users to parallelize the repeated CV process via the <code>cluster</code> argument and the <code>parallel</code> package. A cluster can be set up with <code>makeCluster</code> and passed to <code>bestNormalize</code> via the <code>cluster =</code> argument.</p>
 <p>This speed-up is dependent on the number of repeats, the length of the vector to be transformed, and the number of cores in the cluster. It could well make the computation slower due to the overhead computations of setting up the process, so in cases where the sample size is relatively small and the number of repeats is also small, it is probably better to not worry about the parallelization.</p>
 </div>
@@ -340,51 +340,51 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 </h3>
 <p>As of version 1.7, users can use the <code>scales</code> package in conjunction with <code>ggplot2</code> to facilitate plotting variables that have undergone a transformation with <code>bestNormalize</code> (or any other method).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span>, <span class="fl">.1</span><span class="op">)</span>
-<span class="va">bn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-
-<span class="va">bn</span></code></pre></div>
-<pre><code><span class="co">## Best Normalizing transformation with 1000 Observations</span>
-<span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">##  - arcsinh(x): 1.4556</span>
-<span class="co">##  - Box-Cox: 1.088</span>
-<span class="co">##  - Center+scale: 6.9536</span>
-<span class="co">##  - Exp(x): 115.8928</span>
-<span class="co">##  - Log_b(x+a): 2.0484</span>
-<span class="co">##  - orderNorm (ORQ): 1.1852</span>
-<span class="co">##  - sqrt(x + a): 1.5487</span>
-<span class="co">##  - Yeo-Johnson: 1.1946</span>
-<span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span>
-<span class="co">##  </span>
-<span class="co">## Based off these, bestNormalize chose:</span>
-<span class="co">## Standardized Box Cox Transformation with 1000 nonmissing obs.:</span>
-<span class="co">##  Estimated statistics:</span>
-<span class="co">##  - lambda = 0.2567004 </span>
-<span class="co">##  - mean (before standardization) = 2.392499 </span>
-<span class="co">##  - sd (before standardization) = 1.893565</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span>, <span class="fl">.1</span><span class="op">)</span></span>
+<span><span class="va">bn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bn</span></span></code></pre></div>
+<pre><code><span><span class="co">## Best Normalizing transformation with 1000 Observations</span></span>
+<span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">##  - arcsinh(x): 1.4556</span></span>
+<span><span class="co">##  - Box-Cox: 1.088</span></span>
+<span><span class="co">##  - Center+scale: 6.9536</span></span>
+<span><span class="co">##  - Exp(x): 115.8928</span></span>
+<span><span class="co">##  - Log_b(x+a): 2.0484</span></span>
+<span><span class="co">##  - orderNorm (ORQ): 1.1852</span></span>
+<span><span class="co">##  - sqrt(x + a): 1.5487</span></span>
+<span><span class="co">##  - Yeo-Johnson: 1.1946</span></span>
+<span><span class="co">## Estimation method: Out-of-sample via CV with 10 folds and 5 repeats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">## Based off these, bestNormalize chose:</span></span>
+<span><span class="co">## Standardized Box Cox Transformation with 1000 nonmissing obs.:</span></span>
+<span><span class="co">##  Estimated statistics:</span></span>
+<span><span class="co">##  - lambda = 0.2567004 </span></span>
+<span><span class="co">##  - mean (before standardization) = 2.392499 </span></span>
+<span><span class="co">##  - sd (before standardization) = 1.893565</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># say y is related linearly to the transformed x</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="va">bn</span><span class="op">$</span><span class="va">x.t</span> <span class="op">*</span> <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>
-
-<span class="co"># A log transformation does OK...</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>,y<span class="op">=</span><span class="va">y</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>trans <span class="op">=</span> <span class="st">"log"</span>, breaks <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/breaks_log.html" class="external-link">log_breaks</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># say y is related linearly to the transformed x</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">bn</span><span class="op">$</span><span class="va">x.t</span> <span class="op">*</span> <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># A log transformation does OK...</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>,y<span class="op">=</span><span class="va">y</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>trans <span class="op">=</span> <span class="st">"log"</span>, breaks <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/breaks_log.html" class="external-link">log_breaks</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/scales_ex-1.png" width="672"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create bestNormalize scale for use in ggplot (using bestNormalize object)</span>
-<span class="va">bn_trans</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/trans_new.html" class="external-link">trans_new</a></span><span class="op">(</span>
-  name <span class="op">=</span> <span class="st">"bn_trans"</span>,
-  trans <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bn</span>, newdata <span class="op">=</span> <span class="va">x</span><span class="op">)</span>,
-  inverse <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bn</span>, newdata <span class="op">=</span> <span class="va">x</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">)</span>
-
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>,y<span class="op">=</span><span class="va">y</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>trans <span class="op">=</span> <span class="va">bn_trans</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Create bestNormalize scale for use in ggplot (using bestNormalize object)</span></span>
+<span><span class="va">bn_trans</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/trans_new.html" class="external-link">trans_new</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"bn_trans"</span>,</span>
+<span>  trans <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bn</span>, newdata <span class="op">=</span> <span class="va">x</span><span class="op">)</span>,</span>
+<span>  inverse <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bn</span>, newdata <span class="op">=</span> <span class="va">x</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>,y<span class="op">=</span><span class="va">y</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>trans <span class="op">=</span> <span class="va">bn_trans</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/scales_ex-2.png" width="672"></p>
 </div>
 </div>
@@ -393,208 +393,208 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 </h2>
 <p>The <code>autotrader</code> data set was scraped from the <a href="https://www.autotrader.com/" class="external-link">autotrader website</a> as part of this package (and because at the time of writing, I needed to buy a car). I apply the <code>bestNormalize</code> functionality to de-skew mileage, age, and price in my pricing model. See <code><a href="../reference/autotrader.html">?autotrader</a></code> for more information on this data set.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"autotrader"</span><span class="op">)</span>
-<span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span> <span class="op">&lt;-</span> <span class="fl">2017</span> <span class="op">-</span> <span class="va">autotrader</span><span class="op">$</span><span class="va">Year</span>
-<span class="co">### Using best-normalize</span>
-<span class="op">(</span><span class="va">priceBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Best Normalizing transformation with 6283 Observations</span>
-<span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">##  - arcsinh(x): 7.3646</span>
-<span class="co">##  - Box-Cox: 4.2174</span>
-<span class="co">##  - Center+scale: 6.527</span>
-<span class="co">##  - Log_b(x+a): 7.3646</span>
-<span class="co">##  - orderNorm (ORQ): 1.1586</span>
-<span class="co">##  - sqrt(x + a): 4.2754</span>
-<span class="co">##  - Yeo-Johnson: 4.2174</span>
-<span class="co">## Estimation method: Out-of-sample via CV with 5 folds and 1 repeats</span>
-<span class="co">##  </span>
-<span class="co">## Based off these, bestNormalize chose:</span>
-<span class="co">## orderNorm Transformation with 6283 nonmissing obs and ties</span>
-<span class="co">##  - 2465 unique values </span>
-<span class="co">##  - Original quantiles:</span>
-<span class="co">##    0%   25%   50%   75%  100% </span>
-<span class="co">##   722 11499 15998 21497 64998</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"autotrader"</span><span class="op">)</span></span>
+<span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span> <span class="op">&lt;-</span> <span class="fl">2017</span> <span class="op">-</span> <span class="va">autotrader</span><span class="op">$</span><span class="va">Year</span></span>
+<span><span class="co">### Using best-normalize</span></span>
+<span><span class="op">(</span><span class="va">priceBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Best Normalizing transformation with 6283 Observations</span></span>
+<span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">##  - arcsinh(x): 7.3646</span></span>
+<span><span class="co">##  - Box-Cox: 4.2174</span></span>
+<span><span class="co">##  - Center+scale: 6.527</span></span>
+<span><span class="co">##  - Log_b(x+a): 7.3646</span></span>
+<span><span class="co">##  - orderNorm (ORQ): 1.1586</span></span>
+<span><span class="co">##  - sqrt(x + a): 4.2754</span></span>
+<span><span class="co">##  - Yeo-Johnson: 4.2174</span></span>
+<span><span class="co">## Estimation method: Out-of-sample via CV with 5 folds and 1 repeats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">## Based off these, bestNormalize chose:</span></span>
+<span><span class="co">## orderNorm Transformation with 6283 nonmissing obs and ties</span></span>
+<span><span class="co">##  - 2465 unique values </span></span>
+<span><span class="co">##  - Original quantiles:</span></span>
+<span><span class="co">##    0%   25%   50%   75%  100% </span></span>
+<span><span class="co">##   722 11499 15998 21497 64998</span></span></code></pre>
 <p>Note that <code>orderNorm</code> throws a warning due to the ties in the price vector. We can see that the estimated normality statistic for the OrderNorm transformation is close to one, however, so we know it is performing quite well. It is also performing better than all of the other transformations.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">mileageBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Best Normalizing transformation with 6283 Observations</span>
-<span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">##  - arcsinh(x): 4.7664</span>
-<span class="co">##  - Box-Cox: 4.2613</span>
-<span class="co">##  - Center+scale: 22.0413</span>
-<span class="co">##  - Log_b(x+a): 4.7657</span>
-<span class="co">##  - orderNorm (ORQ): 1.1199</span>
-<span class="co">##  - sqrt(x + a): 7.2496</span>
-<span class="co">##  - Yeo-Johnson: 4.2627</span>
-<span class="co">## Estimation method: Out-of-sample via CV with 5 folds and 1 repeats</span>
-<span class="co">##  </span>
-<span class="co">## Based off these, bestNormalize chose:</span>
-<span class="co">## orderNorm Transformation with 6283 nonmissing obs and ties</span>
-<span class="co">##  - 6077 unique values </span>
-<span class="co">##  - Original quantiles:</span>
-<span class="co">##     0%    25%    50%    75%   100% </span>
-<span class="co">##      2  29099  44800  88950 325556</span></code></pre>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">mileageBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Best Normalizing transformation with 6283 Observations</span></span>
+<span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">##  - arcsinh(x): 4.7664</span></span>
+<span><span class="co">##  - Box-Cox: 4.2613</span></span>
+<span><span class="co">##  - Center+scale: 22.0413</span></span>
+<span><span class="co">##  - Log_b(x+a): 4.7657</span></span>
+<span><span class="co">##  - orderNorm (ORQ): 1.1199</span></span>
+<span><span class="co">##  - sqrt(x + a): 7.2496</span></span>
+<span><span class="co">##  - Yeo-Johnson: 4.2627</span></span>
+<span><span class="co">## Estimation method: Out-of-sample via CV with 5 folds and 1 repeats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">## Based off these, bestNormalize chose:</span></span>
+<span><span class="co">## orderNorm Transformation with 6283 nonmissing obs and ties</span></span>
+<span><span class="co">##  - 6077 unique values </span></span>
+<span><span class="co">##  - Original quantiles:</span></span>
+<span><span class="co">##     0%    25%    50%    75%   100% </span></span>
+<span><span class="co">##      2  29099  44800  88950 325556</span></span></code></pre>
 <p>Similarly, the ORQ normalization performed best for mileage, and the ties didn’t seem to be too big of a deal.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">yearsoldBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Best Normalizing transformation with 6283 Observations</span>
-<span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
-<span class="co">##  - arcsinh(x): 170.512</span>
-<span class="co">##  - Box-Cox: 170.4444</span>
-<span class="co">##  - Center+scale: 171.1519</span>
-<span class="co">##  - Exp(x): 1034.8401</span>
-<span class="co">##  - Log_b(x+a): 170.4138</span>
-<span class="co">##  - orderNorm (ORQ): 168.0324</span>
-<span class="co">##  - sqrt(x + a): 170.5971</span>
-<span class="co">##  - Yeo-Johnson: 171.914</span>
-<span class="co">## Estimation method: Out-of-sample via CV with 5 folds and 1 repeats</span>
-<span class="co">##  </span>
-<span class="co">## Based off these, bestNormalize chose:</span>
-<span class="co">## orderNorm Transformation with 6283 nonmissing obs and ties</span>
-<span class="co">##  - 17 unique values </span>
-<span class="co">##  - Original quantiles:</span>
-<span class="co">##   0%  25%  50%  75% 100% </span>
-<span class="co">##    1    3    4    7   17</span></code></pre>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">yearsoldBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Best Normalizing transformation with 6283 Observations</span></span>
+<span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
+<span><span class="co">##  - arcsinh(x): 170.512</span></span>
+<span><span class="co">##  - Box-Cox: 170.4444</span></span>
+<span><span class="co">##  - Center+scale: 171.1519</span></span>
+<span><span class="co">##  - Exp(x): 1034.8401</span></span>
+<span><span class="co">##  - Log_b(x+a): 170.4138</span></span>
+<span><span class="co">##  - orderNorm (ORQ): 168.0324</span></span>
+<span><span class="co">##  - sqrt(x + a): 170.5971</span></span>
+<span><span class="co">##  - Yeo-Johnson: 171.914</span></span>
+<span><span class="co">## Estimation method: Out-of-sample via CV with 5 folds and 1 repeats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">## Based off these, bestNormalize chose:</span></span>
+<span><span class="co">## orderNorm Transformation with 6283 nonmissing obs and ties</span></span>
+<span><span class="co">##  - 17 unique values </span></span>
+<span><span class="co">##  - Original quantiles:</span></span>
+<span><span class="co">##   0%  25%  50%  75% 100% </span></span>
+<span><span class="co">##    1    3    4    7   17</span></span></code></pre>
 <p>Here we see something peculiar; none of the normalizing transformations performed well according to the normality statistics. The frequency of ties in this case makes it very difficult to find a normalizing transformation (see figure below as to why this is). Even so, orderNorm is chosen as it has the lowest estimated P/df statistic.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span>
-<span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">yearsoldBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span></span>
+<span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">yearsoldBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/hist_app-1.png" width="672"></p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">price.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-<span class="va">mileage.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-<span class="va">yearsold.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">price.xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">priceBN</span>, newdata <span class="op">=</span> <span class="va">price.xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, 
-     main <span class="op">=</span> <span class="st">"Price bestNormalizing transformation"</span>, 
-     xlab <span class="op">=</span> <span class="st">"Price ($)"</span>, ylab <span class="op">=</span> <span class="st">"g(price)"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mileage.xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mileageBN</span>, newdata <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, 
-     main <span class="op">=</span> <span class="st">"Mileage bestNormalizing transformation"</span>, 
-     xlab <span class="op">=</span> <span class="st">"Mileage"</span>, ylab <span class="op">=</span> <span class="st">"g(Mileage)"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">yearsold.xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">yearsoldBN</span>, newdata <span class="op">=</span> <span class="va">yearsold.xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, 
-     main <span class="op">=</span> <span class="st">"Years-old bestNormalizing transformation"</span>, 
-     xlab <span class="op">=</span> <span class="st">"Years-old"</span>, ylab <span class="op">=</span> <span class="st">"g(Years-old)"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">price.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">mileage.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">yearsold.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">price.xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">priceBN</span>, newdata <span class="op">=</span> <span class="va">price.xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"Price bestNormalizing transformation"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"Price ($)"</span>, ylab <span class="op">=</span> <span class="st">"g(price)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mileage.xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mileageBN</span>, newdata <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"Mileage bestNormalizing transformation"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"Mileage"</span>, ylab <span class="op">=</span> <span class="st">"g(Mileage)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">yearsold.xx</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">yearsoldBN</span>, newdata <span class="op">=</span> <span class="va">yearsold.xx</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"Years-old bestNormalizing transformation"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"Years-old"</span>, ylab <span class="op">=</span> <span class="st">"g(Years-old)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/hist_app2-1.png" width="672"></p>
 <p>Next, we will fit a linear model on the transformed values of each variable. The reverse-transformation will allow us to visualize how these variables work into the model on their original units.</p>
 <p>For the sake of illustration, we also plot the effects of a GAM model to see if there is a big difference. The GAM models seem to be more influenced by outliers than the fits to the transformed data.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">autotrader</span><span class="op">$</span><span class="va">price.t</span> <span class="op">&lt;-</span> <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span>
-<span class="va">autotrader</span><span class="op">$</span><span class="va">mileage.t</span> <span class="op">&lt;-</span> <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span>
-<span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold.t</span> <span class="op">&lt;-</span> <span class="va">yearsoldBN</span><span class="op">$</span><span class="va">x.t</span>
-
-<span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">price.t</span> <span class="op">~</span> <span class="va">mileage.t</span> <span class="op">+</span> <span class="va">yearsold.t</span>,
-           data <span class="op">=</span> <span class="va">autotrader</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## </span>
-<span class="co">## Call:</span>
-<span class="co">## lm(formula = price.t ~ mileage.t + yearsold.t, data = autotrader)</span>
-<span class="co">## </span>
-<span class="co">## Residuals:</span>
-<span class="co">##     Min      1Q  Median      3Q     Max </span>
-<span class="co">## -2.4252 -0.5778 -0.1247  0.4973  3.1437 </span>
-<span class="co">## </span>
-<span class="co">## Coefficients:</span>
-<span class="co">##              Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="co">## (Intercept)  0.005454   0.009855   0.553     0.58    </span>
-<span class="co">## mileage.t   -0.234321   0.015657 -14.966   &lt;2e-16 ***</span>
-<span class="co">## yearsold.t  -0.440999   0.016253 -27.134   &lt;2e-16 ***</span>
-<span class="co">## ---</span>
-<span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">## </span>
-<span class="co">## Residual standard error: 0.781 on 6280 degrees of freedom</span>
-<span class="co">## Multiple R-squared:  0.3901, Adjusted R-squared:  0.3899 </span>
-<span class="co">## F-statistic:  2009 on 2 and 6280 DF,  p-value: &lt; 2.2e-16</span></code></pre>
+<code class="sourceCode R"><span><span class="va">autotrader</span><span class="op">$</span><span class="va">price.t</span> <span class="op">&lt;-</span> <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span></span>
+<span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage.t</span> <span class="op">&lt;-</span> <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span></span>
+<span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold.t</span> <span class="op">&lt;-</span> <span class="va">yearsoldBN</span><span class="op">$</span><span class="va">x.t</span></span>
+<span></span>
+<span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">price.t</span> <span class="op">~</span> <span class="va">mileage.t</span> <span class="op">+</span> <span class="va">yearsold.t</span>,</span>
+<span>           data <span class="op">=</span> <span class="va">autotrader</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Call:</span></span>
+<span><span class="co">## lm(formula = price.t ~ mileage.t + yearsold.t, data = autotrader)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Residuals:</span></span>
+<span><span class="co">##     Min      1Q  Median      3Q     Max </span></span>
+<span><span class="co">## -2.4252 -0.5778 -0.1247  0.4973  3.1437 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Coefficients:</span></span>
+<span><span class="co">##              Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span><span class="co">## (Intercept)  0.005454   0.009855   0.553     0.58    </span></span>
+<span><span class="co">## mileage.t   -0.234321   0.015657 -14.966   &lt;2e-16 ***</span></span>
+<span><span class="co">## yearsold.t  -0.440999   0.016253 -27.134   &lt;2e-16 ***</span></span>
+<span><span class="co">## ---</span></span>
+<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Residual standard error: 0.781 on 6280 degrees of freedom</span></span>
+<span><span class="co">## Multiple R-squared:  0.3901, Adjusted R-squared:  0.3899 </span></span>
+<span><span class="co">## F-statistic:  2009 on 2 and 6280 DF,  p-value: &lt; 2.2e-16</span></span></code></pre>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">miles.t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mileageBN</span>, newdata <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span>
-<span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"mileage.t"</span><span class="op">]</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>
-    <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span>,
-    <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span>,
-    pch <span class="op">=</span> <span class="fl">16</span>,
-    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,
-    main <span class="op">=</span> <span class="st">"Estimated linear effect (using transformed data)"</span>,
-    xlab <span class="op">=</span> <span class="st">"g(Mileage)"</span>,
-    ylab <span class="op">=</span> <span class="st">"g(Price)"</span>
-<span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">miles.t</span>,
-      <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">c1</span> <span class="op">*</span> <span class="va">miles.t</span>,
-      col <span class="op">=</span> <span class="st">"slateblue"</span>,
-      lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">miles.t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mileageBN</span>, newdata <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span></span>
+<span><span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"mileage.t"</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>    <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span>,</span>
+<span>    <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span>,</span>
+<span>    pch <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,</span>
+<span>    main <span class="op">=</span> <span class="st">"Estimated linear effect (using transformed data)"</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">"g(Mileage)"</span>,</span>
+<span>    ylab <span class="op">=</span> <span class="st">"g(Price)"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">miles.t</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">c1</span> <span class="op">*</span> <span class="va">miles.t</span>,</span>
+<span>      col <span class="op">=</span> <span class="st">"slateblue"</span>,</span>
+<span>      lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/app_vis-1.png" width="672"></p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Mileage effect</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>
-  <span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span>,
-  <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>,
-  pch <span class="op">=</span> <span class="fl">16</span>,
-  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,
-  main <span class="op">=</span> <span class="st">"Mileage effect (re-transformed to original unit)"</span>,
-  xlab <span class="op">=</span> <span class="st">"Mileage"</span>,
-  ylab <span class="op">=</span> <span class="st">"Price"</span>
-<span class="op">)</span>
-<span class="va">line_vals</span> <span class="op">&lt;-</span> <span class="va">miles.t</span> <span class="op">*</span> <span class="va">c1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span>
-    <span class="va">mileage.xx</span>,
-    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">priceBN</span>, newdata <span class="op">=</span> <span class="va">line_vals</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    lwd <span class="op">=</span> <span class="fl">2</span>,
-    col <span class="op">=</span> <span class="st">"slateblue"</span>
-<span class="op">)</span>
-<span class="co"># Compare to GAM fit</span>
-<span class="va">fit_gam</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">price</span> <span class="op">~</span> <span class="fu">s</span><span class="op">(</span><span class="va">yearsold</span><span class="op">)</span> <span class="op">+</span> <span class="fu">s</span><span class="op">(</span><span class="va">mileage</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">autotrader</span><span class="op">)</span>
-<span class="va">p_gam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_gam</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>yearsold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span>, 
-                                               mileage <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">mileage.xx</span>, <span class="va">p_gam</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'green3'</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span>
-  <span class="st">'topright'</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GAM fit"</span>, <span class="st">"Transformed linear fit"</span><span class="op">)</span>,
-  lwd <span class="op">=</span> <span class="fl">2</span>,
-  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"green3"</span>, <span class="st">"slateblue"</span><span class="op">)</span>,
-  bty <span class="op">=</span> <span class="st">"n"</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Mileage effect</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span>,</span>
+<span>  <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>,</span>
+<span>  pch <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Mileage effect (re-transformed to original unit)"</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Mileage"</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="st">"Price"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">line_vals</span> <span class="op">&lt;-</span> <span class="va">miles.t</span> <span class="op">*</span> <span class="va">c1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span></span>
+<span>    <span class="va">mileage.xx</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">priceBN</span>, newdata <span class="op">=</span> <span class="va">line_vals</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"slateblue"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Compare to GAM fit</span></span>
+<span><span class="va">fit_gam</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">price</span> <span class="op">~</span> <span class="fu">s</span><span class="op">(</span><span class="va">yearsold</span><span class="op">)</span> <span class="op">+</span> <span class="fu">s</span><span class="op">(</span><span class="va">mileage</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">autotrader</span><span class="op">)</span></span>
+<span><span class="va">p_gam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_gam</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>yearsold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span>, </span>
+<span>                                               mileage <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">mileage.xx</span>, <span class="va">p_gam</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'green3'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
+<span>  <span class="st">'topright'</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GAM fit"</span>, <span class="st">"Transformed linear fit"</span><span class="op">)</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"green3"</span>, <span class="st">"slateblue"</span><span class="op">)</span>,</span>
+<span>  bty <span class="op">=</span> <span class="st">"n"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/app_vis-2.png" width="672"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Years Old effect</span>
-<span class="va">yo.t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">yearsoldBN</span>, newdata <span class="op">=</span> <span class="va">yearsold.xx</span><span class="op">)</span>
-<span class="va">c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"yearsold.t"</span><span class="op">]</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span>, <span class="fl">1.5</span><span class="op">)</span>,
-    <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>,
-    pch <span class="op">=</span> <span class="fl">16</span>,
-    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>, 
-    main <span class="op">=</span> <span class="st">"Years old effect (re-transformed to original unit)"</span>,
-    xlab <span class="op">=</span> <span class="st">"Age (Jittered)"</span>,
-    ylab <span class="op">=</span> <span class="st">"Price"</span>
-<span class="op">)</span>
-<span class="va">line_vals</span> <span class="op">&lt;-</span> <span class="va">yo.t</span> <span class="op">*</span> <span class="va">c2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span>
-    <span class="va">yearsold.xx</span>,
-    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">priceBN</span>, newdata <span class="op">=</span> <span class="va">line_vals</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    lwd <span class="op">=</span> <span class="fl">2</span>,
-    col <span class="op">=</span> <span class="st">"slateblue"</span>
-<span class="op">)</span>
-
-<span class="co"># Compare to GAM fit</span>
-<span class="va">p_gam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_gam</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>yearsold <span class="op">=</span> <span class="va">yearsold.xx</span>, 
-                                               mileage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">yearsold.xx</span>, <span class="va">p_gam</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'green3'</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span>
-  <span class="st">'topright'</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GAM fit"</span>, <span class="st">"Transformed linear fit"</span><span class="op">)</span>,
-  lwd <span class="op">=</span> <span class="fl">2</span>,
-  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"green3"</span>, <span class="st">"slateblue"</span><span class="op">)</span>,
-  bty <span class="op">=</span> <span class="st">"n"</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Years Old effect</span></span>
+<span><span class="va">yo.t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">yearsoldBN</span>, newdata <span class="op">=</span> <span class="va">yearsold.xx</span><span class="op">)</span></span>
+<span><span class="va">c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"yearsold.t"</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>    <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>,</span>
+<span>    pch <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>, </span>
+<span>    main <span class="op">=</span> <span class="st">"Years old effect (re-transformed to original unit)"</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">"Age (Jittered)"</span>,</span>
+<span>    ylab <span class="op">=</span> <span class="st">"Price"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">line_vals</span> <span class="op">&lt;-</span> <span class="va">yo.t</span> <span class="op">*</span> <span class="va">c2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span></span>
+<span>    <span class="va">yearsold.xx</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">priceBN</span>, newdata <span class="op">=</span> <span class="va">line_vals</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"slateblue"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compare to GAM fit</span></span>
+<span><span class="va">p_gam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_gam</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>yearsold <span class="op">=</span> <span class="va">yearsold.xx</span>, </span>
+<span>                                               mileage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">yearsold.xx</span>, <span class="va">p_gam</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'green3'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
+<span>  <span class="st">'topright'</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GAM fit"</span>, <span class="st">"Transformed linear fit"</span><span class="op">)</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"green3"</span>, <span class="st">"slateblue"</span><span class="op">)</span>,</span>
+<span>  bty <span class="op">=</span> <span class="st">"n"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/app_vis-3.png" width="672"></p>
 </div>
   </div>
@@ -616,7 +616,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
