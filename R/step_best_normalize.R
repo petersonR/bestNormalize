@@ -213,3 +213,8 @@ axe_env.step_best_normalize <- function(x, ...) {
   x$terms <- purrr::map(x$terms, function(z) butcher::axe_env(z, ...))
   x
 }
+
+#' @export
+required_pkgs.step_best_normalize <- function(x, ...) {
+  c("bestNormalize")
+}
