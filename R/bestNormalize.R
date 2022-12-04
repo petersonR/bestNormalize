@@ -151,7 +151,7 @@ bestNormalize <- function(x, standardize = TRUE,
   stopifnot(is.numeric(x))
   x.t <- list()
   methods <- c("no_transform", "arcsinh_x", 'boxcox', 
-               "log_x", "sqrt_x", 'yeojohnson')
+               "log_x", "double_reverse_log", "sqrt_x", 'yeojohnson')
   
   # Change no transform to center_scale if standardize = T
   if(standardize)
@@ -188,7 +188,7 @@ bestNormalize <- function(x, standardize = TRUE,
   methods <- methods[order(methods)]
   args <- lapply(methods, function(i) {
     val <- list(standardize = standardize)
-    if(i %in% c("orderNorm", "exp_x", "log_x")) {
+    if(i %in% c("orderNorm", "exp_x", "log_x", "double_reverse_log")) {
       val[['warn']] <- warn
     } else if(i == "lambert_s") {
       val[["type"]] <- "s"
@@ -313,6 +313,7 @@ print.bestNormalize <- function(x, ...) {
     "lambert_h" = "Lambert's W (type h)",
     "lambert_s" = "Lambert's W (type s)",
     "log_x" = "Log_b(x+a)",
+    "double_reverse_log" = "Double Reversed Log_b(x+a)",
     "no_transform" = "No transform",
     "orderNorm" = "orderNorm (ORQ)",
     "sqrt_x" = "sqrt(x + a)",

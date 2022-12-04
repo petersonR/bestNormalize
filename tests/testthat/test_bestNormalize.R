@@ -14,7 +14,7 @@ test_that('BestNormalize transformations with positive data', {
   working_transforms <- c(names(BNobject$other_transforms), class(BNobject$chosen_transform))
   
   expect_equal(working_transforms, 
-               c("arcsinh_x", "boxcox", "center_scale", "exp_x", 
+               c("arcsinh_x", "boxcox", "center_scale", "double_reverse_log", "exp_x", 
                  "log_x", "sqrt_x", "yeojohnson", "orderNorm"))
   
   expect_equal(BNobject$x.t, predict(BNobject))
@@ -145,3 +145,4 @@ test_that("options work for bestNormalize", {
   expect_silent(b <- bestNormalize(train, tr_opts = list(yeojohnson = list(eps = .01)), warn = FALSE))
   expect_equal(b$other_transforms$yeojohnson$eps, .01)
 })
+
