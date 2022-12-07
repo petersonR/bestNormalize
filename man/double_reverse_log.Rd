@@ -12,6 +12,7 @@ double_reverse_log(
   b = 10,
   standardize = TRUE,
   eps = 0.001,
+  min = eps,
   warn = TRUE,
   ...
 )
@@ -31,6 +32,8 @@ double_reverse_log(
 scaled, such that the transformation attempts a standard normal}
 
 \item{eps}{The allowed error in the expression for the selected a}
+
+\item{min}{Minimum score used at the score reversal stage.}
 
 \item{warn}{Should a warning result from infinite values?}
 
@@ -59,8 +62,8 @@ A list of class \code{double_reverse_log} with elements
   performed on new data, and allows for the inverse transformation as well.
 }
 \description{
-First reverse scores, then perform a log_b (x+a) 
-normalization transformation, and then reverse scores again.
+First reverses scores, then perform a log_b (x+a) 
+normalization transformation, and then reverses scores again.
 }
 \details{
 \code{double_reverse_log} performs a simple log transformation in the 

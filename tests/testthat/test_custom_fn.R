@@ -277,7 +277,7 @@ BNobject4 <- suppressWarnings(bestNormalize(c(-1, train), allow_orderNorm = FALS
 test_that('BestNormalize transformations with mixed data, in-sample (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
   expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
-  expect_equal(BNobject4$x.t, predict(BNobject4))
+  expect_equal(BNobject4$x.t, predict(BNobject4), check.attributes = FALSE)
   expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
@@ -297,7 +297,7 @@ BNobject4 <- suppressWarnings(bestNormalize(train2, allow_orderNorm = FALSE, out
 test_that('bestNormalize transformations with mixed data and missing values (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
   expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
-  expect_equal(BNobject4$x.t, predict(BNobject4))
+  expect_equal(BNobject4$x.t, predict(BNobject4), check.attributes = FALSE)
   expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
@@ -322,7 +322,7 @@ BNobject4 <- suppressWarnings(bestNormalize(train2, standardize = FALSE,
 test_that('BestNormalize transformations without standardization  (with custom fns)', {
   expect_equal(BNobject$x.t, predict(BNobject))
   expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
-  expect_equal(BNobject4$x.t, predict(BNobject4))
+  expect_equal(BNobject4$x.t, predict(BNobject4), check.attributes = FALSE)
   expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
@@ -379,6 +379,5 @@ test_that("errors work for new transforms when improperly specified", {
   # No predict method
   expect_error(b <- bestNormalize(train, warn = FALSE, new_transforms = list(I)))
 })
-
 
 

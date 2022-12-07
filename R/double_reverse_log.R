@@ -3,14 +3,15 @@
 #' @name double_reverse_log
 #' @aliases predict.double_reverse_log
 #'   
-#' @description First reverse scores, then perform a log_b (x+a) 
-#' normalization transformation, and then reverse scores again.
+#' @description First reverses scores, then perform a log_b (x+a) 
+#' normalization transformation, and then reverses scores again.
 #' @param x A vector to normalize with with x
 #' @param a The constant to add to x (defaults to max(0, -min(x) + eps))
 #' @param b The base of the log (defaults to 10)
 #' @param standardize If TRUE, the transformed values are also centered and
 #'   scaled, such that the transformation attempts a standard normal
 #' @param eps The allowed error in the expression for the selected a
+#' @param min Minimum score used at the score reversal stage.
 #' @param warn Should a warning result from infinite values?
 #' @param object an object of class 'double_reverse_log'
 #' @param newdata a vector of data to be (potentially reverse) transformed
@@ -55,6 +56,7 @@ double_reverse_log  <- function(x,
                                 b = 10, 
                                 standardize = TRUE, 
                                 eps = .001, 
+                                min = eps,
                                 warn = TRUE,
                                 ...) {
   stopifnot(is.numeric(x))
@@ -68,9 +70,12 @@ double_reverse_log  <- function(x,
     standardize <- FALSE
   }
   
-  x.t <- nice_reverse(x, max = max(x, na.rm = TRUE), min = min(x, na.rm = TRUE))
+  max_x <- max(x, na.rm = TRUE)
+  min_x <- min # min(x, na.rm = TRUE)
+  
+  x.t <- nice_reverse(x, max = max_x, min = min_x)
   x.t <- log(x.t + a, base = b)
-  x.t <- nice_reverse(x.t, max = max(x.t, na.rm = TRUE), min = min(x.t, na.rm = TRUE))
+  x.t <- nice_reverse(x.t, max = max_x, min = min_x)
   
   stopifnot(!all(infinite_idx <- is.infinite(x.t)))
   if(any(infinite_idx)) {
@@ -95,8 +100,8 @@ double_reverse_log  <- function(x,
     n = length(x.t) - sum(is.na(x)),
     norm_stat = unname(ptest$statistic / ptest$df),
     standardize = standardize,
-    max_x = max(x, na.rm = TRUE),
-    min_x = min(x, na.rm = TRUE)
+    max_x = max_x,
+    min_x = min_x
   )
   class(val) <- c('double_reverse_log', class(val))
   val
@@ -109,35 +114,44 @@ double_reverse_log  <- function(x,
 predict.double_reverse_log <- function(object, newdata = NULL, inverse = FALSE, ...) {
   if (is.null(newdata) & !inverse)
     newdata <- object$x
-  if (is.null(newdata) & inverse)
+  if (is.null(newdata) & inverse){
     newdata <- object$x.t
-  
+    attr(newdata, "min.value") <- object$eps
+  }
   if (inverse) {
     if (object$standardize) {
       newdata <- newdata * object$sd + object$mean
     }
-
+    
+    min.value <- attributes(newdata)$min.value
+    
     newdata <- nice_reverse(newdata,
-                            max = max(newdata, na.rm = TRUE),
-                            min = min(newdata, na.rm = TRUE))
-    newdata <-  object$b^newdata - object$a
+                            max = object$max_x,
+                            min = min.value)
+    newdata <- object$b^newdata - object$a
     newdata <- nice_reverse(newdata,
-                            max = max(newdata, na.rm = TRUE),
-                            min = min(newdata, na.rm = TRUE))
+                            max = object$max_x,
+                            min = min.value)
 
     } else if (!inverse) {
+      
+    min.value <- max(newdata, na.rm = TRUE) - object$max_x + object$eps
     
     newdata <- nice_reverse(newdata, 
-                            max = max(newdata, na.rm = TRUE), 
-                            min = min(newdata, na.rm = TRUE))
+                            max = object$max_x, 
+                            min = min.value)
     newdata <- log(newdata + object$a, object$b)
     newdata <- nice_reverse(newdata, 
-                            max = max(newdata, na.rm = TRUE),
-                            min = min(newdata, na.rm = TRUE))
+                            max = object$max_x,
+                            min = min.value)
     
-    if (object$standardize) 
+    attr(newdata, "min.value") <- min.value
+    
+    if (object$standardize) {
       newdata <- (newdata - object$mean) / object$sd
+    }
   }
+  
   unname(newdata)
 }
 

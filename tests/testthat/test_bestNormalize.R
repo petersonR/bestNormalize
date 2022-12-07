@@ -29,7 +29,7 @@ BNobject4 <- suppressWarnings(bestNormalize(c(-1, train), allow_orderNorm = FALS
 test_that('BestNormalize transformations with mixed data, in-sample', {
   expect_equal(BNobject$x.t, predict(BNobject))
   expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
-  expect_equal(BNobject4$x.t, predict(BNobject4))
+  expect_equal(BNobject4$x.t, predict(BNobject4), check.attributes = FALSE)
   expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
@@ -49,7 +49,7 @@ BNobject4 <- suppressWarnings(bestNormalize(train2, allow_orderNorm = FALSE, out
 test_that('BestNormalize transformations with mixed data and missing values', {
   expect_equal(BNobject$x.t, predict(BNobject))
   expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
-  expect_equal(BNobject4$x.t, predict(BNobject4))
+  expect_equal(BNobject4$x.t, predict(BNobject4), check.attributes = FALSE)
   expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
@@ -74,7 +74,7 @@ BNobject4 <- suppressWarnings(bestNormalize(train2, standardize = FALSE,
 test_that('BestNormalize transformations without standardization', {
   expect_equal(BNobject$x.t, predict(BNobject))
   expect_equal(BNobject$x, predict(BNobject, inverse = TRUE))
-  expect_equal(BNobject4$x.t, predict(BNobject4))
+  expect_equal(BNobject4$x.t, predict(BNobject4), check.attributes = FALSE)
   expect_equal(BNobject4$x, predict(BNobject4, inverse = TRUE))
 })
 
@@ -145,4 +145,3 @@ test_that("options work for bestNormalize", {
   expect_silent(b <- bestNormalize(train, tr_opts = list(yeojohnson = list(eps = .01)), warn = FALSE))
   expect_equal(b$other_transforms$yeojohnson$eps, .01)
 })
-

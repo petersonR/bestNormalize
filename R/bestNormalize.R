@@ -133,7 +133,8 @@
 #' @seealso  \code{\link[bestNormalize]{boxcox}}, \code{\link{orderNorm}},
 #'   \code{\link{yeojohnson}}
 #' @export
-bestNormalize <- function(x, standardize = TRUE, 
+bestNormalize <- function(x, 
+                          standardize = TRUE, 
                           allow_orderNorm = TRUE,
                           allow_lambert_s = FALSE,
                           allow_lambert_h = FALSE,
@@ -147,7 +148,8 @@ bestNormalize <- function(x, standardize = TRUE,
                           quiet = FALSE, 
                           tr_opts = list(),
                           new_transforms = list(), 
-                          norm_stat_fn= NULL, ...) {
+                          norm_stat_fn = NULL, 
+                          ...) {
   stopifnot(is.numeric(x))
   x.t <- list()
   methods <- c("no_transform", "arcsinh_x", 'boxcox', 
