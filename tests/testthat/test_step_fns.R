@@ -42,7 +42,7 @@ test_that('step_* transformations with iris data', {
   # plot(density(bn_data$Petal.Length), main = "after")
   expect_equal(nrow(tidy(bn_trans, number = 1)), 1)
   expect_equal(nrow(tidy(bn_estimates, number = 1)), 4)
-  expect_s3_class(tidy(bn_estimates, number = 1)$cv_info[[3]]$tr_object[[1]], "log_x")
+  expect_s3_class(tidy(bn_estimates, number = 1)$cv_info[[3]]$tr_object[[1]], "double_reverse_log")
 
   ## Faster (use in-sample metrics, does NOT use orderNorm)
   expect_silent(bn_trans <- step_best_normalize(rec, all_numeric(), transform_options = list(out_of_sample = FALSE, allow_orderNorm = FALSE)))
@@ -52,7 +52,7 @@ test_that('step_* transformations with iris data', {
   # plot(density(bn_data$Petal.Length), main = "after")
   expect_equal(nrow(tidy(bn_trans, number = 1)), 1)
   expect_equal(nrow(tidy(bn_estimates, number = 1)), 4)
-  expect_s3_class(tidy(bn_estimates, number = 1)$cv_info[[3]]$tr_object[[1]], "log_x")
+  expect_s3_class(tidy(bn_estimates, number = 1)$cv_info[[3]]$tr_object[[1]], "double_reverse_log")
 
   ## Fastest (only use ORQ (orderNorm) transformation)
   expect_silent(orq_trans <- step_orderNorm(rec, all_numeric()))
@@ -114,7 +114,7 @@ test_that('step_* transformations with missing/negative/discrete data', {
   # plot(density(bn_data$Petal.Length), main = "after")
   expect_equal(nrow(tidy(bn_trans, number = 1)), 1)
   expect_equal(nrow(tidy(bn_estimates, number = 1)), 4)
-  expect_s3_class(tidy(bn_estimates, number = 1)$cv_info[[3]]$tr_object[[1]], "sqrt_x")
+  expect_s3_class(tidy(bn_estimates, number = 1)$cv_info[[3]]$tr_object[[1]], "double_reverse_log")
 
   ## Fastest (only use ORQ (orderNorm) transformation)
   expect_silent(orq_trans <- step_orderNorm(rec, all_numeric()))
@@ -152,4 +152,3 @@ test_that("recipe + step_orderNorm + axe_env() works", {
   x <- axe_env(rec)
   terms_empty_env(x, 1)
 })
-
