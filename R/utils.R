@@ -1,8 +1,8 @@
 #' Reverse scores
 #' @param x an integer
 #' @param max maximum scale score
-#' @param min minimum scale score
+#' @param eps 
 #' @noRd
-nice_reverse <- function(x, max, min) {
-  max - as.numeric(x) + min
+nice_reverse <- function(x, max, eps) {
+  max - as.numeric(x) + eps
 }

@@ -5,12 +5,12 @@ train <- iris$Petal.Width
 double_reverse_log_obj <- double_reverse_log(train)
 
 test_that('double_reverse_log Transforms original data consistently', {
-  expect_equal(double_reverse_log_obj$x.t, predict(double_reverse_log_obj), check.attributes = FALSE)
+  expect_equal(double_reverse_log_obj$x.t, predict(double_reverse_log_obj))
   expect_equal(double_reverse_log_obj$x, predict(double_reverse_log_obj, inverse = TRUE))
 })
 
 test_that('double_reverse_log Transforms new data consistently', {
-  nd <- seq(0, 4, length = 100)
+  nd <- seq(0, 2.7, length = 100)
   pred <- predict(double_reverse_log_obj, newdata = nd)
   expect_true(!any(is.na(pred)))
   
@@ -35,12 +35,12 @@ test_that('double_reverse_log correctly handles missing new data', {
 double_reverse_log_obj <- double_reverse_log(train, standardize = FALSE)
 
 test_that('double_reverse_log Transforms original data consistently', {
-  expect_equal(double_reverse_log_obj$x.t, predict(double_reverse_log_obj), check.attributes = FALSE)
+  expect_equal(double_reverse_log_obj$x.t, predict(double_reverse_log_obj))
   expect_equal(double_reverse_log_obj$x, predict(double_reverse_log_obj, inverse = TRUE))
 })
 
 test_that('double_reverse_log Transforms new data consistently', {
-  nd <- seq(1, 4, length = 100)
+  nd <- seq(1, 2.7, length = 100)
   pred <- predict(double_reverse_log_obj, newdata = nd)
   expect_true(!any(is.na(pred)))
   
@@ -65,7 +65,7 @@ test_that('double_reverse_log correctly handles missing new data', {
 double_reverse_log_obj <- double_reverse_log(train, a = 1)
 
 test_that('double_reverse_log Transforms new data consistently (given a)', {
-  nd <- seq(0, 4, length = 100)
+  nd <- seq(0, 2.7, length = 100)
   pred <- predict(double_reverse_log_obj, newdata = nd)
   expect_true(!any(is.na(pred)))
   
@@ -76,7 +76,7 @@ test_that('double_reverse_log Transforms new data consistently (given a)', {
 double_reverse_log_obj <- double_reverse_log(train, a = 1, b = exp(1))
 
 test_that('double_reverse_log Transforms new data consistently (given a and b)', {
-  nd <- seq(0, 4, length = 100)
+  nd <- seq(0, 2.7, length = 100)
   pred <- predict(double_reverse_log_obj, newdata = nd)
   expect_true(!any(is.na(pred)))
   
@@ -84,3 +84,15 @@ test_that('double_reverse_log Transforms new data consistently (given a and b)',
   expect_equal(nd, nd2)
 })
 
+test_that('double_reverse_log Transforms new data the same regardless of predict order', {
+  nd <- seq(0, 2.7, length = 100)
+  
+  pred <- predict(double_reverse_log_obj, newdata = nd)
+  nd2 <- predict(double_reverse_log_obj, newdata = pred, inverse = TRUE)
+  expect_equal(nd, nd2)
+  
+  p1 <- sapply(nd, function(nd_i) predict(double_reverse_log_obj, newdata = nd_i))
+  p2 <- predict(double_reverse_log_obj, newdata = nd)
+  expect_equal(p1, p2)
+  
+})

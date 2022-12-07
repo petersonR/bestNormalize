@@ -3,15 +3,14 @@
 #' @name double_reverse_log
 #' @aliases predict.double_reverse_log
 #'   
-#' @description First reverses scores, then perform a log_b (x+a) 
+#' @description First reverses scores, then perform a log_b(x) 
 #' normalization transformation, and then reverses scores again.
+#' 
 #' @param x A vector to normalize with with x
-#' @param a The constant to add to x (defaults to max(0, -min(x) + eps))
 #' @param b The base of the log (defaults to 10)
 #' @param standardize If TRUE, the transformed values are also centered and
 #'   scaled, such that the transformation attempts a standard normal
-#' @param eps The allowed error in the expression for the selected a
-#' @param min Minimum score used at the score reversal stage.
+#' @param eps The cushion for the transformation range (defaults to 10 percent)
 #' @param warn Should a warning result from infinite values?
 #' @param object an object of class 'double_reverse_log'
 #' @param newdata a vector of data to be (potentially reverse) transformed
@@ -30,7 +29,6 @@
 #'   \item{x}{original data} 
 #'   \item{mean}{mean after transformation but prior to standardization} 
 #'   \item{sd}{sd after transformation but prior to standardization} 
-#'   \item{a}{estimated a value} 
 #'   \item{b}{estimated base b value} 
 #'   \item{n}{number of nonmissing observations}
 #'   \item{norm_stat}{Pearson's P / degrees of freedom}
@@ -52,30 +50,18 @@
 #' @importFrom stats sd
 #' @export
 double_reverse_log  <- function(x, 
-                                a = NULL, 
                                 b = 10, 
                                 standardize = TRUE, 
-                                eps = .001, 
-                                min = eps,
+                                eps = diff(range(x, na.rm = TRUE))/10,
                                 warn = TRUE,
                                 ...) {
   stopifnot(is.numeric(x))
   
-  min_a <- max(0, -(min(x, na.rm = TRUE) - eps))
-  if(!length(a)) 
-    a <- min_a
-  if(a < min_a) {
-    warning("Setting a <  max(0, -(min(x) - eps)) can lead to transformation issues",
-            "Standardize set to FALSE")
-    standardize <- FALSE
-  }
+  max_x <- max(x, na.rm = TRUE) + eps
+  x.t_rev <- log(max_x - x + eps, base = b)
   
-  max_x <- max(x, na.rm = TRUE)
-  min_x <- min # min(x, na.rm = TRUE)
-  
-  x.t <- nice_reverse(x, max = max_x, min = min_x)
-  x.t <- log(x.t + a, base = b)
-  x.t <- nice_reverse(x.t, max = max_x, min = min_x)
+  max_xt <- max(x.t_rev, na.rm = TRUE)
+  x.t <- max_xt - x.t_rev + eps
   
   stopifnot(!all(infinite_idx <- is.infinite(x.t)))
   if(any(infinite_idx)) {
@@ -94,14 +80,13 @@ double_reverse_log  <- function(x,
     x = x,
     mean = mu,
     sd = sigma,
-    a = a,
     b = b,
     eps = eps,
     n = length(x.t) - sum(is.na(x)),
     norm_stat = unname(ptest$statistic / ptest$df),
     standardize = standardize,
     max_x = max_x,
-    min_x = min_x
+    max_xt = max_xt
   )
   class(val) <- c('double_reverse_log', class(val))
   val
@@ -116,36 +101,29 @@ predict.double_reverse_log <- function(object, newdata = NULL, inverse = FALSE, 
     newdata <- object$x
   if (is.null(newdata) & inverse){
     newdata <- object$x.t
-    attr(newdata, "min.value") <- object$eps
   }
   if (inverse) {
     if (object$standardize) {
       newdata <- newdata * object$sd + object$mean
     }
     
-    min.value <- attributes(newdata)$min.value
-    
+    newdata <- nice_reverse(newdata,
+                            max = object$max_xt,
+                            eps = object$eps)
+    newdata <- object$b^newdata
     newdata <- nice_reverse(newdata,
                             max = object$max_x,
-                            min = min.value)
-    newdata <- object$b^newdata - object$a
-    newdata <- nice_reverse(newdata,
-                            max = object$max_x,
-                            min = min.value)
+                            eps = object$eps)
 
     } else if (!inverse) {
       
-    min.value <- max(newdata, na.rm = TRUE) - object$max_x + object$eps
-    
     newdata <- nice_reverse(newdata, 
                             max = object$max_x, 
-                            min = min.value)
-    newdata <- log(newdata + object$a, object$b)
+                            eps = object$eps)
+    newdata <- log(newdata, object$b)
     newdata <- nice_reverse(newdata, 
-                            max = object$max_x,
-                            min = min.value)
-    
-    attr(newdata, "min.value") <- min.value
+                            max = object$max_xt,
+                            eps = object$eps)
     
     if (object$standardize) {
       newdata <- (newdata - object$mean) / object$sd
@@ -164,6 +142,7 @@ print.double_reverse_log <- function(x, ...) {
       'Relevant statistics:\n',
       '- a =', x$a, '\n',
       '- b =', x$b, '\n',
+      '- max(x) =', x$max_x, '; max(x.t) =', x$max_xt, '\n',
       '- mean (before standardization) =', x$mean, '\n',
       '- sd (before standardization) =', x$sd, '\n')
 }

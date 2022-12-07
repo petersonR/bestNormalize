@@ -8,11 +8,9 @@
 \usage{
 double_reverse_log(
   x,
-  a = NULL,
   b = 10,
   standardize = TRUE,
-  eps = 0.001,
-  min = eps,
+  eps = diff(range(x, na.rm = TRUE))/10,
   warn = TRUE,
   ...
 )
@@ -24,16 +22,12 @@ double_reverse_log(
 \arguments{
 \item{x}{A vector to normalize with with x}
 
-\item{a}{The constant to add to x (defaults to max(0, -min(x) + eps))}
-
 \item{b}{The base of the log (defaults to 10)}
 
 \item{standardize}{If TRUE, the transformed values are also centered and
 scaled, such that the transformation attempts a standard normal}
 
-\item{eps}{The allowed error in the expression for the selected a}
-
-\item{min}{Minimum score used at the score reversal stage.}
+\item{eps}{The cushion for the transformation range (defaults to 10 percent)}
 
 \item{warn}{Should a warning result from infinite values?}
 
@@ -52,7 +46,6 @@ A list of class \code{double_reverse_log} with elements
   \item{x}{original data} 
   \item{mean}{mean after transformation but prior to standardization} 
   \item{sd}{sd after transformation but prior to standardization} 
-  \item{a}{estimated a value} 
   \item{b}{estimated base b value} 
   \item{n}{number of nonmissing observations}
   \item{norm_stat}{Pearson's P / degrees of freedom}
@@ -62,7 +55,7 @@ A list of class \code{double_reverse_log} with elements
   performed on new data, and allows for the inverse transformation as well.
 }
 \description{
-First reverses scores, then perform a log_b (x+a) 
+First reverses scores, then perform a log_b(x) 
 normalization transformation, and then reverses scores again.
 }
 \details{
