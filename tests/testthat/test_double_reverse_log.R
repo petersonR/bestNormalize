@@ -62,30 +62,25 @@ test_that('double_reverse_log correctly handles missing new data', {
 })
 
 
-double_reverse_log_obj <- double_reverse_log(train, a = 1)
-
-test_that('double_reverse_log Transforms new data consistently (given a)', {
-  nd <- seq(0, 2.7, length = 100)
-  pred <- predict(double_reverse_log_obj, newdata = nd)
-  expect_true(!any(is.na(pred)))
-  
-  nd2 <- predict(double_reverse_log_obj, newdata = pred, inverse = TRUE)
-  expect_equal(nd, nd2)
-})
-
-double_reverse_log_obj <- double_reverse_log(train, a = 1, b = exp(1))
-
-test_that('double_reverse_log Transforms new data consistently (given a and b)', {
-  nd <- seq(0, 2.7, length = 100)
-  pred <- predict(double_reverse_log_obj, newdata = nd)
-  expect_true(!any(is.na(pred)))
-  
-  nd2 <- predict(double_reverse_log_obj, newdata = pred, inverse = TRUE)
-  expect_equal(nd, nd2)
-})
+double_reverse_log_obj <- double_reverse_log(train, b = exp(1))
 
 test_that('double_reverse_log Transforms new data the same regardless of predict order', {
   nd <- seq(0, 2.7, length = 100)
+  
+  pred <- predict(double_reverse_log_obj, newdata = nd)
+  nd2 <- predict(double_reverse_log_obj, newdata = pred, inverse = TRUE)
+  expect_equal(nd, nd2)
+  
+  p1 <- sapply(nd, function(nd_i) predict(double_reverse_log_obj, newdata = nd_i))
+  p2 <- predict(double_reverse_log_obj, newdata = nd)
+  expect_equal(p1, p2)
+  
+})
+
+double_reverse_log_obj <- double_reverse_log(train, eps = 1.6)
+
+test_that('double_reverse_log Transforms new data well if padding increased', {
+  nd <- seq(0, 4, length = 100)
   
   pred <- predict(double_reverse_log_obj, newdata = nd)
   nd2 <- predict(double_reverse_log_obj, newdata = pred, inverse = TRUE)

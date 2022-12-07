@@ -57,11 +57,17 @@ double_reverse_log  <- function(x,
                                 ...) {
   stopifnot(is.numeric(x))
   
+  # Calculated padded max + min of x
   max_x <- max(x, na.rm = TRUE) + eps
-  x.t_rev <- log(max_x - x + eps, base = b)
+  min_x <- min(x, na.rm = TRUE) - eps
   
-  max_xt <- max(x.t_rev, na.rm = TRUE)
-  x.t <- max_xt - x.t_rev + eps
+  # calculate padded max(x.t)
+  max_xt <- log(max_x - min_x, base = b)
+  
+  # Perform transformation (reverse, log, reverse)
+  x_rev <- max_x - x
+  x.t_rev <- log(x_rev, base = b) 
+  x.t <- max_xt - x.t_rev 
   
   stopifnot(!all(infinite_idx <- is.infinite(x.t)))
   if(any(infinite_idx)) {
@@ -86,6 +92,7 @@ double_reverse_log  <- function(x,
     norm_stat = unname(ptest$statistic / ptest$df),
     standardize = standardize,
     max_x = max_x,
+    min_x = min_x,
     max_xt = max_xt
   )
   class(val) <- c('double_reverse_log', class(val))
@@ -107,24 +114,17 @@ predict.double_reverse_log <- function(object, newdata = NULL, inverse = FALSE, 
       newdata <- newdata * object$sd + object$mean
     }
     
-    newdata <- nice_reverse(newdata,
-                            max = object$max_xt,
-                            eps = object$eps)
-    newdata <- object$b^newdata
-    newdata <- nice_reverse(newdata,
-                            max = object$max_x,
-                            eps = object$eps)
+    # Perform transformation
+    new_xt_rev <- object$max_xt - newdata
+    new_x_rev <- object$b^new_xt_rev
+    newdata <- object$max_x - new_x_rev
 
     } else if (!inverse) {
       
-    newdata <- nice_reverse(newdata, 
-                            max = object$max_x, 
-                            eps = object$eps)
-    newdata <- log(newdata, object$b)
-    newdata <- nice_reverse(newdata, 
-                            max = object$max_xt,
-                            eps = object$eps)
-    
+      new_x_rev <- object$max_x - newdata 
+      new_xt_rev <-  log(new_x_rev, object$b)
+      newdata <- object$max_xt - new_xt_rev 
+      
     if (object$standardize) {
       newdata <- (newdata - object$mean) / object$sd
     }
@@ -142,7 +142,7 @@ print.double_reverse_log <- function(x, ...) {
       'Relevant statistics:\n',
       '- a =', x$a, '\n',
       '- b =', x$b, '\n',
-      '- max(x) =', x$max_x, '; max(x.t) =', x$max_xt, '\n',
+      '- max(x) =', x$max_x, '; min(x) =', x$min_x, '\n',
       '- mean (before standardization) =', x$mean, '\n',
       '- sd (before standardization) =', x$sd, '\n')
 }
