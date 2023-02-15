@@ -305,20 +305,21 @@ predict methods (see details)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Best Normalizing transformation with 100 Observations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - arcsinh(x): 3.078</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Box-Cox: 0.712</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Center+scale: 7.394</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Exp(x): 83.631</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Log_b(x+a): 1.336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - sqrt(x + a): 1.622</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Yeo-Johnson: 0.946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Box-Cox: 0.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Center+scale: 7.966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Double Reversed Log_b(x+a): 15.896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Exp(x): 33.706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Log_b(x+a): 0.374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sqrt(x + a): 1.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Yeo-Johnson: 1.024</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimation method: In-sample</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Based off these, bestNormalize chose:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Standardized Box Cox Transformation with 100 nonmissing obs.:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Estimated statistics:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.2462949 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = -0.2695253 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 1.017151 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - lambda = 0.1488483 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - mean (before standardization) = -0.505039 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - sd (before standardization) = 0.9806716 </span>
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">BN_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -339,7 +340,7 @@ predict methods (see details)</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

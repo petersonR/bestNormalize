@@ -97,7 +97,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="bestnormalize-flexibly-calculate-the-best-normalizing-transformation-for-a-vector">bestNormalize: Flexibly calculate the best normalizing transformation for a vector<a class="anchor" aria-label="anchor" href="#bestnormalize-flexibly-calculate-the-best-normalizing-transformation-for-a-vector"></a>
 </h1></div>
-
+<p><a href="https://cran.r-project.org/package=bestNormalize" class="external-link"><img src="https://www.r-pkg.org/badges/version/bestNormalize" alt="CRAN version"></a> <a href="https://github.com/petersonR/bestNormalize/actions" class="external-link"><img src="https://github.com/petersonR/bestNormalize/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://cran.r-project.org/package=bestNormalize" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/bestNormalize" alt="downloads"></a> <a href="https://app.codecov.io/gh/petersonR/bestNormalize?branch=master" class="external-link"><img src="https://codecov.io/gh/petersonR/bestNormalize/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></p>
 <p>The <code>bestNormalize</code> R package was designed to help find a normalizing transformation for a vector. There are many techniques that have been developed in this aim, however each has been subject to their own strengths/weaknesses, and it is unclear on how to decide which will work best until the data is observed. This package will look at a range of possible transformations and return the best one, i.e. the one that makes it look the <em>most</em> normal.</p>
 <p>Note that some authors use the term “normalize” differently than in this package. We define “normalize”: to transform a vector of data in such a way that the transformed values follow a Gaussian distribution (or equivalently, a bell curve). This is in contrast to other such techniques designed to transform values to the 0-1 range, or to the -1 to 1 range.</p>
 <p>This package also introduces a new adaptation of a normalization technique, which we call Ordered Quantile normalization (<code><a href="reference/orderNorm.html">orderNorm()</a></code>, or ORQ). ORQ transforms the data based off of a rank mapping to the normal distribution. This allows us to <em>guarantee</em> normally distributed transformed data (if ties are not present). The adaptation uses a shifted logit approximation on the ranks transformation to perform the transformation on newly observed data outside of the original domain. On new data within the original domain, the transformation uses linear interpolation of the fitted transformation.</p>
@@ -216,15 +216,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=bestNormalize" class="external-link"><img src="https://www.r-pkg.org/badges/version/bestNormalize" alt="CRAN version"></a></li>
-<li><a href="https://github.com/petersonR/bestNormalize/actions" class="external-link"><img src="https://github.com/petersonR/bestNormalize/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://cran.r-project.org/package=bestNormalize" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/bestNormalize" alt="downloads"></a></li>
-<li><a href="https://app.codecov.io/gh/petersonR/bestNormalize?branch=master" class="external-link"><img src="https://codecov.io/gh/petersonR/bestNormalize/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
@@ -237,7 +229,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

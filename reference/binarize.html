@@ -152,32 +152,32 @@ Note that the transformation is not one-to-one, in contrast to the other
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">binarize_obj</span> <span class="op">&lt;-</span> <span class="fu">binarize</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">binarize_obj</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0 0 0 0 0 0 1 0 1 0 0 0 1 0 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 1 1 0 1 1 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [38] 0 1 1 0 1 1 0 1 0 1 1 0 0 1 0 1 1 0 1 1 1 0 0 0 1 1 1 0 0 1 0 0 0 0 0 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [75] 1 1 1 1 1 0 0 0 0 0 0 1 0 0 0 1 1 1 0 1 0 0 1 1 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 1 0 0 1 0 1 1 1 1 1 0 0 1 0 0 0 0 0 1 1 1 1 1 1 0 0 1 0 0 0 1 1 0 1 0 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [38] 0 0 0 1 1 0 1 1 0 1 1 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1 0 1 1 1 0 0 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75] 1 1 0 0 1 1 0 1 1 1 1 0 1 0 0 1 0 0 1 1 0 1 0 1 0 1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">binarize_obj</span>, newdata <span class="op">=</span> <span class="va">p</span>, inverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [6] &lt; 0.7370046  &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046 &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [11] &lt; 0.7370046  &lt; 0.7370046  &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [16] &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [21] &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [26] &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046 &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [36] &lt; 0.7370046  &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [41] &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [46] &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046  &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [51] &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [56] &gt;= 0.7370046 &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046  &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [66] &lt; 0.7370046  &gt;= 0.7370046 &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [71] &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [76] &gt;= 0.7370046 &gt;= 0.7370046 &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [81] &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [86] &gt;= 0.7370046 &lt; 0.7370046  &lt; 0.7370046  &lt; 0.7370046  &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046 &lt; 0.7370046 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [96] &lt; 0.7370046  &gt;= 0.7370046 &gt;= 0.7370046 &lt; 0.7370046  &gt;= 0.7370046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: &lt; 0.7370046 &gt;= 0.7370046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [6] &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [11] &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [16] &lt; 0.7770544  &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544 &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [21] &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544 &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [26] &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544  &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] &gt;= 0.7770544 &gt;= 0.7770544 &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36] &gt;= 0.7770544 &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544  &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41] &gt;= 0.7770544 &gt;= 0.7770544 &lt; 0.7770544  &gt;= 0.7770544 &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [46] &lt; 0.7770544  &gt;= 0.7770544 &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [51] &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [56] &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544  &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] &lt; 0.7770544  &lt; 0.7770544  &lt; 0.7770544  &lt; 0.7770544  &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [66] &gt;= 0.7770544 &lt; 0.7770544  &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71] &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544  &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [76] &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544 &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81] &lt; 0.7770544  &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544 &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [86] &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] &lt; 0.7770544  &lt; 0.7770544  &gt;= 0.7770544 &gt;= 0.7770544 &lt; 0.7770544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [96] &gt;= 0.7770544 &lt; 0.7770544  &gt;= 0.7770544 &lt; 0.7770544  &gt;= 0.7770544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: &lt; 0.7770544 &gt;= 0.7770544</span>
 </code></pre></div>
     </div>
   </div>
@@ -192,7 +192,7 @@ Note that the transformation is not one-to-one, in contrast to the other
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

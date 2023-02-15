@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Using the bestNormalize Package</h1>
                         <h4 data-toc-skip class="author">Ryan A Peterson</h4>
             
-            <h4 data-toc-skip class="date">2022-12-02</h4>
+            <h4 data-toc-skip class="date">2023-02-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/petersonR/bestNormalize/blob/HEAD/vignettes/bestNormalize.Rmd" class="external-link"><code>vignettes/bestNormalize.Rmd</code></a></small>
       <div class="hidden name"><code>bestNormalize.Rmd</code></div>
@@ -246,6 +246,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="co">##  - arcsinh(x): 1.7917</span></span>
 <span><span class="co">##  - Box-Cox: 1.0442</span></span>
 <span><span class="co">##  - Center+scale: 3.0102</span></span>
+<span><span class="co">##  - Double Reversed Log_b(x+a): 4.7638</span></span>
 <span><span class="co">##  - Exp(x): 9.5306</span></span>
 <span><span class="co">##  - Log_b(x+a): 1.7072</span></span>
 <span><span class="co">##  - orderNorm (ORQ): 1.1773</span></span>
@@ -315,6 +316,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="co">##  - arcsinh(x): 4.401</span></span>
 <span><span class="co">##  - Box-Cox: 0.7435</span></span>
 <span><span class="co">##  - Center+scale: 8.087</span></span>
+<span><span class="co">##  - Double Reversed Log_b(x+a): 18.7175</span></span>
 <span><span class="co">##  - Exp(x): 64.6975</span></span>
 <span><span class="co">##  - Log_b(x+a): 3.47</span></span>
 <span><span class="co">##  - sqrt(x + a): 0.9145</span></span>
@@ -351,6 +353,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="co">##  - arcsinh(x): 1.4556</span></span>
 <span><span class="co">##  - Box-Cox: 1.088</span></span>
 <span><span class="co">##  - Center+scale: 6.9536</span></span>
+<span><span class="co">##  - Double Reversed Log_b(x+a): 9.7803</span></span>
 <span><span class="co">##  - Exp(x): 115.8928</span></span>
 <span><span class="co">##  - Log_b(x+a): 2.0484</span></span>
 <span><span class="co">##  - orderNorm (ORQ): 1.1852</span></span>
@@ -397,11 +400,15 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span> <span class="op">&lt;-</span> <span class="fl">2017</span> <span class="op">-</span> <span class="va">autotrader</span><span class="op">$</span><span class="va">Year</span></span>
 <span><span class="co">### Using best-normalize</span></span>
 <span><span class="op">(</span><span class="va">priceBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: `progress_estimated()` was deprecated in dplyr 1.0.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">bestNormalize</span> package.</span></span>
+<span><span class="co">##   Please report the issue to the authors.</span></span></code></pre>
 <pre><code><span><span class="co">## Best Normalizing transformation with 6283 Observations</span></span>
 <span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
 <span><span class="co">##  - arcsinh(x): 7.3646</span></span>
 <span><span class="co">##  - Box-Cox: 4.2174</span></span>
 <span><span class="co">##  - Center+scale: 6.527</span></span>
+<span><span class="co">##  - Double Reversed Log_b(x+a): 10.959</span></span>
 <span><span class="co">##  - Log_b(x+a): 7.3646</span></span>
 <span><span class="co">##  - orderNorm (ORQ): 1.1586</span></span>
 <span><span class="co">##  - sqrt(x + a): 4.2754</span></span>
@@ -415,13 +422,14 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="co">##    0%   25%   50%   75%  100% </span></span>
 <span><span class="co">##   722 11499 15998 21497 64998</span></span></code></pre>
 <p>Note that <code>orderNorm</code> throws a warning due to the ties in the price vector. We can see that the estimated normality statistic for the OrderNorm transformation is close to one, however, so we know it is performing quite well. It is also performing better than all of the other transformations.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">mileageBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Best Normalizing transformation with 6283 Observations</span></span>
 <span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
 <span><span class="co">##  - arcsinh(x): 4.7664</span></span>
 <span><span class="co">##  - Box-Cox: 4.2613</span></span>
 <span><span class="co">##  - Center+scale: 22.0413</span></span>
+<span><span class="co">##  - Double Reversed Log_b(x+a): 34.1653</span></span>
 <span><span class="co">##  - Log_b(x+a): 4.7657</span></span>
 <span><span class="co">##  - orderNorm (ORQ): 1.1199</span></span>
 <span><span class="co">##  - sqrt(x + a): 7.2496</span></span>
@@ -435,13 +443,14 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="co">##     0%    25%    50%    75%   100% </span></span>
 <span><span class="co">##      2  29099  44800  88950 325556</span></span></code></pre>
 <p>Similarly, the ORQ normalization performed best for mileage, and the ties didn’t seem to be too big of a deal.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">yearsoldBN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bestNormalize.html">bestNormalize</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span>, r <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Best Normalizing transformation with 6283 Observations</span></span>
 <span><span class="co">##  Estimated Normality Statistics (Pearson P / df, lower =&gt; more normal):</span></span>
 <span><span class="co">##  - arcsinh(x): 170.512</span></span>
 <span><span class="co">##  - Box-Cox: 170.4444</span></span>
 <span><span class="co">##  - Center+scale: 171.1519</span></span>
+<span><span class="co">##  - Double Reversed Log_b(x+a): 169.7945</span></span>
 <span><span class="co">##  - Exp(x): 1034.8401</span></span>
 <span><span class="co">##  - Log_b(x+a): 170.4138</span></span>
 <span><span class="co">##  - orderNorm (ORQ): 168.0324</span></span>
@@ -456,7 +465,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="co">##   0%  25%  50%  75% 100% </span></span>
 <span><span class="co">##    1    3    4    7   17</span></span></code></pre>
 <p>Here we see something peculiar; none of the normalizing transformations performed well according to the normality statistics. The frequency of ties in this case makes it very difficult to find a normalizing transformation (see figure below as to why this is). Even so, orderNorm is chosen as it has the lowest estimated P/df statistic.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span></span>
 <span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></span>
@@ -465,7 +474,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">)</span></span>
 <span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/truehist.html" class="external-link">truehist</a></span><span class="op">(</span><span class="va">yearsoldBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/hist_app-1.png" width="672"></p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">price.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">mileage.xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
@@ -483,7 +492,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <p><img src="bestNormalize_files/figure-html/hist_app2-1.png" width="672"></p>
 <p>Next, we will fit a linear model on the transformed values of each variable. The reverse-transformation will allow us to visualize how these variables work into the model on their original units.</p>
 <p>For the sake of illustration, we also plot the effects of a GAM model to see if there is a big difference. The GAM models seem to be more influenced by outliers than the fits to the transformed data.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">autotrader</span><span class="op">$</span><span class="va">price.t</span> <span class="op">&lt;-</span> <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span></span>
 <span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage.t</span> <span class="op">&lt;-</span> <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span></span>
 <span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold.t</span> <span class="op">&lt;-</span> <span class="va">yearsoldBN</span><span class="op">$</span><span class="va">x.t</span></span>
@@ -510,7 +519,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="co">## Residual standard error: 0.781 on 6280 degrees of freedom</span></span>
 <span><span class="co">## Multiple R-squared:  0.3901, Adjusted R-squared:  0.3899 </span></span>
 <span><span class="co">## F-statistic:  2009 on 2 and 6280 DF,  p-value: &lt; 2.2e-16</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">miles.t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mileageBN</span>, newdata <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span></span>
 <span><span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"mileage.t"</span><span class="op">]</span></span>
 <span></span>
@@ -529,7 +538,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span>      col <span class="op">=</span> <span class="st">"slateblue"</span>,</span>
 <span>      lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/app_vis-1.png" width="672"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Mileage effect</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span>,</span>
@@ -561,7 +570,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span>  bty <span class="op">=</span> <span class="st">"n"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/app_vis-2.png" width="672"></p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Years Old effect</span></span>
 <span><span class="va">yo.t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">yearsoldBN</span>, newdata <span class="op">=</span> <span class="va">yearsold.xx</span><span class="op">)</span></span>
 <span><span class="va">c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"yearsold.t"</span><span class="op">]</span></span>
@@ -616,7 +625,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
