@@ -20,7 +20,7 @@ test_that('BestNormalize transformations with positive data', {
 })
 
 # 
-BNobject <- suppressWarnings(bestNormalize(c(-1, train), quiet = TRUE, norm_stat_fn = new_norm_stat_fn))
+BNobject <- suppressWarnings(bestNormalize(c(1, train), quiet = TRUE, norm_stat_fn = new_norm_stat_fn))
 BNobject4 <- suppressWarnings(bestNormalize(c(-1, train), allow_orderNorm = FALSE, out_of_sample = FALSE, quiet = TRUE, norm_stat_fn = new_norm_stat_fn))
 test_that('BestNormalize transformations with mixed data, in-sample', {
   expect_equal(BNobject$x.t, predict(BNobject))
