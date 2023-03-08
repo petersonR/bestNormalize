@@ -345,9 +345,10 @@ print.bestNormalize <- function(x, ...) {
 
 #' @rdname bestNormalize
 #' @param x A `bestNormalize` object.
+#' @param ... not used
 #' @importFrom tibble tibble
 #' @export
-tidy.bestNormalize <- function(x) {
+tidy.bestNormalize <- function(x, ...) {
   
   chosen_name <- class(x$chosen_transform)[1]
   chosen_tr <- x$chosen_transform

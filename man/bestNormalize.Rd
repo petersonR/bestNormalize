@@ -31,7 +31,7 @@ bestNormalize(
 
 \method{print}{bestNormalize}(x, ...)
 
-\method{tidy}{bestNormalize}(x)
+\method{tidy}{bestNormalize}(x, ...)
 }
 \arguments{
 \item{x}{A `bestNormalize` object.}
@@ -76,7 +76,7 @@ predict methods (see details)}
 \item{norm_stat_fn}{if specified, a function to calculate to assess normality
 (default is the Pearson chi-squared statistic divided by its d.f.)}
 
-\item{...}{additional arguments.}
+\item{...}{not used}
 
 \item{object}{an object of class 'bestNormalize'}
 

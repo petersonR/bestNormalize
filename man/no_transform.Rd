@@ -22,14 +22,14 @@ center_scale(x, warn = TRUE, ...)
 
 \method{print}{center_scale}(x, ...)
 
-\method{tidy}{no_transform}(x)
+\method{tidy}{no_transform}(x, ...)
 }
 \arguments{
 \item{x}{A `no_transform` object.}
 
 \item{warn}{Should a warning result from infinite values?}
 
-\item{...}{additional arguments}
+\item{...}{not used}
 
 \item{object}{an object of class 'no_transform'}
 

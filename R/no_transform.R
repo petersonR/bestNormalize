@@ -155,9 +155,10 @@ print.center_scale <- function(x, ...) {
 
 #' @rdname no_transform
 #' @param x A `no_transform` object.
+#' @param ... not used 
 #' @importFrom tibble tibble
 #' @export
-tidy.no_transform <- function(x) {
+tidy.no_transform <- function(x, ...) {
   value <- tibble(
     "transform" = c("no_transform"),
     "norm_stat" = x$norm_stat, 
