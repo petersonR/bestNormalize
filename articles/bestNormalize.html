@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Using the bestNormalize Package</h1>
                         <h4 data-toc-skip class="author">Ryan A Peterson</h4>
             
-            <h4 data-toc-skip class="date">2023-02-15</h4>
+            <h4 data-toc-skip class="date">2023-03-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/petersonR/bestNormalize/blob/HEAD/vignettes/bestNormalize.Rmd" class="external-link"><code>vignettes/bestNormalize.Rmd</code></a></small>
       <div class="hidden name"><code>bestNormalize.Rmd</code></div>
@@ -491,7 +491,7 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span>     xlab <span class="op">=</span> <span class="st">"Years-old"</span>, ylab <span class="op">=</span> <span class="st">"g(Years-old)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="bestNormalize_files/figure-html/hist_app2-1.png" width="672"></p>
 <p>Next, we will fit a linear model on the transformed values of each variable. The reverse-transformation will allow us to visualize how these variables work into the model on their original units.</p>
-<p>For the sake of illustration, we also plot the effects of a GAM model to see if there is a big difference. The GAM models seem to be more influenced by outliers than the fits to the transformed data.</p>
+<p>For the sake of illustration, we also plot the effects of a GAM model to see if there is a big difference. The GAM models seem to be more influenced by outliers than the fits to the transformed data. Only 1000 points are plotted to reduce plot memory footprint.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">autotrader</span><span class="op">$</span><span class="va">price.t</span> <span class="op">&lt;-</span> <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span></span>
 <span><span class="va">autotrader</span><span class="op">$</span><span class="va">mileage.t</span> <span class="op">&lt;-</span> <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span></span>
@@ -522,11 +522,12 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">miles.t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mileageBN</span>, newdata <span class="op">=</span> <span class="va">mileage.xx</span><span class="op">)</span></span>
 <span><span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"mileage.t"</span><span class="op">]</span></span>
+<span><span class="va">plot_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>    <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span>,</span>
-<span>    <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span>,</span>
+<span>    <span class="va">mileageBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">[</span><span class="va">plot_idx</span><span class="op">]</span>,</span>
+<span>    <span class="va">priceBN</span><span class="op">$</span><span class="va">x.t</span><span class="op">[</span><span class="va">plot_idx</span><span class="op">]</span>,</span>
 <span>    pch <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,</span>
 <span>    main <span class="op">=</span> <span class="st">"Estimated linear effect (using transformed data)"</span>,</span>
@@ -541,8 +542,8 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Mileage effect</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span>,</span>
-<span>  <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>,</span>
+<span>  <span class="va">autotrader</span><span class="op">$</span><span class="va">mileage</span><span class="op">[</span><span class="va">plot_idx</span><span class="op">]</span>,</span>
+<span>  <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">[</span><span class="va">plot_idx</span><span class="op">]</span>,</span>
 <span>  pch <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Mileage effect (re-transformed to original unit)"</span>,</span>
@@ -576,8 +577,8 @@ g(x) = \Phi ^{-1} \left(\frac{\text{rank} (x) - 1/2}{\text{length}(x) }\right)
 <span><span class="va">c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span><span class="op">[</span><span class="st">"yearsold.t"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
-<span>    <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="va">autotrader</span><span class="op">$</span><span class="va">yearsold</span><span class="op">[</span><span class="va">plot_idx</span><span class="op">]</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>    <span class="va">autotrader</span><span class="op">$</span><span class="va">price</span><span class="op">[</span><span class="va">plot_idx</span><span class="op">]</span>,</span>
 <span>    pch <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>    col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>, </span>
 <span>    main <span class="op">=</span> <span class="st">"Years old effect (re-transformed to original unit)"</span>,</span>
