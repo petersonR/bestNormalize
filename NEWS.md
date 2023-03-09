@@ -1,4 +1,4 @@
-# bestNormalize 1.8.3.9000
+# bestNormalize 1.9.0
 
 - Add an S3 methods that helps `step_orderNorm()` to work with parallel processing. 
 - Add an S3 methods that helps `step_best_normalize()` to work with parallel processing. 

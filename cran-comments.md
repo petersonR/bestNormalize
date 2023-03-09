@@ -6,10 +6,9 @@
 ## R CMD check results
 There were no ERRORs, WARNINGs, or NOTEs.
 
-## Downstream dependencies
+## revdepcheck results
 
-R CMD CHECK was run on two CRAN downstream dependencies/reverse suggests:
-- longDat
-- mlr3pipelines 
+We checked 3 reverse dependencies (2 from CRAN + 1 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
 
-There were no ERRORs, WARNINGs, or NOTEs in either.
+ * We saw 0 new problems
+ * We failed to check 0 packages
