@@ -1,6 +1,6 @@
 citHeader("To cite 'bestNormalize' software in publications, use (1); to cite the orderNorm (ORQ) technique use (2), or cite both.")
 
-citEntry(entry = "article",
+bibentry(bibtype = "article",
          title = "{Finding Optimal Normalizing Transformations via
           bestNormalize}",
          author = as.person("Ryan A. Peterson"),
@@ -14,9 +14,9 @@ citEntry(entry = "article",
         "(1) Peterson, R. A. (2021). Finding Optimal Normalizing Transformations via bestNormalize. The R Journal, 13:1, 310-329, DOI:10.32614/RJ-2021-041"
 )
 
-citEntry(entry = "article",
+bibentry(bibtype = "article",
          title = "Ordered quantile normalization: a semiparametric transformation built for the cross-validation era",
-         author = personList(as.person("Ryan A. Peterson"), 
+         author = c(as.person("Ryan A. Peterson"), 
 		  as.person("Joseph E. Cavanaugh")),
          year = "2020",
 	 journal = "Journal of Applied Statistics",

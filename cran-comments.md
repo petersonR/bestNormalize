@@ -1,3 +1,6 @@
+This is a resubmission of bestNormalize 1.9.0 
+with corrected citations. 
+
 ## Test environments 
 - GitHub Actions (ubuntu-18.04): 3.5, 3.6, oldrel, release, devel
 - GitHub Actions (windows): 3.6, release
