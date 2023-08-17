@@ -1,6 +1,10 @@
-# bestNormalize 1.9.0.9000
+# bestNormalize 1.9.1
 
-- Working on new function, `bestLogConstant`, that uses the same machinery to pick the best value of a constant to use when logging a variable, e.g. the one that makes the distribution look the most normal, especially useful for non-positive or zero-inflated data. 
+- New function, `bestLogConstant`, that uses the same machinery to pick the best 
+  value of a constant to use when logging a variable, e.g. the one that makes 
+  the distribution look the most normal, especially useful for non-positive or 
+  zero-inflated data. Currently experimental. 
+- Taking out tests that failed due to dependent package update (does not impact default bestNormalize behavior). See (issue)[https://github.com/gmgeorg/LambertW/issues/3]. 
 
 # bestNormalize 1.9.0
 

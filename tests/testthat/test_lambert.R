@@ -41,28 +41,6 @@ test_that('lambert without standardization Transforms new data consistently', {
   expect_equal(nd, nd2)
 })
 
-
-# For type = 'hh'
-
-lambert_obj <- lambert(train, type = 'hh')
-
-test_that('lambert Transforms original data consistently' , {
-  expect_equal(lambert_obj$x.t, predict(lambert_obj))
-  expect_equal(lambert_obj$x, 
-               predict(lambert_obj, inverse = TRUE), 
-               tolerance = .001)
-})
-
-test_that('lambert Transforms new data consistently', {
-  nd <- seq(0, 4, length = 100)
-  pred <- predict(lambert_obj, newdata = nd)
-  expect_true(!any(is.na(pred)))
-  
-  nd2 <- predict(lambert_obj, newdata = pred, inverse = TRUE)
-  expect_equal(nd, nd2, tolerance = .001)
-})
-
-
 # for type = 'h'
 
 lambert_obj <- lambert(train, type = 'h')
