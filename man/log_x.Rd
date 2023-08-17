@@ -15,7 +15,8 @@ log_x(x, a = NULL, b = 10, standardize = TRUE, eps = 0.001, warn = TRUE, ...)
 \arguments{
 \item{x}{A vector to normalize with with x}
 
-\item{a}{The constant to add to x (defaults to max(0, -min(x) + eps))}
+\item{a}{The constant to add to x (defaults to max(0, -min(x) + eps));
+see \code{bestLogConstant}}
 
 \item{b}{The base of the log (defaults to 10)}
 

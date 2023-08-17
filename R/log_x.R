@@ -7,7 +7,8 @@
 #' @param x A vector to normalize with with x
 #' @param standardize If TRUE, the transformed values are also centered and
 #'   scaled, such that the transformation attempts a standard normal
-#' @param a The constant to add to x (defaults to max(0, -min(x) + eps))
+#' @param a The constant to add to x (defaults to max(0, -min(x) + eps));
+#'    see \code{bestLogConstant} 
 #' @param b The base of the log (defaults to 10)
 #' @param eps The allowed error in the expression for the selected a
 #' @param warn Should a warning result from infinite values?
