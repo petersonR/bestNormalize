@@ -1,3 +1,5 @@
+# bestNormalize 1.9.1.9000
+
 # bestNormalize 1.9.1
 
 - New function, `bestLogConstant`, that uses the same machinery to pick the best 
