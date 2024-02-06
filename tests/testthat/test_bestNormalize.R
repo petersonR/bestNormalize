@@ -91,30 +91,30 @@ test_that('bestNormalize without standardization handles missing new data', {
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
 })
 
-## Test lambert functionality in bestNormalize
-# test_that("bestNormalize works with lambert of type s", {
-#   skip_on_cran()
-#   skip_on_travis()
-#   b <-  suppressWarnings(bestNormalize(train, allow_lambert_s = TRUE, quiet = TRUE))
-#   expect_true(!is.null(b$other_transforms$lambert_s))
-#   expect_true(is.null(b$other_transforms$lambert_h))
-# })
-# 
-# test_that("bestNormalize works with lambert of type h", {
-#   skip_on_cran()
-#   skip_on_travis()
-#   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, allow_lambert_s = FALSE,  quiet = TRUE))
-#   expect_true(is.null(b$other_transforms$lambert_s))
-#   expect_true(!is.null(b$other_transforms$lambert_h))
-# })
+# Test lambert functionality in bestNormalize
+test_that("bestNormalize works with lambert of type s", {
+  skip_on_cran()
+  skip_on_ci()
+  b <-  suppressWarnings(bestNormalize(train, allow_lambert_s = TRUE, quiet = TRUE, out_of_sample = FALSE))
+  expect_true(!is.null(b$other_transforms$lambert_s))
+  expect_true(is.null(b$other_transforms$lambert_h))
+})
 
-# test_that("bestNormalize works with lambert of type h", {
-#   skip_on_cran()
-#   skip_on_travis()
-#   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, allow_lambert_s = FALSE, quiet = TRUE))
-#   expect_true(is.null(b$other_transforms$lambert_s))
-#   expect_true(!is.null(b$other_transforms$lambert_h))
-# })
+test_that("bestNormalize works with lambert of type h", {
+  skip_on_cran()
+  skip_on_ci()
+  b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, allow_lambert_s = FALSE,  quiet = TRUE, out_of_sample = FALSE))
+  expect_true(is.null(b$other_transforms$lambert_s))
+  expect_true(!is.null(b$other_transforms$lambert_h))
+})
+
+test_that("bestNormalize works with lambert of type h", {
+  skip_on_cran()
+  skip_on_ci()
+  b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, allow_lambert_s = FALSE, quiet = TRUE, out_of_sample = FALSE))
+  expect_true(is.null(b$other_transforms$lambert_s))
+  expect_true(!is.null(b$other_transforms$lambert_h))
+})
 
 test_that("options work for bestNormalize", {
   ## Log_x

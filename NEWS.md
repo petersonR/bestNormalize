@@ -1,5 +1,7 @@
 # bestNormalize 1.9.1.9000
 
+- Started testing `lambert` type transforms again.
+
 # bestNormalize 1.9.1
 
 - New function, `bestLogConstant`, that uses the same machinery to pick the best 
