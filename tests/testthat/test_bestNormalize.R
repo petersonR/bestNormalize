@@ -98,6 +98,7 @@ test_that("bestNormalize works with lambert of type s", {
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_s = TRUE, quiet = TRUE, out_of_sample = FALSE))
   expect_true(!is.null(b$other_transforms$lambert_s))
   expect_true(is.null(b$other_transforms$lambert_h))
+  expect_true(is.null(b$other_transforms$lambert_hh))
 })
 
 test_that("bestNormalize works with lambert of type h", {
@@ -106,6 +107,7 @@ test_that("bestNormalize works with lambert of type h", {
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, allow_lambert_s = FALSE,  quiet = TRUE, out_of_sample = FALSE))
   expect_true(is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
+  expect_true(!is.null(b$other_transforms$lambert_hh))
 })
 
 test_that("bestNormalize works with lambert of type h", {
@@ -114,6 +116,7 @@ test_that("bestNormalize works with lambert of type h", {
   b <-  suppressWarnings(bestNormalize(train, allow_lambert_h = TRUE, allow_lambert_s = FALSE, quiet = TRUE, out_of_sample = FALSE))
   expect_true(is.null(b$other_transforms$lambert_s))
   expect_true(!is.null(b$other_transforms$lambert_h))
+  expect_true(!is.null(b$other_transforms$lambert_hh))
 })
 
 test_that("options work for bestNormalize", {

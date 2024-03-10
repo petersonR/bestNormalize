@@ -42,11 +42,11 @@ not change the normality statistic.}
 
 \item{allow_orderNorm}{set to FALSE if orderNorm should not be applied}
 
-\item{allow_lambert_s}{Set to FALSE if the lambertW of type "s"  should not be
-applied (see details). Expect about 2-3x elapsed computing time if TRUE.}
+\item{allow_lambert_s}{Set to FALSE if the lambertW of type "s"  should not
+be applied (see details). Expect about 2-3x elapsed computing time if TRUE.}
 
-\item{allow_lambert_h}{Set to TRUE if the lambertW of type "h"  should be
-applied (see details). Expect about 2-3x elapsed computing time.}
+\item{allow_lambert_h}{Set to TRUE if the lambertW of type "h"  and "hh"
+should be applied (see details). Expect about 2-4x elapsed computing time.}
 
 \item{allow_exp}{Set to TRUE if the exponential transformation should be
 applied (sometimes this will cause errors with heavy right skew)}
@@ -139,8 +139,9 @@ This function currently estimates the Yeo-Johnson transformation,
   \code{cl} argument.
 
 
-  Note that the Lambert transformation of type "h" can be done by setting
-  allow_lambert_h = TRUE, however this can take significantly longer to run.
+  Note that the Lambert transformation of type "h" or "hh" can be done by
+  setting allow_lambert_h = TRUE, however this can take significantly longer
+  to run.
 
   Use \code{tr_opts} in order to set options for each transformation. For
   instance, if you want to overide the default a selection for \code{log_x},

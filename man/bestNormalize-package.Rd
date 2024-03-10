@@ -3,7 +3,6 @@
 \docType{package}
 \name{bestNormalize-package}
 \alias{bestNormalize-package}
-\alias{_PACKAGE}
 \title{bestNormalize: Flexibly calculate the best normalizing transformation for a
 vector}
 \description{

@@ -1,6 +1,9 @@
 # bestNormalize 1.9.1.9000
 
 - Started testing `lambert` type transforms again.
+- adding `lambert` of type "hh" as option when `allow_lambert_h` is set to
+  `TRUE`, per request from 
+  [issue 24](https://github.com/petersonR/bestNormalize/issues/24)
 
 # bestNormalize 1.9.1
 
