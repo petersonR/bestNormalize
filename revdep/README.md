@@ -1,18 +1,19 @@
 # Platform
 
-|field    |value                                    |
-|:--------|:----------------------------------------|
-|version  |R version 4.2.1 (2022-06-23)             |
-|os       |macOS Ventura 13.0.1                     |
-|system   |x86_64, darwin17.0                       |
-|ui       |RStudio                                  |
-|language |(EN)                                     |
-|collate  |en_US.UTF-8                              |
-|ctype    |en_US.UTF-8                              |
-|tz       |America/Denver                           |
-|date     |2023-08-17                               |
-|rstudio  |2022.12.0+353 Elsbeth Geranium (desktop) |
-|pandoc   |NA                                       |
+|field    |value                                                                       |
+|:--------|:---------------------------------------------------------------------------|
+|version  |R version 4.5.1 (2025-06-13)                                                |
+|os       |macOS Sequoia 15.7.2                                                        |
+|system   |aarch64, darwin20                                                           |
+|ui       |RStudio                                                                     |
+|language |(EN)                                                                        |
+|collate  |en_US.UTF-8                                                                 |
+|ctype    |en_US.UTF-8                                                                 |
+|tz       |America/Chicago                                                             |
+|date     |2025-11-29                                                                  |
+|rstudio  |2025.09.1+401 Cucumberleaf Sunflower (desktop)                              |
+|pandoc   |NA                                                                          |
+|quarto   |1.7.32 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/quarto |
 
 # Dependencies
 
