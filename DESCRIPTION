@@ -1,10 +1,10 @@
 Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
-Version: 1.9.1.9000
+Version: 1.9.2
 Date: 2025-11-29
 Authors@R: person("Ryan A", "Peterson", 
-                  email = "ryan.a.peterson@cuanschutz.edu", 
+                  email = "ryan-peterson@uiowa.edu", 
                   role = c("aut", "cre"), 
                   comment = c(ORCID = "0000-0002-4650-5798"))
 Description: Estimate a suite of normalizing transformations, including 
