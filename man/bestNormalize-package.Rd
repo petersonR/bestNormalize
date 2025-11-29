@@ -21,6 +21,6 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ryan Andrew Peterson \email{ryan.a.peterson@cuanschutz.edu} (\href{https://orcid.org/0000-0002-4650-5798}{ORCID})
+\strong{Maintainer}: Ryan A Peterson \email{ryan.a.peterson@cuanschutz.edu} (\href{https://orcid.org/0000-0002-4650-5798}{ORCID})
 
 }

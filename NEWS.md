@@ -4,6 +4,7 @@
 - adding `lambert` of type "hh" as option when `allow_lambert_h` is set to
   `TRUE`, per request from 
   [issue 24](https://github.com/petersonR/bestNormalize/issues/24)
+- fixing deprecation of `dplyr::progress_estimated` (#26)
 
 # bestNormalize 1.9.1
 

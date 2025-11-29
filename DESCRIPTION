@@ -2,8 +2,8 @@ Package: bestNormalize
 Type: Package
 Title: Normalizing Transformation Functions
 Version: 1.9.1.9000
-Date: 2023-09-20
-Authors@R: person("Ryan Andrew", "Peterson", 
+Date: 2025-11-29
+Authors@R: person("Ryan A", "Peterson", 
                   email = "ryan.a.peterson@cuanschutz.edu", 
                   role = c("aut", "cre"), 
                   comment = c(ORCID = "0000-0002-4650-5798"))
@@ -40,6 +40,7 @@ Imports:
     methods,
     butcher, 
     purrr,
+    progress,
     generics
 Suggests: 
     knitr,
@@ -54,5 +55,5 @@ Suggests:
     covr
 VignetteBuilder: knitr 
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 Encoding: UTF-8
