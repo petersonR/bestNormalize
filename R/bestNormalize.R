@@ -133,6 +133,9 @@
 #'
 #' @seealso  \code{\link[bestNormalize]{boxcox}}, \code{\link{orderNorm}},
 #'   \code{\link{yeojohnson}}
+#'   
+#' @importFrom progress progress_bar
+#' 
 #' @export
 bestNormalize <- function(x, 
                           standardize = TRUE, 
@@ -391,7 +394,13 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r,
   # Perform in this session if cluster unspecified
   if(is.null(cluster)) {
     
-    if(!quiet & length(x) > 2000) pb <- dplyr::progress_estimated(r*k)
+    if(!quiet & length(x) > 2000) {
+      pb <- progress::progress_bar$new(
+        format = "  computing [:bar] :percent eta: :eta",
+        total  = k * r,
+        width  = 60
+      )
+    }
     
     reps <- lapply(1:r, function(rep) {
       resamples <- create_folds(x, k)
@@ -409,7 +418,7 @@ get_oos_estimates <- function(x, standardize, norm_methods, k, r,
             pstats[i, m] <- suppressWarnings(do.call(norm_stat_fn, list(x = vec)))
           }
         }
-        if(!quiet & length(x) > 2000) pb$tick()$print()
+        if(!quiet & length(x) > 2000) pb$tick()
       }
       colnames(pstats) <- norm_methods
       rownames(pstats) <- paste0("Rep", rep, "Fold", 1:k)
