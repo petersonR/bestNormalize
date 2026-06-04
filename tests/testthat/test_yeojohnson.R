@@ -33,6 +33,13 @@ test_that('yeojohnson correctly handles missing new data', {
   expect_equal(as.numeric(NA), predict(b, newdata = c(1, NA), inverse = TRUE)[2])
 })
 
+test_that('yeojohnson lambda is unaffected by appended missing values', {
+  expect_equal(
+    yeojohnson(train)$lambda,
+    yeojohnson(c(train, NA, NA, NA))$lambda
+  )
+})
+
 # without standardization
 
 yeojohnson_obj <- yeojohnson(train, standardize = FALSE)
